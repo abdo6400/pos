@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../domain/entities/auth_tokens.dart';
+import '../../../../../core/entities/auth_tokens.dart';
 import '../../../domain/usecases/login_usecase.dart';
 part 'login_event.dart';
 part 'login_state.dart';

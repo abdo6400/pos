@@ -24,7 +24,7 @@ extension Responsive on BuildContext {
   }
 
   double ResponsiveValu(double defaultValue,
-          {double? mobile, double? tablet, double? desktop}) =>
+          {double? mobile, double? tablet, double? desktop, double? large}) =>
       ResponsiveValue(
         this,
         defaultValue: defaultValue,
@@ -32,7 +32,7 @@ extension Responsive on BuildContext {
           Condition.smallerThan(name: MOBILE, value: mobile),
           Condition.equals(name: TABLET, value: tablet),
           Condition.equals(name: DESKTOP, value: desktop),
+          Condition.equals(name: '4K', value: large),
         ],
       ).value;
 }
-

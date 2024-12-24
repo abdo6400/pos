@@ -10,7 +10,7 @@ class AppTheme {
   static ThemeData get getApplicationLightTheme => FlexThemeData.light(
         useMaterial3: true,
         useMaterial3ErrorColors: true,
-        scheme: FlexScheme.blueM3,
+        scheme: FlexScheme.yellowM3,
         scaffoldBackground: AppColors.backgroundLight,
         primary: AppColors.primary,
         secondary: AppColors.secondary,
@@ -36,7 +36,7 @@ class AppTheme {
   static ThemeData get getApplicationDarkTheme => FlexThemeData.dark(
         useMaterial3: true,
         useMaterial3ErrorColors: true,
-        scheme: FlexScheme.blueM3,
+        scheme: FlexScheme.yellowM3,
         scaffoldBackground: AppColors.backgroundDark,
         primary: AppColors.primary,
         secondary: AppColors.secondary,

@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import '../../../../config/routes/app_routes.dart';
 import '../../../../core/utils/constants.dart';
-import '../../../../core/components/onboarding_component/onboarding_component.dart';
+import '../../../../core/widgets/onboarding_component/onboarding_component.dart';
 import '../../../../core/utils/assets.dart';
 import '../../../../core/utils/enums/string_enums.dart';
 

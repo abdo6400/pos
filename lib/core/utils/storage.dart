@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import '../../config/database/cache/cache_consumer.dart';
+import '../entities/auth_tokens.dart';
+import '../models/auth_tokens_model.dart';
 import 'constants.dart';
 import 'enums/shared_pref_enums.dart';
 
@@ -19,11 +23,12 @@ class Storage {
   }
 
   Future<void> saveAuthTokenState(
-      String accessToken, String refreshToken) async {
+    String accessToken,
+    Map<String, dynamic> user,
+  ) async {
     await _cache.save(
         key: SharedPrefEnums.AccessToken.name, value: accessToken);
-    await _cache.save(
-        key: SharedPrefEnums.RefrashToken.name, value: refreshToken);
+    await _cache.save(key: SharedPrefEnums.user.name, value: jsonEncode(user));
   }
 
   Future<bool> isAuthenticatedState() async {
@@ -34,6 +39,12 @@ class Storage {
   Future<String?> getAccessToken() async {
     return await _cache.get(key: SharedPrefEnums.AccessToken.name);
   }
+
+  Future<AuthTokens?> getUser() async {
+    final String? user = await _cache.get(key: SharedPrefEnums.user.name);
+    return user == null ? null : AuthTokensModel.fromJson(jsonDecode(user));
+  }
+
   Future<String?> getRefreshToken() async {
     return await _cache.get(key: SharedPrefEnums.RefrashToken.name);
   }

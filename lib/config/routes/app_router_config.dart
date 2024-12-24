@@ -5,6 +5,7 @@ import '../../features/intro/presentation/screens/onboarding_screen.dart';
 import '../../features/intro/presentation/screens/splash_screen.dart';
 import 'package:page_transition/page_transition.dart';
 
+import '../../features/main/presentation/screens/main_screen.dart';
 import 'app_routes.dart';
 
 class AppRouterConfig {
@@ -59,6 +60,16 @@ class AppRouterConfig {
             context,
             state,
             child: LoginScreen(),
+          );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.main,
+        pageBuilder: (context, state) {
+          return _buildPageWithTransition(
+            context,
+            state,
+            child: MainScreen(),
           );
         },
       ),

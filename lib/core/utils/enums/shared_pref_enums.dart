@@ -1,3 +1,6 @@
 enum SharedPrefEnums {
-  onboarding, RefrashToken, AccessToken,
+  onboarding,
+  RefrashToken,
+  AccessToken,
+  user,
 }

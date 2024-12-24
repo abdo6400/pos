@@ -8,7 +8,7 @@ import '../../../core/utils/enums/string_enums.dart';
 import '../error/exceptions.dart';
 import '../network/netwok_info.dart';
 import 'api_consumer.dart';
-import 'api_keys.dart';
+// import 'api_keys.dart';
 import 'end_points.dart';
 import 'status_code.dart';
 
@@ -33,28 +33,28 @@ class DioConsumer extends ApiConsumer {
                 '${EndPoints.prefixToken} $accessToken';
           return handler.next(options);
         },
-        onError: (DioException error, ErrorInterceptorHandler handler) async {
-          if (error.response?.statusCode == 401) {
-            try {
-              final refreshToken = await storage.getRefreshToken();
-              if (refreshToken != null) {
-                final newToken = await _refreshAccessToken(refreshToken);
-                if (newToken != null) {
-                  await storage.saveAuthTokenState(
-                      newToken[ApiKeys.accessToken], refreshToken);
-                  final requestOptions = error.requestOptions;
-                  requestOptions.headers[HttpHeaders.authorizationHeader] =
-                      '${EndPoints.prefixToken} $newToken';
-                  final response = await client.fetch(requestOptions);
-                  return handler.resolve(response);
-                }
-              }
-            } catch (refreshError) {
-              return handler.reject(error);
-            }
-          }
-          return handler.next(error);
-        },
+        // onError: (DioException error, ErrorInterceptorHandler handler) async {
+        //   if (error.response?.statusCode == 401) {
+        //     try {
+        //       final refreshToken = await storage.getRefreshToken();
+        //       if (refreshToken != null) {
+        //         final newToken = await _refreshAccessToken(refreshToken);
+        //         if (newToken != null) {
+        //           await storage.saveAuthTokenState(
+        //               newToken[ApiKeys.accessToken], refreshToken);
+        //           final requestOptions = error.requestOptions;
+        //           requestOptions.headers[HttpHeaders.authorizationHeader] =
+        //               '${EndPoints.prefixToken} $newToken';
+        //           final response = await client.fetch(requestOptions);
+        //           return handler.resolve(response);
+        //         }
+        //       }
+        //     } catch (refreshError) {
+        //       return handler.reject(error);
+        //     }
+        //   }
+        //   return handler.next(error);
+        // },
       ),
     );
     if (!kIsWeb) {
@@ -63,11 +63,11 @@ class DioConsumer extends ApiConsumer {
       );
     }
   }
-  Future<dynamic> _refreshAccessToken(String refreshToken) async {
-    final response = await post(EndPoints.refresh,
-        body: {ApiKeys.refreshToken: refreshToken});
-    return response;
-  }
+  // Future<dynamic> _refreshAccessToken(String refreshToken) async {
+  //   final response = await post(EndPoints.refresh,
+  //       body: {ApiKeys.refreshToken: refreshToken});
+  //   return response;
+  // }
 
   @override
   Future<dynamic> get(
@@ -170,7 +170,7 @@ class DioConsumer extends ApiConsumer {
     if (await networkInfo.isConnected) {
       try {
         final response = await request();
-        return response.data["data"];
+        return response.data[EndPoints.response];
       } on DioException catch (error) {
         _handleDioError(error);
       } catch (error) {

@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import '../../../../config/database/error/exceptions.dart';
 import '../../../../config/database/error/failures.dart';
-import '../../domain/entities/auth_tokens.dart';
+import '../../../../core/entities/auth_tokens.dart';
 import '../../domain/repositories/login_repository.dart';
 import '../datasources/login_remote_data_source.dart';
 

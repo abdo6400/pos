@@ -1,5 +1,5 @@
 {
-  "appName": "الغالي",
+  "appName": "فوتر سوفت",
   "appMessage": "نبتغي قمم الجبال",
   "arabic": "العربية",
   "english": "الانجليزية",
@@ -205,8 +205,8 @@
   "gateway_timeout_error": "انتهاء وقت البوابة",
   "payload_too_large_error": "الحمولة كبيرة جدًا",
   "unprocessable_entity_error": "غير قادر على المعالجة",
-  "edit_note_on_lesson":"تعديل ملاحظة على الدرس",
-  "note_edited_successfully":"ملاحظة تم تعديلها بنجاح",
-  "note_added_successfully":"ملاحظة تمت اضافتها بنجاح",
-  "are_you_sure_you_want_to_delete":"هل تريد حذف هذه الملاحظة؟"
+  "edit_note_on_lesson": "تعديل ملاحظة على الدرس",
+  "note_edited_successfully": "ملاحظة تم تعديلها بنجاح",
+  "note_added_successfully": "ملاحظة تمت اضافتها بنجاح",
+  "are_you_sure_you_want_to_delete": "هل تريد حذف هذه الملاحظة؟"
 }

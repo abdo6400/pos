@@ -2,7 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import '../../utils/extensions/extensions.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import '../../components/global_form_builder/custom_form_builder.dart';
+import '../../widgets/global_form_builder/custom_form_builder.dart';
 import '../../entities/form.dart';
 import '../enums/string_enums.dart';
 
