@@ -1,5 +1,5 @@
+import '../../../../core/widgets/app_logo.dart';
 import '../../../../core/widgets/global_form_builder/custom_form_builder.dart';
-import '../../../../core/utils/assets.dart';
 import '../../../../core/utils/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -35,27 +35,7 @@ class LoginFormBuilder extends StatelessWidget {
               context.ResponsiveValu(8, mobile: 5, tablet: 20, desktop: 35),
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              width: context.ResponsiveValu(80,
-                  mobile: 70, tablet: 150, desktop: 200, large: 250),
-              height: context.ResponsiveValu(80,
-                  mobile: 70, tablet: 150, desktop: 200, large: 250),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-              ),
-              child: Center(
-                child: SizedBox(
-                  width: context.ResponsiveValu(80,
-                      mobile: 70, tablet: 150, desktop: 200, large: 250),
-                  height: context.ResponsiveValu(80,
-                      mobile: 70, tablet: 150, desktop: 200, large: 250),
-                  child: Image.asset(
-                    Assets.logo,
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ),
-            ),
+            AppLogo(),
             CustomFormBuilder(FormParams(
               formKey: _formKey,
               fields: [

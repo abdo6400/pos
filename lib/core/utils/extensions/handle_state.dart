@@ -1,8 +1,6 @@
 import '../../utils/extensions/extensions.dart';
 import 'package:flutter/material.dart';
-
 import '../enums/state_enums.dart';
-import '../enums/string_enums.dart';
 
 extension HandleState on BuildContext {
   void handleState(StateEnum state, String? errorMessage) {
@@ -16,7 +14,7 @@ extension HandleState on BuildContext {
     switch (state) {
       case StateEnum.added:
         this.showMessageToast(
-          msg: StringEnums.note_added_successfully.name,
+          msg: "",
           backgroundColor: Colors.green,
         );
         break;
@@ -30,7 +28,7 @@ extension HandleState on BuildContext {
 
       case StateEnum.deleted:
         this.showMessageToast(
-          msg: StringEnums.note_deleted_successfully.name,
+          msg: "",
           backgroundColor: Colors.green,
         );
         break;
@@ -44,7 +42,7 @@ extension HandleState on BuildContext {
 
       case StateEnum.updated:
         this.showMessageToast(
-          msg: StringEnums.note_edited_successfully.name,
+          msg: "",
           backgroundColor: Colors.green,
         );
         break;

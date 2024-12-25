@@ -106,7 +106,7 @@ class OtpDialog extends StatelessWidget {
               ),
               SizedBox(height: 20),
               Text(
-                StringEnums.resend_otp_note.name.tr(),
+                StringEnums.resend_otp.name.tr(),
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                       fontSize: context.ResponsiveValu(12,

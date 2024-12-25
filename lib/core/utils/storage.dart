@@ -32,8 +32,7 @@ class Storage {
   }
 
   Future<bool> isAuthenticatedState() async {
-    return await _cache.get(key: SharedPrefEnums.AccessToken.name) != null &&
-        await _cache.get(key: SharedPrefEnums.RefrashToken.name) != null;
+    return await _cache.get(key: SharedPrefEnums.AccessToken.name) != null;
   }
 
   Future<String?> getAccessToken() async {

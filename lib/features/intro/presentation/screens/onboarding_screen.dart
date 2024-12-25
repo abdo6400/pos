@@ -92,45 +92,45 @@ class OnboardingScreen extends StatelessWidget {
             : context.pushReplacement(AppRoutes.login);
       },
       pages: [
-        PageViewModel(
-          title: StringEnums.savetime.name.tr(),
-          body: StringEnums.savetime_description.name.tr(),
-          image: Lottie.asset(
-            Assets.savingTime,
-            decoder: customDecoder,
-            fit: BoxFit.fill,
-          ),
-          decoration: PageDecoration(
-            titleTextStyle: titleTextStyle,
-            bodyTextStyle: bodyTextStyle,
-          ),
-        ),
-        PageViewModel(
-          title: StringEnums.tests.name.tr(),
-          body: StringEnums.tests_description.name.tr(),
-          image: Lottie.asset(
-            Assets.task,
-            decoder: customDecoder,
-            fit: BoxFit.fill,
-          ),
-          decoration: PageDecoration(
-            titleTextStyle: titleTextStyle,
-            bodyTextStyle: bodyTextStyle,
-          ),
-        ),
-        PageViewModel(
-          title: StringEnums.followup.name.tr(),
-          body: StringEnums.followup_description.name.tr(),
-          image: Lottie.asset(
-            Assets.followup,
-            decoder: customDecoder,
-            fit: BoxFit.fill,
-          ),
-          decoration: PageDecoration(
-            titleTextStyle: titleTextStyle,
-            bodyTextStyle: bodyTextStyle,
-          ),
-        ),
+        // PageViewModel(
+        //   title: StringEnums.savetime.name.tr(),
+        //   body: StringEnums.savetime_description.name.tr(),
+        //   image: Lottie.asset(
+        //     Assets.savingTime,
+        //     decoder: customDecoder,
+        //     fit: BoxFit.fill,
+        //   ),
+        //   decoration: PageDecoration(
+        //     titleTextStyle: titleTextStyle,
+        //     bodyTextStyle: bodyTextStyle,
+        //   ),
+        // ),
+        // PageViewModel(
+        //   title: StringEnums.tests.name.tr(),
+        //   body: StringEnums.tests_description.name.tr(),
+        //   image: Lottie.asset(
+        //     Assets.task,
+        //     decoder: customDecoder,
+        //     fit: BoxFit.fill,
+        //   ),
+        //   decoration: PageDecoration(
+        //     titleTextStyle: titleTextStyle,
+        //     bodyTextStyle: bodyTextStyle,
+        //   ),
+        // ),
+        // PageViewModel(
+        //   title: StringEnums.followup.name.tr(),
+        //   body: StringEnums.followup_description.name.tr(),
+        //   image: Lottie.asset(
+        //     Assets.followup,
+        //     decoder: customDecoder,
+        //     fit: BoxFit.fill,
+        //   ),
+        //   decoration: PageDecoration(
+        //     titleTextStyle: titleTextStyle,
+        //     bodyTextStyle: bodyTextStyle,
+        //   ),
+        // ),
       ],
     );
   }

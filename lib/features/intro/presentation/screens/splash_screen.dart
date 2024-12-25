@@ -13,18 +13,15 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: CustomSplashScreen.fadeIn(
-        gifPath: Assets.logo,
-        gifWidth: context.ResponsiveValu(120,
-            mobile: 100, tablet: 200, desktop: 250, large: 300),
-        gifHeight: context.ResponsiveValu(120,
-            mobile: 100, tablet: 200, desktop: 250, large: 300),
-        duration: Duration(seconds: 4),
-        onEnd: () async => await storage.isOnBoardingState()
-            ? await storage.isAuthenticatedState()
-                ? context.pushReplacement(AppRoutes.main)
-                : context.pushReplacement(AppRoutes.login)
-            : context.pushReplacement(AppRoutes.login),
-      ),
+          gifPath: Assets.logo,
+          gifWidth: context.ResponsiveValu(120,
+              mobile: 100, tablet: 200, desktop: 250, large: 300),
+          gifHeight: context.ResponsiveValu(120,
+              mobile: 100, tablet: 200, desktop: 250, large: 300),
+          duration: Duration(seconds: 4),
+          onEnd: () async => (await storage.isAuthenticatedState())
+              ? context.pushReplacement(AppRoutes.main)
+              : context.pushReplacement(AppRoutes.login)),
     );
   }
 }
