@@ -223,13 +223,15 @@ class AnimatedRailRawState extends State<AnimatedRailRaw>
     var translateX = width.clamp(0, widget.width) - widget.width;
     var direction = widget.direction ?? Directionality.of(context);
     return Positioned(
-      left: direction == TextDirection.ltr ? 0 : null,
-      right: direction == TextDirection.ltr ? null : 0,
+      left: direction == TextDirection.rtl ? 0 : null,
+      right: direction == TextDirection.rtl ? null : 0,
       width: width.clamp(widget.width, double.infinity) + 30,
+      top: 0,
+      bottom: 0,
       key: _containerKey,
       child: Transform.translate(
         offset: Offset(
-            translateX * (direction == TextDirection.ltr ? 1 : -1), translateY),
+            translateX * (direction == TextDirection.rtl ? 1 : -1), translateY),
         child: Row(
           key: _railKey,
           mainAxisSize: MainAxisSize.max,
@@ -242,7 +244,7 @@ class AnimatedRailRawState extends State<AnimatedRailRaw>
   void _onHorizontalDragUpdate(DragUpdateDetails d) {
     var direction = widget.direction ?? Directionality.of(context);
     setState(() {
-      if (direction == TextDirection.ltr) {
+      if (direction == TextDirection.rtl) {
         if (width + d.delta.dx > widget.width && !widget.expand) {
           return;
         }
@@ -258,7 +260,7 @@ class AnimatedRailRawState extends State<AnimatedRailRaw>
 
   void _onHorizontalDragEnd(DragEndDetails d) {
     var direction = widget.direction ?? Directionality.of(context);
-    if (direction == TextDirection.ltr) {
+    if (direction == TextDirection.rtl) {
       velocity = d.velocity.pixelsPerSecond.dx;
     } else {
       velocity = -d.velocity.pixelsPerSecond.dx;
@@ -312,34 +314,6 @@ class AnimatedRailRawState extends State<AnimatedRailRaw>
     var theme = Theme.of(context);
     var direction = widget.direction ?? Directionality.of(context);
     return [
-      GestureDetector(
-        onHorizontalDragUpdate: _onHorizontalDragUpdate,
-        onHorizontalDragEnd: _onHorizontalDragEnd,
-        onHorizontalDragStart: _onHorizontalDragStart,
-        onVerticalDragUpdate: _onVerticalDragUpdate,
-        onVerticalDragEnd: (d) {
-          _stopCursorAnimation();
-        },
-        child: PhysicalModel(
-          color: Colors.black,
-          elevation: 10.0,
-          borderRadius: BorderRadiusDirectional.horizontal(
-            end: Radius.circular(20),
-          ).resolve(direction),
-          child: ClipRRect(
-            borderRadius: BorderRadiusDirectional.horizontal(
-              end: Radius.circular(20),
-            ).resolve(direction),
-            child: Container(
-                constraints: BoxConstraints(maxHeight: constraints.maxHeight),
-                width: width.clamp(widget.width, double.infinity),
-                decoration: BoxDecoration(
-                  color: widget.background ?? theme.primaryColor,
-                ),
-                child: _buildTiles(widget.items, theme)),
-          ),
-        ),
-      ),
       Flexible(
         child: GestureDetector(
           onTap: () {
@@ -373,17 +347,44 @@ class AnimatedRailRawState extends State<AnimatedRailRaw>
               height: widget.cursorSize?.height ?? 100,
               width: widget.cursorSize?.width ?? 100,
               child: RotatedBox(
-                quarterTurns: direction == TextDirection.rtl ? 2 : 0,
+                quarterTurns: direction == TextDirection.rtl ? 0 : 2,
                 child: ValueListenableBuilder(
                     valueListenable: animationNotifier,
                     builder: (cx, double value, _) => CustomPaint(
-                            painter: PointerPainter(
-                          pointerHeight: widget.cursorSize?.height ?? 100,
-                          animation: value,
-                          color: widget.background ?? theme.primaryColor,
-                          arrowTintColor: theme.textTheme.bodyLarge!.color!,
-                        ))),
+                        painter: PointerPainter(
+                            pointerHeight: widget.cursorSize?.height ?? 100,
+                            animation: value,
+                            color: widget.background ?? theme.primaryColor,
+                            arrowTintColor: theme.scaffoldBackgroundColor))),
               )),
+        ),
+      ),
+      GestureDetector(
+        onHorizontalDragUpdate: _onHorizontalDragUpdate,
+        onHorizontalDragEnd: _onHorizontalDragEnd,
+        onHorizontalDragStart: _onHorizontalDragStart,
+        onVerticalDragUpdate: _onVerticalDragUpdate,
+        onVerticalDragEnd: (d) {
+          _stopCursorAnimation();
+        },
+        child: PhysicalModel(
+          color: Colors.black,
+          elevation: 10.0,
+          borderRadius: BorderRadiusDirectional.horizontal(
+            start: Radius.circular(10),
+          ).resolve(direction),
+          child: ClipRRect(
+            borderRadius: BorderRadiusDirectional.horizontal(
+              start: Radius.circular(10),
+            ).resolve(direction),
+            child: Container(
+                constraints: BoxConstraints(maxHeight: constraints.maxHeight),
+                width: width.clamp(widget.width, double.infinity),
+                decoration: BoxDecoration(
+                  color: widget.background ?? theme.primaryColor,
+                ),
+                child: _buildTiles(widget.items, theme)),
+          ),
         ),
       ),
     ];

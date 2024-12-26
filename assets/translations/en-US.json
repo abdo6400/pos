@@ -205,8 +205,5 @@
   "gateway_timeout_error": "Gateway timeout error",
   "payload_too_large_error": "Payload too large error",
   "unprocessable_entity_error": "Unprocessable entity error",
-  "edit_note_on_lesson": "Edit Note on Lesson",
-  "note_edited_successfully": "Note edited successfully",
-  "note_added_successfully": "Note added successfully",
-  "are_you_sure_you_want_to_delete": "Are you sure you want to delete this note?"
+  "search_about_item": "Search about item"
 }
