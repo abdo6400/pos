@@ -21,8 +21,12 @@ class DioConsumer extends ApiConsumer {
       ..baseUrl = EndPoints.baseUrl
       ..responseType = ResponseType.json
       ..followRedirects = false
-      ..headers = {'Content-Type': 'application/json'};
-    client.interceptors.add(LogInterceptor());
+      ..headers = {
+        HttpHeaders.contentTypeHeader: ContentType.json.value,
+        HttpHeaders.acceptHeader: ContentType.json.value,
+      };
+    client.interceptors
+        .add(LogInterceptor(requestBody: true, responseBody: true));
     client.interceptors.add(
       InterceptorsWrapper(
         onRequest:
@@ -30,7 +34,7 @@ class DioConsumer extends ApiConsumer {
           final accessToken = await storage.getAccessToken();
           if (accessToken != null)
             options.headers[HttpHeaders.authorizationHeader] =
-                '${EndPoints.prefixToken} $accessToken';
+                '${EndPoints.prefixToken}$accessToken';
           return handler.next(options);
         },
         // onError: (DioException error, ErrorInterceptorHandler handler) async {
@@ -170,7 +174,7 @@ class DioConsumer extends ApiConsumer {
     if (await networkInfo.isConnected) {
       try {
         final response = await request();
-        return response.data[EndPoints.response];
+        return response.data;
       } on DioException catch (error) {
         _handleDioError(error);
       } catch (error) {
@@ -201,7 +205,18 @@ class DioConsumer extends ApiConsumer {
   }
 
   void _handleBadResponse(DioException error) {
-    final String? message = error.response?.data["message"];
+    final dynamic responseData = error.response?.data;
+
+    String? message;
+    if (responseData is Map<String, dynamic>) {
+      message = responseData["message"];
+    } else if (responseData is String && responseData.contains('<html')) {
+      final htmlMessage = RegExp(r'<h2>(.*?)<\/h2>', dotAll: true)
+          .firstMatch(responseData)
+          ?.group(1);
+      message = htmlMessage?.trim();
+    }
+
     switch (error.response?.statusCode) {
       case StatusCode.badRequest:
         throw BadRequestException(

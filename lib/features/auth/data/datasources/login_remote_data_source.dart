@@ -18,6 +18,6 @@ class LoginRemoteDataSourceImpl implements LoginRemoteDataSource {
       {required String email, required String password}) async {
     final response = await _apiConsumer.post(EndPoints.login,
         queryParameters: {ApiKeys.userName: email, ApiKeys.password: password});
-    return AuthTokensModel.fromJson(response);
+    return AuthTokensModel.fromJson(response[EndPoints.response]);
   }
 }

@@ -2,19 +2,19 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
 
-import '../utils/enums/string_enums.dart';
+import '../../utils/enums/string_enums.dart';
 
-class ErrorCard extends StatelessWidget {
+class ErrorMessage extends StatelessWidget {
   final String? message;
   final VoidCallback? onRetry;
-  const ErrorCard({super.key, this.message, this.onRetry});
+  const ErrorMessage({super.key, this.message, this.onRetry});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
       padding: const EdgeInsets.all(8.0),
-      child: Column(
+      child: Row(
         spacing: context.ResponsiveValu(10, mobile: 5, tablet: 15),
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -28,21 +28,21 @@ class ErrorCard extends StatelessWidget {
               size: context.ResponsiveValu(45,
                   mobile: 40, tablet: 55, desktop: 70),
               color: Theme.of(context).colorScheme.error),
-          Text(
-            StringEnums.error.name.tr(),
-            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  fontSize: context.ResponsiveValu(16,
-                      mobile: 12, tablet: 24, desktop: 30),
+          (message == null)
+              ? Text(
+                  StringEnums.error.name.tr(),
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        fontSize: context.ResponsiveValu(16,
+                            mobile: 12, tablet: 24, desktop: 30),
+                      ),
+                )
+              : Text(
+                  message!,
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        fontSize: context.ResponsiveValu(12,
+                            mobile: 8, tablet: 20, desktop: 30),
+                      ),
                 ),
-          ),
-          if (message != null)
-            Text(
-              message!,
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    fontSize: context.ResponsiveValu(12,
-                        mobile: 8, tablet: 20, desktop: 30),
-                  ),
-            ),
           TextButton(
               onPressed: () => onRetry!(),
               style: Theme.of(context).elevatedButtonTheme.style!.copyWith(
