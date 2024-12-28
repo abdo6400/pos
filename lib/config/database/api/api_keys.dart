@@ -40,4 +40,54 @@ class ApiKeys {
   static const String permissionId = "PermissionId";
   static const String allow = "Allow";
   static const String warehouseId = "WarehouseId";
+  static const String warehouse = "Warehouse";
+
+  static const String pageNumber = "paging.PageNumber";
+  static const String pageSize = "paging.PageSize";
+
+  // Additional keys for CategoryModel and ProductModel
+  static const String catId = "CatID";
+  static const String catArName = "Cat_AR_Name";
+  static const String catEnName = "Cat_EN_Name";
+  static const String taxPercentage = "TaxPercentage";
+  static const String icon = "Icon";
+  static const String backColor = "BackColor";
+  static const String foreColor = "ForeColor";
+  static const String price = "Price";
+  static const String printer = "Printer";
+  static const String printer2 = "Printer2";
+  static const String tag = "Tag";
+  static const String question1 = "Question1";
+  static const String question2 = "Question2";
+  static const String question3 = "Question3";
+  static const String question4 = "Question4";
+  static const String question5 = "Question5";
+  static const String saleable = "Saleable";
+  static const String standardItem = "StandardItem";
+  static const String discountable = "Discountable";
+
+  // Keys for ProductModel
+  static const String proId = "ProID";
+  static const String barcode = "Barcode";
+  static const String proArName = "Pro_AR_Name";
+  static const String proEnName = "Pro_EN_Name";
+  static const String categoryAr = "CategoryAr";
+  static const String categoryEn = "CategoryEn";
+  static const String father = "Father";
+  static const String price2 = "Price2";
+  static const String price3 = "Price3";
+  static const String price4 = "Price4";
+  static const String taxable = "Taxable";
+  static const String isActive = "IsActive";
+  static const String rawMaterial = "RawMaterial";
+  static const String compositeMaterial = "CompositeMaterial";
+  static const String compo = "Compo";
+  static const String isMaximumQty = "IsMaximumQty";
+  static const String question1Qty = "Question1Qty";
+  static const String question2Qty = "Question2Qty";
+  static const String question3Qty = "Question3Qty";
+  static const String question4Qty = "Question4Qty";
+  static const String question5Qty = "Question5Qty";
+
+  static const String fatherId = "FatherID";
 }

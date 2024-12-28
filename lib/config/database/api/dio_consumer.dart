@@ -34,7 +34,7 @@ class DioConsumer extends ApiConsumer {
           final accessToken = await storage.getAccessToken();
           if (accessToken != null)
             options.headers[HttpHeaders.authorizationHeader] =
-                '${EndPoints.prefixToken}$accessToken';
+                '${EndPoints.prefixToken} $accessToken';
           return handler.next(options);
         },
         // onError: (DioException error, ErrorInterceptorHandler handler) async {

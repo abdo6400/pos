@@ -1,3 +1,4 @@
+import '../../../../config/database/api/api_keys.dart';
 import '../../domain/entities/category.dart';
 
 class CategoryModel extends Category {
@@ -23,24 +24,24 @@ class CategoryModel extends Category {
       required super.discountable});
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) => CategoryModel(
-        catId: json["CatID"],
-        catArName: json["Cat_AR_Name"],
-        catEnName: json["Cat_EN_Name"],
-        taxPercentage: json["TaxPercentage"].toString(),
-        icon: json["Icon"],
-        backColor: json["BackColor"],
-        foreColor: json["ForeColor"],
-        price: json["Price"].toString(),
-        printer: json["Printer"],
-        printer2: json["Printer2"],
-        tag: json["Tag"],
-        question1: json["Question1"].toString(),
-        question2: json["Question2"].toString(),
-        question3: json["Question3"].toString(),
-        question4: json["Question4"].toString(),
-        question5: json["Question5"].toString(),
-        saleable: json["Saleable"],
-        standardItem: json["StandardItem"],
-        discountable: json["Discountable"],
+        catId: json[ApiKeys.catId],
+        catArName: json[ApiKeys.catArName],
+        catEnName: json[ApiKeys.catEnName],
+        taxPercentage: json[ApiKeys.taxPercentage].toString(),
+        icon: json[ApiKeys.icon],
+        backColor: json[ApiKeys.backColor],
+        foreColor: json[ApiKeys.foreColor],
+        price: json[ApiKeys.price].toString(),
+        printer: json[ApiKeys.printer],
+        printer2: json[ApiKeys.printer2],
+        tag: json[ApiKeys.tag],
+        question1: json[ApiKeys.question1].toString(),
+        question2: json[ApiKeys.question2].toString(),
+        question3: json[ApiKeys.question3].toString(),
+        question4: json[ApiKeys.question4].toString(),
+        question5: json[ApiKeys.question5].toString(),
+        saleable: json[ApiKeys.saleable],
+        standardItem: json[ApiKeys.standardItem],
+        discountable: json[ApiKeys.discountable],
       );
 }

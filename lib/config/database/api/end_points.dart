@@ -24,7 +24,7 @@ class EndPoints {
       'RestaurantSales/v1.0/AppGetPaymentsByCashNo';
 
   // Item Endpoints
-  static const String getAllItems = 'Item/v1.0/AppGetAll?Warehouse';
+  static const String getAllItems = 'Item/v1.0/AppGetAll';
   static const String getAllCategories = 'Category/v1.0/AppGetAll';
   static const String getAllFlavors = 'Flavors/v1.0/AppGetAll';
   static const String getAllDiscounts = 'Discount/v1.0/AppGetAll';
@@ -47,4 +47,6 @@ class EndPoints {
   static const String getReturnById = 'Return/v1.0/GetById';
   static const String getReturnByInvoice =
       'RestaurantInvoices/v1.0/AppGetByDiff?InvoiceN';
+
+  static const String getItemsByCategory = 'Item/v1.0/AppGetByCategory';
 }

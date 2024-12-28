@@ -1,9 +1,12 @@
 import '../../../../config/database/api/api_consumer.dart';
+import '../../../../config/database/api/api_keys.dart';
 import '../../../../config/database/api/end_points.dart';
 import '../models/category_model.dart';
+import '../models/product_model.dart';
 
 abstract class MenuRemoteDataSource {
   Future<List<CategoryModel>> getCategories();
+  Future<List<ProductModel>> getProducts(String branchId);
 }
 
 class MenuRemoteDataSourceImpl implements MenuRemoteDataSource {
@@ -14,8 +17,16 @@ class MenuRemoteDataSourceImpl implements MenuRemoteDataSource {
   @override
   Future<List<CategoryModel>> getCategories() async {
     final response = await _apiConsumer.get(EndPoints.getAllCategories,
-        queryParameters: {'paging.PageNumber': '32', 'paging.PageSize': '32'});
+        queryParameters: {ApiKeys.pageNumber: '32', ApiKeys.pageSize: '32'});
     return List<CategoryModel>.from(
         response.map((x) => CategoryModel.fromJson(x)));
+  }
+
+  @override
+  Future<List<ProductModel>> getProducts(String branchId) async {
+    final response = await _apiConsumer.get(EndPoints.getItemsByCategory,
+        queryParameters: {ApiKeys.fatherId: branchId});
+    return List<ProductModel>.from(
+        response.map((x) => ProductModel.fromJson(x)));
   }
 }
