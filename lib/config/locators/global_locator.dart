@@ -10,11 +10,13 @@ import '../database/cache/secure_cache_helper.dart';
 import '../database/network/netwok_info.dart';
 import 'app_locator.dart';
 import 'auth_locator.dart';
+import 'constant_locator.dart';
 
 class GlobalLocator {
   static Future<void> init() async {
     await AuthLocator.init();
     await AppLocator.init();
+    await ConstantLocator.init();
     // Internal
     await EasyLocalization.ensureInitialized();
     final themeMode =
@@ -24,7 +26,7 @@ class GlobalLocator {
         () => SecureCacheHelper(sharedPref: locator()));
     locator.registerLazySingleton<ApiConsumer>(
         () => DioConsumer(client: locator(), networkInfo: locator()));
-    
+
     // Extarnal
     locator.registerLazySingleton(() => Dio());
     locator.registerLazySingleton(() => FlutterSecureStorage());

@@ -26,6 +26,9 @@ class MainScreen extends StatelessWidget {
         BlocProvider(
           create: (context) => locator<ProductBloc>(),
         ),
+        BlocProvider(
+          create: (context) => locator<ProductBloc>()..add(GetProductsEvent()),
+        ),
       ],
       child: Scaffold(
           resizeToAvoidBottomInset: false,

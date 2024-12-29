@@ -12,7 +12,7 @@ class CategoryChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selected = category != null &&
-        context.watch<CategorySelectionCubit>().state.catId == category!.catId;
+        context.watch<CategorySelectionCubit>().state?.catId == category!.catId;
     return InkWell(
       onTap: () => category != null
           ? context.read<CategorySelectionCubit>().selectCategory(category!)
@@ -22,7 +22,7 @@ class CategoryChip extends StatelessWidget {
             ? context.trValue(category!.catArName, category!.catEnName)
             : 'Category'),
         backgroundColor:
-            selected ? Theme.of(context).colorScheme.primary : null,
+            selected ? Theme.of(context).colorScheme.secondary : null,
         labelStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
               color: selected ? Colors.white : null,
               fontSize: context.ResponsiveValu(13,

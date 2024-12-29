@@ -1,13 +1,13 @@
 import 'dart:convert';
-
 import '../../config/database/cache/cache_consumer.dart';
 import '../entities/auth_tokens.dart';
 import '../models/auth_tokens_model.dart';
-import 'constants.dart';
 import 'enums/shared_pref_enums.dart';
 
 class Storage {
-  final _cache = locator<CacheConsumer>();
+  final CacheConsumer _cache;
+
+  Storage({required CacheConsumer cache}) : _cache = cache;
   Future<void> saveOnBoardingState() async {
     await _cache.save(
         key: SharedPrefEnums.onboarding.name,

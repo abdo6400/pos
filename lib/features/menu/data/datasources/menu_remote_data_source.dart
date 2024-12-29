@@ -24,8 +24,12 @@ class MenuRemoteDataSourceImpl implements MenuRemoteDataSource {
 
   @override
   Future<List<ProductModel>> getProducts(String branchId) async {
-    final response = await _apiConsumer.get(EndPoints.getItemsByCategory,
-        queryParameters: {ApiKeys.fatherId: branchId});
+    final response = await _apiConsumer.get(EndPoints.getAllItems,
+        queryParameters: {
+          ApiKeys.warehouse: branchId,
+          ApiKeys.pageNumber: '32',
+          ApiKeys.pageSize: '32'
+        });
     return List<ProductModel>.from(
         response.map((x) => ProductModel.fromJson(x)));
   }

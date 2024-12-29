@@ -4,7 +4,6 @@ import 'package:skeletonizer/skeletonizer.dart';
 import '../../../../core/widgets/errors/error_message.dart';
 import '../bloc/category/category_bloc.dart';
 import '../bloc/category_selection/category_selection_cubit.dart';
-import '../bloc/product/product_bloc.dart';
 import 'category_chip.dart';
 
 class CategoriesList extends StatelessWidget {
@@ -18,8 +17,6 @@ class CategoriesList extends StatelessWidget {
           context
               .read<CategorySelectionCubit>()
               .selectCategory(state.categories[0]);
-          context.read<ProductBloc>().add(
-              GetProductsEvent(branchId: state.categories[0].catId.toString()));
         }
       },
       builder: (context, state) {

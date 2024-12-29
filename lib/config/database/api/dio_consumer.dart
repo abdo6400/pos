@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:dio_http2_adapter/dio_http2_adapter.dart';
 import 'package:flutter/foundation.dart';
 import '../../../core/utils/constants.dart';
@@ -25,12 +26,21 @@ class DioConsumer extends ApiConsumer {
         HttpHeaders.contentTypeHeader: ContentType.json.value,
         HttpHeaders.acceptHeader: ContentType.json.value,
       };
+
     client.interceptors
         .add(LogInterceptor(requestBody: true, responseBody: true));
     client.interceptors.add(
       InterceptorsWrapper(
         onRequest:
             (RequestOptions options, RequestInterceptorHandler handler) async {
+          client.httpClientAdapter = IOHttpClientAdapter(
+            createHttpClient: () {
+              final HttpClient _client = HttpClient();
+              _client.badCertificateCallback =
+                  ((X509Certificate cert, String host, int port) => true);
+              return _client;
+            },
+          );
           final accessToken = await storage.getAccessToken();
           if (accessToken != null)
             options.headers[HttpHeaders.authorizationHeader] =

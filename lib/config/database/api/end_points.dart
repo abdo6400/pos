@@ -48,5 +48,5 @@ class EndPoints {
   static const String getReturnByInvoice =
       'RestaurantInvoices/v1.0/AppGetByDiff?InvoiceN';
 
-  static const String getItemsByCategory = 'Item/v1.0/AppGetByCategory';
+  static const String getItemsByCategory = 'Item/v1.0/ApiGetByCategory';
 }

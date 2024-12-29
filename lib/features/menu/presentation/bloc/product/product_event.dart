@@ -8,6 +8,5 @@ sealed class ProductEvent extends Equatable {
 }
 
 class GetProductsEvent extends ProductEvent {
-  final String branchId;
-  const GetProductsEvent({required this.branchId});
+  const GetProductsEvent();
 }

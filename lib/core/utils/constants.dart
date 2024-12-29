@@ -14,8 +14,4 @@ final localArabic = Locale('ar', 'SA');
 final localEnglish = Locale('en', 'US');
 
 // storage
-final storage = Storage();
-
-
-
-
+final storage = locator<Storage>();
