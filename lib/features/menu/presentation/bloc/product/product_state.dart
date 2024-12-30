@@ -12,6 +12,14 @@ class ProductLoading extends ProductState {}
 class ProductSuccess extends ProductState {
   final List<Product> products;
   const ProductSuccess({required this.products});
+
+  List<Product> filteredProducts(String catId) {
+    try {
+      return products.where((x) => catId.compareTo(x.catId) == 0).toList();
+    } catch (e) {
+      return [];
+    }
+  }
 }
 
 class ProductError extends ProductState {

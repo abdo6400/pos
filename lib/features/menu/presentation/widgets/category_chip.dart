@@ -18,6 +18,7 @@ class CategoryChip extends StatelessWidget {
           ? context.read<CategorySelectionCubit>().selectCategory(category!)
           : null,
       child: Chip(
+        elevation: 10,
         label: Text(category != null
             ? context.trValue(category!.catArName, category!.catEnName)
             : 'Category'),
