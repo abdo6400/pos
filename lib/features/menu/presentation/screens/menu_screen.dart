@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
-import 'package:retail/features/menu/presentation/bloc/category_selection/category_selection_cubit.dart';
+import 'package:retail/features/menu/presentation/bloc/cubit/category_selection_cubit.dart';
+import '../bloc/cubit/search_cubit.dart';
 import '../widgets/categories_list.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/products_list.dart';
@@ -11,8 +12,11 @@ class MenuScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => CategorySelectionCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => CategorySelectionCubit()),
+        BlocProvider(create: (_) => SearchCubit()),
+      ],
       child: Column(
         children: [
           Expanded(

@@ -6,7 +6,8 @@ import 'package:skeletonizer/skeletonizer.dart';
 import '../../../../core/widgets/errors/error_card.dart';
 import '../../domain/entities/category.dart';
 import '../../domain/entities/product.dart';
-import '../bloc/category_selection/category_selection_cubit.dart';
+import '../bloc/cubit/category_selection_cubit.dart';
+import '../bloc/cubit/search_cubit.dart';
 import '../bloc/product/product_bloc.dart';
 
 class ProductsList extends StatelessWidget {
@@ -24,13 +25,15 @@ class ProductsList extends StatelessWidget {
                 ),
           );
         }
-
         return Skeletonizer(
           enabled: state is ProductLoading,
           child: BlocBuilder<CategorySelectionCubit, Category?>(
             builder: (context, category) {
               final List<Product> products = state is ProductSuccess
-                  ? state.filteredProducts(category!.catId)
+                  ? category != null
+                      ? state.filteredProductsByCategory(category.catId)
+                      : state.filteredProductsByName(
+                          context.watch<SearchCubit>().state)
                   : [];
               return ResponsiveGridView.builder(
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -44,8 +47,13 @@ class ProductsList extends StatelessWidget {
                         elevation: 0.5,
                         shape: RoundedRectangleBorder(
                           side: BorderSide(
-                            color: context.generateColorFromValue(
-                                products[index].proId.toString()),
+                            color: (state is ProductSuccess)
+                                ? context
+                                    .generateColorFromValue(
+                                        products[index].catId.toString(),
+                                        darkenFactor: 0.2)
+                                    .withAlpha(120)
+                                : Colors.grey,
                           ),
                           borderRadius: BorderRadiusDirectional.only(
                               bottomEnd: Radius.circular(10),
@@ -57,7 +65,8 @@ class ProductsList extends StatelessWidget {
                           alignment: Alignment.center,
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                              image: products[index].icon != null
+                              image: (state is ProductSuccess &&
+                                      products[index].icon != null)
                                   ? DecorationImage(
                                       image: context.displayBase64Image(
                                           products[index].icon!))
@@ -109,7 +118,10 @@ class ProductsList extends StatelessWidget {
                                         ),
                                   ),
                                   IconButton.outlined(
-                                      onPressed: () {}, icon: Icon(Icons.add))
+                                      iconSize: context.ResponsiveValu(20,
+                                          mobile: 15, tablet: 30, desktop: 40),
+                                      onPressed: () {},
+                                      icon: Icon(Icons.add))
                                 ],
                               ),
                             ],

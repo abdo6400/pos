@@ -1,29 +1,35 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
 
+import '../../../../core/utils/enums/string_enums.dart';
 import '../../domain/entities/category.dart';
-import '../bloc/category_selection/category_selection_cubit.dart';
+import '../bloc/cubit/category_selection_cubit.dart';
 
 class CategoryChip extends StatelessWidget {
   final Category? category;
-  const CategoryChip({super.key, required this.category});
+  final bool loading;
+  const CategoryChip({super.key, required this.category, this.loading = false});
 
   @override
   Widget build(BuildContext context) {
-    final selected = category != null &&
-        context.watch<CategorySelectionCubit>().state?.catId == category!.catId;
+    final selected =
+        context.watch<CategorySelectionCubit>().state?.catId == category?.catId;
     return InkWell(
-      onTap: () => category != null
-          ? context.read<CategorySelectionCubit>().selectCategory(category!)
-          : null,
+      onTap: () =>
+          context.read<CategorySelectionCubit>().selectCategory(category),
       child: Chip(
         elevation: 10,
         label: Text(category != null
             ? context.trValue(category!.catArName, category!.catEnName)
-            : 'Category'),
-        backgroundColor:
-            selected ? Theme.of(context).colorScheme.secondary : null,
+            : loading
+                ? StringEnums.loading.name.tr()
+                : StringEnums.all.name.tr()),
+        backgroundColor: (selected && !loading)
+            ? context.generateColorFromValue(category?.catId ?? "0",
+                darkenFactor: 0.2)
+            : null,
         labelStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
               color: selected ? Colors.white : null,
               fontSize: context.ResponsiveValu(13,

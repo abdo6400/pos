@@ -205,5 +205,6 @@
   "gateway_timeout_error": "انتهاء وقت البوابة",
   "payload_too_large_error": "الحمولة كبيرة جدًا",
   "unprocessable_entity_error": "غير قادر على المعالجة",
-  "search_about_item": "ابحث عن العنصر"
+  "search_about_item": "ابحث عن العنصر",
+  "all": "الكل"
 }

@@ -205,5 +205,6 @@
   "gateway_timeout_error": "Gateway timeout error",
   "payload_too_large_error": "Payload too large error",
   "unprocessable_entity_error": "Unprocessable entity error",
-  "search_about_item": "Search about item"
+  "search_about_item": "Search about item",
+  "all": "All"
 }

@@ -136,4 +136,5 @@ enum StringEnums {
   bad_request_error,
   are_you_sure_you_want_to_delete,
   search_about_item,
+  all,
 }
