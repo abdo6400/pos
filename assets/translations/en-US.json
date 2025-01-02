@@ -48,7 +48,7 @@
   "failed_to_update_user": "Failed to update user",
   "no_courses_in_this_category": "No courses available in this category",
   "watch_course": "Watch Course",
-  "currency": "Egp",
+  "currency": "Currency",
   "subscribe": "Subscribe",
   "course_content": "Course Content",
   "login": "Login",
@@ -206,5 +206,15 @@
   "payload_too_large_error": "Payload too large error",
   "unprocessable_entity_error": "Unprocessable entity error",
   "search_about_item": "Search about item",
-  "all": "All"
+  "all": "All",
+  "no_products_found": "No products found",
+  "no_categories_found": "No categories found",
+  "pendingOrders": "Pending Orders",
+  "deleviry": "Delivery",
+  "offers": "Offers",
+  "discounts": "Discounts",
+  "no_offers": "No offers found",
+  "no_discounts": "No discounts found",
+  "no_pending_orders": "No pending orders found",
+  "branch": "Branch"
 }

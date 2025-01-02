@@ -1,5 +1,7 @@
 import 'package:dartz/dartz.dart';
+import 'package:retail/features/menu/domain/entities/flavor.dart';
 import 'package:retail/features/menu/domain/entities/product.dart';
+import 'package:retail/features/menu/domain/entities/question.dart';
 import '../../../../config/database/error/exceptions.dart';
 import '../../../../config/database/error/failures.dart';
 import '../../domain/entities/category.dart';
@@ -26,6 +28,28 @@ class MenuRepositoryImpl extends MenuRepository {
   Future<Either<Failure, List<Product>>> getProducts(String branchId) async {
     try {
       return Right(await _menuRemoteDataSource.getProducts(branchId));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Flavor>>> getFlavors() async {
+    try {
+      return Right(await _menuRemoteDataSource.getFlavors());
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Question>>> getQuestions() async {
+    try {
+      return Right(await _menuRemoteDataSource.getQuestions());
     } on ServerException catch (e) {
       return Left(ServerFailure(message: e.message));
     } catch (e) {

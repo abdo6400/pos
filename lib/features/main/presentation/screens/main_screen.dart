@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/widgets/floating_menu/animated_rail.dart';
+import '../../../../core/bloc/cubit/user_cubit.dart';
 import '../../../../core/utils/constants.dart';
 import '../../../home/presentation/screens/home_screen.dart';
 import '../../../../../core/utils/extensions/extensions.dart';
 import '../../../menu/presentation/bloc/category/category_bloc.dart';
+import '../../../menu/presentation/bloc/flavor/flavor_bloc.dart';
 import '../../../menu/presentation/bloc/product/product_bloc.dart';
+import '../../../menu/presentation/bloc/question/question_bloc.dart';
 import '../../../settings/presentation/screens/settings_screen.dart';
 import '../bloc/cubit/screen_cubit.dart';
 
@@ -24,10 +27,17 @@ class MainScreen extends StatelessWidget {
               locator<CategoryBloc>()..add(GetCategoriesEvent()),
         ),
         BlocProvider(
-          create: (context) => locator<ProductBloc>(),
+          create: (context) => locator<ProductBloc>()..add(GetProductsEvent()),
         ),
         BlocProvider(
-          create: (context) => locator<ProductBloc>()..add(GetProductsEvent()),
+          create: (context) => locator<FlavorBloc>()..add(GetFlavorsEvent()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              locator<QuestionBloc>()..add(GetQuestionsEvent()),
+        ),
+        BlocProvider(
+          create: (context) => UserCubit()..setUser(),
         ),
       ],
       child: Scaffold(

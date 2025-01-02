@@ -48,7 +48,7 @@
   "failed_to_update_user": "فشل في تحديث المستخدم",
   "no_courses_in_this_category": "لا توجد دورات متاحة في هذه الفئة",
   "watch_course": "شاهد الدورة",
-  "currency": "جنيها",
+  "currency": "العملة",
   "subscribe": "اشترك",
   "course_content": "محتوى الدورة",
   "login": "تسجيل الدخول",
@@ -206,5 +206,15 @@
   "payload_too_large_error": "الحمولة كبيرة جدًا",
   "unprocessable_entity_error": "غير قادر على المعالجة",
   "search_about_item": "ابحث عن العنصر",
-  "all": "الكل"
+  "all": "الكل",
+  "no_products_found": "لا يوجد منتجات",
+  "no_categories_found": "لا يوجد تصنيفات",
+  "pendingOrders": " الطلبات المعلقة",
+  "deleviry": " التوصيل",
+  "offers": " العروض",
+  "discounts": " الخصومات",
+  "no_offers": " لا يوجد عروض",
+  "no_discounts": " لا يوجد خصومات",
+  "no_pending_orders": " لا يوجد طلبات معلقة",
+  "branch": " الفرع"
 }

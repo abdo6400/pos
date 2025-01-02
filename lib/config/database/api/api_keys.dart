@@ -88,6 +88,19 @@ class ApiKeys {
   static const String question3Qty = "Question3Qty";
   static const String question4Qty = "Question4Qty";
   static const String question5Qty = "Question5Qty";
-
   static const String fatherId = "FatherID";
+
+  // FlavorModel keys
+  static const String flavorNo = "FlavorNo";
+  static const String flavorAr = "FlavorAr";
+  static const String flavorEn = "FlavorEn";
+  static const String category = "Category";
+
+  // QuestionModel keys
+  static const String productId = "ProductId";
+  static const String questionElements1 = "QuestionElements1";
+  static const String productQuestionId = "ProductQuestionId";
+  static const String productPrice = "ProductPrice";
+  static const String isRequired = "IsRequired";
+  static const String questionAr = "QuestionAr";
 }

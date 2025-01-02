@@ -7,6 +7,8 @@ import '../database/api/api_consumer.dart';
 import '../database/api/dio_consumer.dart';
 import '../database/cache/cache_consumer.dart';
 import '../database/cache/secure_cache_helper.dart';
+import '../database/local/local_consumer.dart';
+import '../database/local/sqlflite_consumer.dart';
 import '../database/network/netwok_info.dart';
 import 'app_locator.dart';
 import 'auth_locator.dart';
@@ -26,7 +28,7 @@ class GlobalLocator {
         () => SecureCacheHelper(sharedPref: locator()));
     locator.registerLazySingleton<ApiConsumer>(
         () => DioConsumer(client: locator(), networkInfo: locator()));
-
+    locator.registerLazySingleton<LocalConsumer>(() => SqlfliteConsumer());
     // Extarnal
     locator.registerLazySingleton(() => Dio());
     locator.registerLazySingleton(() => FlutterSecureStorage());

@@ -137,4 +137,11 @@ enum StringEnums {
   are_you_sure_you_want_to_delete,
   search_about_item,
   all,
+  no_products_found,
+  no_categories_found,
+  pendingOrders,
+  deleviry,
+  offers,
+  discounts,
+  branch
 }

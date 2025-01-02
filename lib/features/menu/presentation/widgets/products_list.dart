@@ -1,8 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import '../../../../core/utils/enums/string_enums.dart';
+import '../../../../core/widgets/empty_message.dart';
 import '../../../../core/widgets/errors/error_card.dart';
 import '../../domain/entities/category.dart';
 import '../../domain/entities/product.dart';
@@ -25,6 +28,7 @@ class ProductsList extends StatelessWidget {
                 ),
           );
         }
+
         return Skeletonizer(
           enabled: state is ProductLoading,
           child: BlocBuilder<CategorySelectionCubit, Category?>(
@@ -35,6 +39,11 @@ class ProductsList extends StatelessWidget {
                       : state.filteredProductsByName(
                           context.watch<SearchCubit>().state)
                   : [];
+              if (state is ProductSuccess && products.isEmpty) {
+                return EmptyMessage(
+                  message: StringEnums.no_products_found.name.tr(),
+                );
+              }
               return ResponsiveGridView.builder(
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   gridDelegate: ResponsiveGridDelegate(
