@@ -22,6 +22,8 @@ class ProductCard extends StatelessWidget {
     final MultiSelectController<Question> _questionController =
         MultiSelectController();
     context.showCustomDialog(
+      image: product!.icon,
+      title: context.trValue(product!.proArName, product!.proEnName),
       onSubmit: () {
         _flavorsController.getSelectedItems();
         _questionController.getSelectedItems();
@@ -41,6 +43,7 @@ class ProductCard extends StatelessWidget {
                 catId: product!.catId,
                 controller: _flavorsController,
               )),
+              const VerticalDivider(),
               Flexible(
                   child: QuestionsList(
                 productId: product!.proId,
@@ -83,8 +86,10 @@ class ProductCard extends StatelessWidget {
                     bottomStart: Radius.circular(15),
                     topEnd: Radius.circular(15),
                     topStart: Radius.circular(10)),
-                color: context.generateColorFromValue(product?.catId ?? "0",
-                    darkenFactor: 0.5),
+                color: product != null
+                    ? context.generateColorFromValue(product?.catId ?? "0",
+                        darkenFactor: 0.5)
+                    : null,
                 image: (product != null && product!.icon != null)
                     ? DecorationImage(
                         colorFilter: ColorFilter.mode(
@@ -172,9 +177,11 @@ class ProductCard extends StatelessWidget {
                                 mobile: 15, tablet: 30, desktop: 40),
                             style: ButtonStyle(
                               backgroundColor: WidgetStatePropertyAll(
-                                context.generateColorFromValue(
-                                    product!.catId.toString(),
-                                    darkenFactor: 0.2),
+                                product != null
+                                    ? context.generateColorFromValue(
+                                        product!.catId.toString(),
+                                        darkenFactor: 0.2)
+                                    : Theme.of(context).scaffoldBackgroundColor,
                               ),
                               iconColor: WidgetStatePropertyAll(
                                 Colors.white,
@@ -185,9 +192,9 @@ class ProductCard extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            onPressed: product == null
-                                ? null
-                                : () => _flavorsQuestionsDialog(context),
+                            onPressed: product != null
+                                ? () => _flavorsQuestionsDialog(context)
+                                : null,
                             icon: Icon(Icons.add)),
                       ],
                     ),

@@ -38,10 +38,30 @@ class FlavorsList extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
+              Container(
                 padding: EdgeInsets.all(8.0),
-                child: Text(
-                  StringEnums.flavors.name.tr(),
+                alignment: Alignment.center,
+                width: double.maxFinite,
+                decoration: BoxDecoration(
+                  color:
+                      Theme.of(context).scaffoldBackgroundColor.withAlpha(225),
+                ),
+                child: Row(
+                  spacing: 10,
+                  children: [
+                    const Icon(
+                      Icons.fastfood_outlined,
+                      color: Colors.deepOrange,
+                    ),
+                    Text(
+                      StringEnums.flavors.name.tr(),
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            fontWeight: FontWeight.bold,
+                            fontSize: context.ResponsiveValu(16,
+                                mobile: 14, tablet: 20, desktop: 25),
+                          ),
+                    ),
+                  ],
                 ),
               ),
               Expanded(
@@ -57,27 +77,48 @@ class FlavorsList extends StatelessWidget {
                             flavors.length,
                             (index) => CheckListCard(
                                   value: flavors[index],
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
                                   title: Text(context.trValue(
                                       flavors[index].flavorAr,
                                       flavors[index].flavorEn)),
                                   textStyles: MultiSelectItemTextStyles(
+                                    selectedTextStyle: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: context.ResponsiveValu(16,
+                                              mobile: 14,
+                                              tablet: 20,
+                                              desktop: 25),
+                                        ),
+                                    disabledTextStyle: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: context.ResponsiveValu(16,
+                                              mobile: 14,
+                                              tablet: 20,
+                                              desktop: 25),
+                                        ),
                                     textStyle: Theme.of(context)
                                         .textTheme
                                         .bodyLarge!
                                         .copyWith(
                                           fontWeight: FontWeight.bold,
+                                          fontSize: context.ResponsiveValu(16,
+                                              mobile: 14,
+                                              tablet: 20,
+                                              desktop: 25),
                                         ),
-                                  ),
-                                  subtitle:
-                                      Text(flavors[index].price.toString()),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5),
                                   ),
                                 )),
                         onChange: (allSelectedItems, selectedItem) {},
-                        onMaximumSelected: (allSelectedItems, selectedItem) {},
                       )
-                    : Container(),
+                    : Card(),
               )
             ],
           ));

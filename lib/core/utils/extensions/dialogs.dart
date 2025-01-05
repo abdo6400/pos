@@ -90,6 +90,9 @@ extension Dialogs on BuildContext {
   }
 
   void showCustomDialog({
+    required String title,
+    String? subtitle,
+    String? image,
     required Widget child,
     required void Function() onSubmit,
   }) {
@@ -97,11 +100,6 @@ extension Dialogs on BuildContext {
       context: this,
       useRootNavigator: false,
       btnCancelText: StringEnums.cancel.name.tr(),
-      titleTextStyle: Theme.of(this).textTheme.headlineSmall!.copyWith(
-            color: Colors.white,
-            fontSize:
-                this.ResponsiveValu(20, mobile: 15, tablet: 24, desktop: 32),
-          ),
       buttonsTextStyle: Theme.of(this).textTheme.bodyLarge!.copyWith(
             color: Colors.white,
             fontSize:
@@ -117,7 +115,20 @@ extension Dialogs on BuildContext {
       btnOkText: StringEnums.confirm.name.tr(),
       buttonsBorderRadius: BorderRadius.circular(5),
       padding: EdgeInsetsDirectional.symmetric(horizontal: 5, vertical: 20),
-      body: child,
+      body: Column(
+        spacing: 10,
+        children: [
+          Text(
+            title.tr(),
+            style: Theme.of(this).textTheme.headlineSmall!.copyWith(
+                  fontSize: this
+                      .ResponsiveValu(20, mobile: 15, tablet: 24, desktop: 32),
+                ),
+          ),
+          Divider(),
+          child
+        ],
+      ),
     )..show();
   }
 }

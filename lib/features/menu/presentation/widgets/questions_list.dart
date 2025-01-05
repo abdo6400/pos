@@ -36,27 +36,94 @@ class QuestionsList extends StatelessWidget {
         );
       }
       return Skeletonizer(
-        enabled: state is QuestionLoading,
-        child: ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            itemCount: state is QuestionSuccess ? questions.length : 5,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(children: [
-                  Text(
-                    state is QuestionSuccess
-                        ? context.trValue(questions[index].questionAr,
-                            questions[index].questionAr)
-                        : "loading",
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  )
-                ]),
-              );
-            }),
-      );
+          enabled: state is QuestionLoading,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: EdgeInsets.all(8.0),
+                alignment: Alignment.center,
+                width: double.maxFinite,
+                decoration: BoxDecoration(
+                  color:
+                      Theme.of(context).scaffoldBackgroundColor.withAlpha(225),
+                ),
+                child: Row(
+                  spacing: 10,
+                  children: [
+                    Icon(
+                      Icons.question_answer,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    Text(
+                      StringEnums.questions.name.tr(),
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            fontWeight: FontWeight.bold,
+                            fontSize: context.ResponsiveValu(16,
+                                mobile: 14, tablet: 20, desktop: 25),
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: state is QuestionSuccess
+                    ? MultiSelectCheckList<Question>(
+                        maxSelectableCount: questions.length,
+                        listViewSettings: ListViewSettings(
+                            separatorBuilder: (context, index) => const Divider(
+                                  height: 0,
+                                )),
+                        controller: controller,
+                        items: List.generate(
+                            questions.length,
+                            (index) => CheckListCard(
+                                  value: questions[index],
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  title: Text(context.trValue(
+                                      questions[index].questionAr,
+                                      questions[index].questionAr)),
+                                  textStyles: MultiSelectItemTextStyles(
+                                    selectedTextStyle: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: context.ResponsiveValu(16,
+                                              mobile: 14,
+                                              tablet: 20,
+                                              desktop: 25),
+                                        ),
+                                    disabledTextStyle: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: context.ResponsiveValu(16,
+                                              mobile: 14,
+                                              tablet: 20,
+                                              desktop: 25),
+                                        ),
+                                    textStyle: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: context.ResponsiveValu(16,
+                                              mobile: 14,
+                                              tablet: 20,
+                                              desktop: 25),
+                                        ),
+                                  ),
+                                )),
+                        onChange: (allSelectedItems, selectedItem) {},
+                      )
+                    : Card(),
+              )
+            ],
+          ));
     });
   }
 }
