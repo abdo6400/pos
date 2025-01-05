@@ -25,8 +25,11 @@ class ProductCard extends StatelessWidget {
       image: product!.icon,
       title: context.trValue(product!.proArName, product!.proEnName),
       onSubmit: () {
-        _flavorsController.getSelectedItems();
-        _questionController.getSelectedItems();
+        if (_questionController.getSelectedItems().isNotEmpty ||
+            _flavorsController.getSelectedItems().isNotEmpty) {
+          print(_flavorsController.getSelectedItems());
+          print(_questionController.getSelectedItems());
+        }
       },
       child: MultiBlocProvider(
         providers: [
