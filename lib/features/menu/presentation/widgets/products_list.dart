@@ -48,8 +48,8 @@ class ProductsList extends StatelessWidget {
               return ResponsiveGridView.builder(
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   gridDelegate: ResponsiveGridDelegate(
-                      maxCrossAxisExtent: context.ResponsiveValu(150,
-                          mobile: 100, tablet: 200, desktop: 300),
+                      maxCrossAxisExtent: context.ResponsiveValu(200,
+                          mobile: 100, tablet: 250, desktop: 350),
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 10),
                   itemCount: state is ProductSuccess ? products.length : 10,

@@ -50,7 +50,7 @@ class ApiKeys {
   static const String catArName = "Cat_AR_Name";
   static const String catEnName = "Cat_EN_Name";
   static const String taxPercentage = "TaxPercentage";
-  static const String icon = "Icon";
+  static const String icon = "ImgPath";
   static const String backColor = "BackColor";
   static const String foreColor = "ForeColor";
   static const String price = "Price";
