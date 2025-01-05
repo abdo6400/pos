@@ -30,14 +30,14 @@ class MainScreen extends StatelessWidget {
           create: (context) => locator<ProductBloc>()..add(GetProductsEvent()),
         ),
         BlocProvider(
+          create: (context) => UserCubit()..setUser(),
+        ),
+        BlocProvider(
           create: (context) => locator<FlavorBloc>()..add(GetFlavorsEvent()),
         ),
         BlocProvider(
           create: (context) =>
               locator<QuestionBloc>()..add(GetQuestionsEvent()),
-        ),
-        BlocProvider(
-          create: (context) => UserCubit()..setUser(),
         ),
       ],
       child: Scaffold(

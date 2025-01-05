@@ -12,6 +12,7 @@ import '../../domain/entities/product.dart';
 import '../bloc/cubit/category_selection_cubit.dart';
 import '../bloc/cubit/search_cubit.dart';
 import '../bloc/product/product_bloc.dart';
+import 'product_card.dart';
 
 class ProductsList extends StatelessWidget {
   const ProductsList({super.key});
@@ -52,90 +53,9 @@ class ProductsList extends StatelessWidget {
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 10),
                   itemCount: state is ProductSuccess ? products.length : 10,
-                  itemBuilder: (context, index) => Card(
-                        elevation: 0.5,
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                            color: (state is ProductSuccess)
-                                ? context
-                                    .generateColorFromValue(
-                                        products[index].catId.toString(),
-                                        darkenFactor: 0.2)
-                                    .withAlpha(120)
-                                : Colors.grey,
-                          ),
-                          borderRadius: BorderRadiusDirectional.only(
-                              bottomEnd: Radius.circular(10),
-                              bottomStart: Radius.circular(15),
-                              topEnd: Radius.circular(15),
-                              topStart: Radius.circular(10)),
-                        ),
-                        child: Container(
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                              image: (state is ProductSuccess &&
-                                      products[index].icon != null)
-                                  ? DecorationImage(
-                                      image: context.displayBase64Image(
-                                          products[index].icon!))
-                                  : null),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                        state is ProductSuccess
-                                            ? context.trValue(
-                                                products[index].proArName,
-                                                products[index].proEnName)
-                                            : "Product $index",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge!
-                                            .copyWith(
-                                              fontSize: context.ResponsiveValu(
-                                                  12,
-                                                  mobile: 10,
-                                                  tablet: 16,
-                                                  desktop: 25),
-                                            ),
-                                        textAlign: TextAlign.center),
-                                  ],
-                                ),
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    state is ProductSuccess
-                                        ? products[index].price.toString()
-                                        : "0.00",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge!
-                                        .copyWith(
-                                          fontSize: context.ResponsiveValu(14,
-                                              mobile: 10,
-                                              tablet: 20,
-                                              desktop: 24),
-                                        ),
-                                  ),
-                                  IconButton.outlined(
-                                      iconSize: context.ResponsiveValu(20,
-                                          mobile: 15, tablet: 30, desktop: 40),
-                                      onPressed: () {},
-                                      icon: Icon(Icons.add))
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
+                  itemBuilder: (context, index) => ProductCard(
+                        product:
+                            state is ProductSuccess ? products[index] : null,
                       ));
             },
           ),

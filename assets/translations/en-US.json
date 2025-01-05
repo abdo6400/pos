@@ -216,5 +216,9 @@
   "no_offers": "No offers found",
   "no_discounts": "No discounts found",
   "no_pending_orders": "No pending orders found",
-  "branch": "Branch"
+  "branch": "Branch",
+  "no_flavors_found": "No flavors found",
+  "no_questions_found": "No questions found",
+  "flavors": "Flavors",
+  "question": "Question"
 }

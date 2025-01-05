@@ -14,6 +14,14 @@ class FlavorLoading extends FlavorState {}
 class FlavorSuccess extends FlavorState {
   final List<Flavor> flavors;
   const FlavorSuccess(this.flavors);
+
+  List<Flavor> filteredFlavorsByCategory(String catId) {
+    try {
+      return flavors.where((x) => x.category.any((x) => x == catId)).toList();
+    } catch (e) {
+      return [];
+    }
+  }
 }
 
 class FlavorError extends FlavorState {

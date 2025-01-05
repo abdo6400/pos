@@ -5,6 +5,10 @@ abstract class LocalConsumer {
   // Insert data into a table
   Future<int> insert(String table, Map<String, dynamic> data);
 
+  // Insert multiple rows into a table
+  Future<void> insertMultiple(
+      String table, List<Map<String, dynamic>> dataList);
+
   // Query all rows from a table
   Future<List<Map<String, dynamic>>> queryAll(String table);
 
@@ -19,6 +23,12 @@ abstract class LocalConsumer {
   // Delete rows from a table
   Future<int> delete(String table, {String? where, List<dynamic>? whereArgs});
 
+  // Check if data is updated
+  Future<void> setLastUpdateTime(String tableName, int timestamp);
+  Future<int?> getLastUpdateTime(String tableName);
+  Future<void> refreshDataIfNeeded(
+      String table, List<Map<String, dynamic>> newData,
+      {int intervalInDays = 7});
   // Close the database
   Future<void> close();
 }

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import '../../../../config/database/api/api_keys.dart';
 import '../../domain/entities/flavor.dart';
 
@@ -15,10 +16,11 @@ class FlavorModel extends Flavor {
         flavorNo: json[ApiKeys.flavorNo],
         flavorAr: json[ApiKeys.flavorAr],
         flavorEn: json[ApiKeys.flavorEn],
-        price: json[ApiKeys.price],
+        price: double.parse(json[ApiKeys.price].toString()),
         warehouse: json[ApiKeys.warehouse],
-        category: List<String>.from(json[ApiKeys.category].map((x) => x)),
-        isActive: json[ApiKeys.isActive],
+        category: List<String>.from(
+            jsonDecode(jsonEncode(json[ApiKeys.category])).map((x) => x)),
+        isActive: bool.tryParse(json[ApiKeys.isActive].toString()) ?? false,
       );
 
   Map<String, dynamic> toJson() => {
@@ -27,7 +29,7 @@ class FlavorModel extends Flavor {
         ApiKeys.flavorEn: flavorEn,
         ApiKeys.price: price,
         ApiKeys.warehouse: warehouse,
-        ApiKeys.category: List<dynamic>.from(category.map((x) => x)),
-        ApiKeys.isActive: isActive,
+        ApiKeys.category: jsonEncode(category),
+        ApiKeys.isActive: isActive.toString(),
       };
 }

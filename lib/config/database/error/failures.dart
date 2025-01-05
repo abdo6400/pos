@@ -16,6 +16,10 @@ class CacheFailure extends Failure {
   const CacheFailure({required super.message});
 }
 
+class LocalFailure extends Failure {
+  const LocalFailure({required super.message});
+}
+
 class LocationFailure extends Failure {
   const LocationFailure({required super.message});
 }

@@ -88,4 +88,36 @@ extension Dialogs on BuildContext {
       btnOkOnPress: () => onSubmit(),
     )..show();
   }
+
+  void showCustomDialog({
+    required Widget child,
+    required void Function() onSubmit,
+  }) {
+    AwesomeDialog(
+      context: this,
+      useRootNavigator: false,
+      btnCancelText: StringEnums.cancel.name.tr(),
+      titleTextStyle: Theme.of(this).textTheme.headlineSmall!.copyWith(
+            color: Colors.white,
+            fontSize:
+                this.ResponsiveValu(20, mobile: 15, tablet: 24, desktop: 32),
+          ),
+      buttonsTextStyle: Theme.of(this).textTheme.bodyLarge!.copyWith(
+            color: Colors.white,
+            fontSize:
+                this.ResponsiveValu(16, mobile: 15, tablet: 24, desktop: 32),
+          ),
+      btnOkOnPress: () => onSubmit(),
+      btnCancelOnPress: () {},
+      onDismissCallback: (type) {
+        return;
+      },
+      animType: AnimType.topSlide,
+      dialogType: DialogType.noHeader,
+      btnOkText: StringEnums.confirm.name.tr(),
+      buttonsBorderRadius: BorderRadius.circular(5),
+      padding: EdgeInsetsDirectional.symmetric(horizontal: 5, vertical: 20),
+      body: child,
+    )..show();
+  }
 }

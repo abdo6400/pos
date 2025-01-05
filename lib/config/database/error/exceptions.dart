@@ -21,8 +21,7 @@ class DataFormatException extends ServerException {
 class ParamterErrorException extends ServerException {
   final List<String> errors;
 
-  ParamterErrorException(this.errors)
-      : super(errors.map((e) => e).join(", "));
+  ParamterErrorException(this.errors) : super(errors.map((e) => e).join(", "));
 }
 
 class FetchDataException extends ServerException {
@@ -50,7 +49,8 @@ class InternalServerErrorException extends ServerException {
 }
 
 class NoInternetConnectionException extends ServerException {
-  const NoInternetConnectionException(String errorMessage) : super(errorMessage);
+  const NoInternetConnectionException(String errorMessage)
+      : super(errorMessage);
 }
 
 class RequestCancelledException extends ServerException {
@@ -77,3 +77,30 @@ class UnprocessableEntityException extends ServerException {
   const UnprocessableEntityException(String errorMessage) : super(errorMessage);
 }
 
+class CacheException extends Equatable implements Exception {
+  final String message;
+
+  const CacheException(this.message);
+
+  @override
+  List<Object?> get props => [message];
+
+  @override
+  String toString() {
+    return message;
+  }
+}
+
+class LocalException extends Equatable implements Exception {
+  final String message;
+
+  const LocalException(this.message);
+
+  @override
+  List<Object?> get props => [message];
+
+  @override
+  String toString() {
+    return message;
+  }
+}

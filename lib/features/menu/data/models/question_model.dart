@@ -15,7 +15,7 @@ class QuestionModel extends Question {
         questionElements1: json[ApiKeys.questionElements1],
         productQuestionId: json[ApiKeys.productQuestionId],
         productPrice: json[ApiKeys.productPrice]?.toDouble() ?? 0.0,
-        isRequired: json[ApiKeys.isRequired],
+        isRequired: bool.tryParse(json[ApiKeys.isRequired].toString()) ?? false,
         questionAr: json[ApiKeys.questionAr],
       );
 
@@ -24,7 +24,7 @@ class QuestionModel extends Question {
         ApiKeys.questionElements1: questionElements1,
         ApiKeys.productQuestionId: productQuestionId,
         ApiKeys.productPrice: productPrice,
-        ApiKeys.isRequired: isRequired,
+        ApiKeys.isRequired: isRequired.toString(),
         ApiKeys.questionAr: questionAr,
       };
 }

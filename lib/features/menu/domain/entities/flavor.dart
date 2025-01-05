@@ -2,7 +2,7 @@ abstract class Flavor {
   final int flavorNo;
   final String flavorAr;
   final String flavorEn;
-  final int price;
+  final double price;
   final String warehouse;
   final List<String> category;
   final bool isActive;

@@ -37,7 +37,7 @@ class ErrorMessage extends StatelessWidget {
                       ),
                 )
               : Text(
-                  message!,
+                  message!.trExists() ? message!.tr() : message!,
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         fontSize: context.ResponsiveValu(12,
                             mobile: 8, tablet: 20, desktop: 30),

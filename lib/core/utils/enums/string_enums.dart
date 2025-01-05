@@ -143,5 +143,9 @@ enum StringEnums {
   deleviry,
   offers,
   discounts,
-  branch
+  branch,
+  no_flavors_found,
+  no_questions_found,
+  flavors,
+  questions
 }

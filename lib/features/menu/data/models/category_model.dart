@@ -40,8 +40,32 @@ class CategoryModel extends Category {
         question3: json[ApiKeys.question3].toString(),
         question4: json[ApiKeys.question4].toString(),
         question5: json[ApiKeys.question5].toString(),
-        saleable: json[ApiKeys.saleable],
-        standardItem: json[ApiKeys.standardItem],
-        discountable: json[ApiKeys.discountable],
+        saleable: bool.tryParse(json[ApiKeys.saleable].toString()) ?? false,
+        standardItem:
+            bool.tryParse(json[ApiKeys.standardItem].toString()) ?? false,
+        discountable:
+            bool.tryParse(json[ApiKeys.discountable].toString()) ?? false,
       );
+
+  Map<String, dynamic> toJson() => {
+        ApiKeys.catId: catId,
+        ApiKeys.catArName: catArName,
+        ApiKeys.catEnName: catEnName,
+        ApiKeys.taxPercentage: taxPercentage,
+        ApiKeys.icon: icon,
+        ApiKeys.backColor: backColor,
+        ApiKeys.foreColor: foreColor,
+        ApiKeys.price: price,
+        ApiKeys.printer: printer,
+        ApiKeys.printer2: printer2,
+        ApiKeys.tag: tag,
+        ApiKeys.question1: question1,
+        ApiKeys.question2: question2,
+        ApiKeys.question3: question3,
+        ApiKeys.question4: question4,
+        ApiKeys.question5: question5,
+        ApiKeys.saleable: saleable.toString(),
+        ApiKeys.standardItem: standardItem.toString(),
+        ApiKeys.discountable: discountable.toString(),
+      };
 }
