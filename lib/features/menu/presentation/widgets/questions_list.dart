@@ -13,8 +13,12 @@ import '../bloc/question/question_bloc.dart';
 class QuestionsList extends StatelessWidget {
   final String productId;
   final MultiSelectController<Question> controller;
+  final List<Question> selectedQuestions;
   const QuestionsList(
-      {super.key, required this.productId, required this.controller});
+      {super.key,
+      required this.productId,
+      required this.controller,
+      this.selectedQuestions = const []});
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +86,8 @@ class QuestionsList extends StatelessWidget {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(5),
                                   ),
+                                  selected: selectedQuestions
+                                      .contains(questions[index]),
                                   title: Text(context.trValue(
                                       questions[index].questionAr,
                                       questions[index].questionAr)),

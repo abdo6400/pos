@@ -4,14 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import '../../../../core/utils/enums/string_enums.dart';
-import '../../../../core/widgets/empty_message.dart';
-import '../../../../core/widgets/errors/error_card.dart';
-import '../../domain/entities/category.dart';
-import '../../domain/entities/product.dart';
-import '../bloc/cubit/category_selection_cubit.dart';
-import '../bloc/cubit/search_cubit.dart';
-import '../bloc/product/product_bloc.dart';
+import '../../../../../core/utils/enums/string_enums.dart';
+import '../../../../../core/widgets/empty_message.dart';
+import '../../../../../core/widgets/errors/error_card.dart';
+import '../../../domain/entities/category.dart';
+import '../../../domain/entities/product.dart';
+import '../../bloc/cubit/category_selection_cubit.dart';
+import '../../bloc/cubit/search_cubit.dart';
+import '../../bloc/product/product_bloc.dart';
 import 'product_card.dart';
 
 class ProductsList extends StatelessWidget {

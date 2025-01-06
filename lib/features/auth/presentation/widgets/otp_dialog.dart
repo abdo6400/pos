@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:pinput/pinput.dart';
-
 import '../../../../core/utils/enums/string_enums.dart';
 import 'custom_sign_button.dart';
 

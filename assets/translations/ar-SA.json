@@ -220,5 +220,15 @@
   "no_flavors_found": "لا يوجد نكهات",
   "no_questions_found": " لا يوجد اسئلة",
   "flavors": " نكهات",
-  "question": " اسئلة"
+  "question": " اسئلة",
+  "empty_cart": "عربة المشتريات فارغة",
+  "current_order": " الطلبات الحالية",
+  "subTotalAmount": "المجموع",
+  "totalAmount": "الصافي",
+  "discountAmount": "الخصم",
+  "taxAmount": "الضريبة",
+  "checkout": "الدفع",
+  "clear": "مسح",
+  "checkoutCash": "كاش",
+  "checkoutVisa": "فيزا"
 }

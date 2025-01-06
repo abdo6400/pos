@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
 
-import '../../../../core/utils/enums/string_enums.dart';
-import '../../domain/entities/category.dart';
-import '../bloc/cubit/category_selection_cubit.dart';
+import '../../../../../core/utils/enums/string_enums.dart';
+import '../../../domain/entities/category.dart';
+import '../../bloc/cubit/category_selection_cubit.dart';
 
 class CategoryChip extends StatelessWidget {
   final Category? category;

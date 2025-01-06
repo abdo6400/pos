@@ -147,5 +147,15 @@ enum StringEnums {
   no_flavors_found,
   no_questions_found,
   flavors,
-  questions
+  questions,
+  empty_cart,
+  current_order,
+  subTotalAmount,
+  totalAmount,
+  discountAmount,
+  taxAmount,
+  checkout,
+  clear,
+  checkoutCash,
+  checkoutVisa
 }

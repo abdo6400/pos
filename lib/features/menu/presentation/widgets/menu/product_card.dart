@@ -4,13 +4,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_select_items/flutter_multi_select_items.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
 
-import '../../domain/entities/flavor.dart';
-import '../../domain/entities/product.dart';
-import '../../domain/entities/question.dart';
-import '../bloc/flavor/flavor_bloc.dart';
-import '../bloc/question/question_bloc.dart';
-import 'flavors_list.dart';
-import 'questions_list.dart';
+import '../../../domain/entities/cart_item.dart';
+import '../../../domain/entities/flavor.dart';
+import '../../../domain/entities/product.dart';
+import '../../../domain/entities/question.dart';
+import '../../bloc/cart/cart_bloc.dart';
+import '../../bloc/flavor/flavor_bloc.dart';
+import '../../bloc/question/question_bloc.dart';
+import '../flavors_list.dart';
+import '../questions_list.dart';
 
 class ProductCard extends StatelessWidget {
   final Product? product;
@@ -25,11 +27,21 @@ class ProductCard extends StatelessWidget {
       image: product!.icon,
       title: context.trValue(product!.proArName, product!.proEnName),
       onSubmit: () {
-        if (_questionController.getSelectedItems().isNotEmpty ||
-            _flavorsController.getSelectedItems().isNotEmpty) {
-          print(_flavorsController.getSelectedItems());
-          print(_questionController.getSelectedItems());
+        List<Flavor> flavors = [];
+        List<Question> questions = [];
+        try {
+          flavors = _flavorsController.getSelectedItems();
+          questions = _questionController.getSelectedItems();
+        } catch (e) {
+          debugPrint(e.toString());
         }
+        context.read<CartBloc>().add(AddCartEvent(
+                cartItem: CartItem(
+              product: product!,
+              quantity: 1,
+              flavors: flavors,
+              questions: questions,
+            )));
       },
       child: MultiBlocProvider(
         providers: [

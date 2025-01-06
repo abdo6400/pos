@@ -13,7 +13,12 @@ import '../bloc/flavor/flavor_bloc.dart';
 class FlavorsList extends StatelessWidget {
   final String catId;
   final MultiSelectController<Flavor> controller;
-  const FlavorsList({super.key, required this.catId, required this.controller});
+  final List<Flavor> selectedFlavors;
+  const FlavorsList(
+      {super.key,
+      required this.catId,
+      required this.controller,
+      this.selectedFlavors = const []});
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +82,9 @@ class FlavorsList extends StatelessWidget {
                             flavors.length,
                             (index) => CheckListCard(
                                   value: flavors[index],
+                                  selected: selectedFlavors.contains(
+                                    flavors[index],
+                                  ),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(5),
                                   ),

@@ -220,5 +220,15 @@
   "no_flavors_found": "No flavors found",
   "no_questions_found": "No questions found",
   "flavors": "Flavors",
-  "question": "Question"
+  "question": "Question",
+  "empty_cart": "No items in cart",
+  "current_order": "Current Order",
+  "subTotalAmount": "Sub Total Amount",
+  "totalAmount": "Total Amount",
+  "discountAmount": "Discount Amount",
+  "taxAmount": "Tax Amount",
+  "checkout": "Checkout",
+  "clear": "Clear",
+  "checkoutCash": "Cash",
+  "checkoutVisa": "Visa"
 }

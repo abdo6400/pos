@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import '../../../../core/utils/enums/string_enums.dart';
-import '../../../../core/widgets/lang_theme_options.dart';
-import '../bloc/cubit/category_selection_cubit.dart';
-import '../bloc/cubit/search_cubit.dart';
-import '../bloc/product/product_bloc.dart';
+import '../../../../../core/utils/enums/string_enums.dart';
+import '../../../../../core/widgets/lang_theme_options.dart';
+import '../../bloc/cubit/category_selection_cubit.dart';
+import '../../bloc/cubit/search_cubit.dart';
+import '../../bloc/product/product_bloc.dart';
 
 class CustomAppBar extends StatelessWidget {
   const CustomAppBar({super.key});

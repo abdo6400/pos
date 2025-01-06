@@ -4,10 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-import '../../../../core/bloc/cubit/user_cubit.dart';
-import '../../../../core/entities/auth_tokens.dart';
-import '../../../../core/utils/enums/string_enums.dart';
-import '../../../../core/widgets/app_logo.dart';
+import '../../../../../core/bloc/cubit/user_cubit.dart';
+import '../../../../../core/entities/auth_tokens.dart';
+import '../../../../../core/utils/enums/string_enums.dart';
+import '../../../../../core/widgets/app_logo.dart';
 
 class CustomAppBar extends StatelessWidget {
   const CustomAppBar({super.key});
