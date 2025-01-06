@@ -89,6 +89,11 @@ class CartList extends StatelessWidget {
           return Dismissible(
             key: ValueKey(state.cart[index].product.proId),
             direction: DismissDirection.endToStart,
+            onDismissed: (_) => context.read<CartBloc>().add(
+                  DeleteCartEvent(
+                    productId: state.cart[index].product.proId,
+                  ),
+                ),
             child: Row(
               children: [
                 Expanded(
