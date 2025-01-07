@@ -16,11 +16,11 @@ class EmptyMessage extends StatelessWidget {
       children: [
         image != null
             ? Image.asset(image!,
-                height: context.ResponsiveValu(50,
+                height: context.ResponsiveValu(30,
                     mobile: 40, tablet: 60, desktop: 80))
             : Icon(
                 Icons.sentiment_dissatisfied_outlined,
-                size: context.ResponsiveValu(50,
+                size: context.ResponsiveValu(30,
                     mobile: 40, tablet: 60, desktop: 80),
                 color: Theme.of(context).primaryColor,
               ),

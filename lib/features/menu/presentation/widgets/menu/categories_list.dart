@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:retail/core/utils/extensions/extensions.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import '../../../../../core/utils/enums/string_enums.dart';
 import '../../../../../core/widgets/empty_message.dart';
@@ -29,20 +30,38 @@ class CategoriesList extends StatelessWidget {
         }
         return Skeletonizer(
           enabled: state is CategoryLoading,
-          child: ListView.separated(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) => CategoryChip(
-                    loading: state is CategoryLoading,
-                    category: (state is CategorySuccess && index != 0)
-                        ? state.categories[index - 1]
-                        : null,
-                  ),
-              separatorBuilder: (context, index) => SizedBox(
-                    width: 10,
-                  ),
-              itemCount:
-                  state is CategorySuccess ? state.categories.length + 1 : 10),
+          child: Row(
+            children: [
+              const SizedBox(width: 10),
+              InkWell(
+                onTap: () {},
+                child: Chip(
+                    label: Icon(
+                  Icons.local_offer_sharp,
+                  color: Colors.red,
+                  size: context.ResponsiveValu(13,
+                      mobile: 12, tablet: 25, desktop: 35),
+                )),
+              ),
+              Expanded(
+                child: ListView.separated(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) => CategoryChip(
+                          loading: state is CategoryLoading,
+                          category: (state is CategorySuccess && index != 0)
+                              ? state.categories[index - 1]
+                              : null,
+                        ),
+                    separatorBuilder: (context, index) => SizedBox(
+                          width: 10,
+                        ),
+                    itemCount: state is CategorySuccess
+                        ? state.categories.length + 1
+                        : 10),
+              ),
+            ],
+          ),
         );
       },
     );

@@ -11,7 +11,7 @@ class Options extends StatelessWidget {
     Option(
         title: StringEnums.pending.name,
         icon: Icons.list,
-        color: Colors.red,
+        color: Colors.amber,
         onPress: () {}),
     Option(
         title: StringEnums.deleviry.name,
@@ -43,9 +43,7 @@ class Options extends StatelessWidget {
                             side: BorderSide(color: e.color),
                           ),
                           child: ResponsiveRowColumn(
-                            layout: context.isMobile
-                                ? ResponsiveRowColumnType.ROW
-                                : ResponsiveRowColumnType.COLUMN,
+                            layout: ResponsiveRowColumnType.COLUMN,
                             rowMainAxisAlignment: MainAxisAlignment.center,
                             columnMainAxisAlignment: MainAxisAlignment.center,
                             rowSpacing: 10,
