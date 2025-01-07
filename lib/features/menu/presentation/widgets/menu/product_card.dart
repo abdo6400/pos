@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_select_items/flutter_multi_select_items.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
-
 import '../../../domain/entities/cart_item.dart';
 import '../../../domain/entities/flavor.dart';
 import '../../../domain/entities/product.dart';
@@ -11,8 +10,7 @@ import '../../../domain/entities/question.dart';
 import '../../bloc/cart/cart_bloc.dart';
 import '../../bloc/flavor/flavor_bloc.dart';
 import '../../bloc/question/question_bloc.dart';
-import '../flavors_list.dart';
-import '../questions_list.dart';
+import '../custom_dialog.dart';
 
 class ProductCard extends StatelessWidget {
   final Product? product;
@@ -23,52 +21,42 @@ class ProductCard extends StatelessWidget {
         MultiSelectController();
     final MultiSelectController<Question> _questionController =
         MultiSelectController();
+    final TextEditingController _quantityController =
+        TextEditingController(text: "1");
+    final TextEditingController _noteController = TextEditingController();
     context.showCustomDialog(
-      image: product!.icon,
-      title: context.trValue(product!.proArName, product!.proEnName),
-      onSubmit: () {
-        List<Flavor> flavors = [];
-        List<Question> questions = [];
-        try {
-          flavors = _flavorsController.getSelectedItems();
-          questions = _questionController.getSelectedItems();
-        } catch (e) {
-          debugPrint(e.toString());
-        }
-        context.read<CartBloc>().add(AddCartEvent(
-                cartItem: CartItem(
-              product: product!,
-              quantity: 1,
-              flavors: flavors,
-              questions: questions,
-            )));
-      },
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider.value(value: context.read<FlavorBloc>()),
-          BlocProvider.value(value: context.read<QuestionBloc>()),
-        ],
-        child: SizedBox(
-          height: context.ResponsiveValu(400,
-              mobile: 300, tablet: 500, desktop: 600),
-          child: Row(
-            children: [
-              Flexible(
-                  child: FlavorsList(
-                catId: product!.catId,
-                controller: _flavorsController,
-              )),
-              const VerticalDivider(),
-              Flexible(
-                  child: QuestionsList(
-                productId: product!.proId,
-                controller: _questionController,
-              )),
+        image: product!.icon,
+        title: context.trValue(product!.proArName, product!.proEnName),
+        onSubmit: () {
+          List<Flavor> flavors = [];
+          List<Question> questions = [];
+          try {
+            flavors = _flavorsController.getSelectedItems();
+            questions = _questionController.getSelectedItems();
+          } catch (e) {
+            debugPrint(e.toString());
+          }
+          context.read<CartBloc>().add(AddCartEvent(
+                  cartItem: CartItem(
+                product: product!,
+                quantity: int.parse(_quantityController.text),
+                flavors: flavors,
+                questions: questions,
+                note: _noteController.text,
+              )));
+        },
+        child: MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: context.read<FlavorBloc>()),
+              BlocProvider.value(value: context.read<QuestionBloc>()),
             ],
-          ),
-        ),
-      ),
-    );
+            child: CustomDialog(
+              flavorsController: _flavorsController,
+              questionController: _questionController,
+              product: product,
+              quantityController: _quantityController,
+              noteController: _noteController,
+            )));
   }
 
   @override
@@ -103,13 +91,13 @@ class ProductCard extends StatelessWidget {
                     topStart: Radius.circular(10)),
                 color: product != null
                     ? context.generateColorFromValue(product?.catId ?? "0",
-                        darkenFactor: 0.5)
+                        darkenFactor: 0.2)
                     : null,
                 image: (product != null && product!.icon != null)
                     ? DecorationImage(
                         colorFilter: ColorFilter.mode(
-                          Theme.of(context).primaryColor.withAlpha(220),
-                          BlendMode.modulate,
+                          Theme.of(context).hintColor.withAlpha(10),
+                          BlendMode.darken,
                         ),
                         image: CachedNetworkImageProvider(product!.icon!),
                         fit: BoxFit.fill)

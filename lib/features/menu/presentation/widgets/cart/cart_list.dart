@@ -11,8 +11,7 @@ import '../../../domain/entities/question.dart';
 import '../../bloc/cart/cart_bloc.dart';
 import '../../bloc/flavor/flavor_bloc.dart';
 import '../../bloc/question/question_bloc.dart';
-import '../flavors_list.dart';
-import '../questions_list.dart';
+import '../custom_dialog.dart';
 
 class CartList extends StatelessWidget {
   const CartList({super.key});
@@ -21,55 +20,46 @@ class CartList extends StatelessWidget {
         MultiSelectController();
     final MultiSelectController<Question> _questionController =
         MultiSelectController();
+    final TextEditingController _quantityController =
+        TextEditingController(text: cartItem.quantity.toString());
+    final TextEditingController _noteController =
+        TextEditingController(text: cartItem.note);
     context.showCustomDialog(
-      image: cartItem.product.icon,
-      title: context.trValue(
-          cartItem.product.proArName, cartItem.product.proEnName),
-      onSubmit: () {
-        List<Flavor> flavors = [];
-        List<Question> questions = [];
-        try {
-          flavors = _flavorsController.getSelectedItems();
-          questions = _questionController.getSelectedItems();
-        } catch (e) {
-          debugPrint(e.toString());
-        }
-        context.read<CartBloc>().add(UpdateCartEvent(
-                cartItem: CartItem(
-              product: cartItem.product,
-              quantity: cartItem.quantity,
-              flavors: flavors,
-              questions: questions,
-            )));
-      },
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider.value(value: context.read<FlavorBloc>()),
-          BlocProvider.value(value: context.read<QuestionBloc>()),
-        ],
-        child: SizedBox(
-          height: context.ResponsiveValu(400,
-              mobile: 300, tablet: 500, desktop: 600),
-          child: Row(
-            children: [
-              Flexible(
-                  child: FlavorsList(
-                catId: cartItem.product.catId,
-                controller: _flavorsController,
-                selectedFlavors: cartItem.flavors,
-              )),
-              const VerticalDivider(),
-              Flexible(
-                  child: QuestionsList(
-                productId: cartItem.product.proId,
-                controller: _questionController,
-                selectedQuestions: cartItem.questions,
-              )),
+        image: cartItem.product.icon,
+        title: context.trValue(
+            cartItem.product.proArName, cartItem.product.proEnName),
+        onSubmit: () {
+          List<Flavor> flavors = [];
+          List<Question> questions = [];
+          try {
+            flavors = _flavorsController.getSelectedItems();
+            questions = _questionController.getSelectedItems();
+          } catch (e) {
+            debugPrint(e.toString());
+          }
+          context.read<CartBloc>().add(UpdateCartEvent(
+                  cartItem: CartItem(
+                product: cartItem.product,
+                note: _noteController.text,
+                quantity: int.parse(_quantityController.text),
+                flavors: flavors,
+                questions: questions,
+              )));
+        },
+        child: MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: context.read<FlavorBloc>()),
+              BlocProvider.value(value: context.read<QuestionBloc>()),
             ],
-          ),
-        ),
-      ),
-    );
+            child: CustomDialog(
+              selectedFlavors: cartItem.flavors,
+              selectedQuestions: cartItem.questions,
+              flavorsController: _flavorsController,
+              questionController: _questionController,
+              product: cartItem.product,
+              quantityController: _quantityController,
+              noteController: _noteController,
+            )));
   }
 
   @override
@@ -89,6 +79,16 @@ class CartList extends StatelessWidget {
           return Dismissible(
             key: ValueKey(state.cart[index].product.proId),
             direction: DismissDirection.endToStart,
+            background: Container(
+              color: Colors.red,
+              alignment: AlignmentDirectional.centerEnd,
+              child: Icon(
+                Icons.delete,
+                color: Colors.white,
+                size: context.ResponsiveValu(30,
+                    mobile: 20, tablet: 35, desktop: 40),
+              ),
+            ),
             onDismissed: (_) => context.read<CartBloc>().add(
                   DeleteCartEvent(
                     productId: state.cart[index].product.proId,

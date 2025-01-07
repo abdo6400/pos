@@ -34,10 +34,10 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       final updatedCart = state.cart.map((cartItem) {
         if (cartItem.product.proId == event.cartItem.product.proId) {
           return CartItem(
-            product: cartItem.product,
+            product: event.cartItem.product,
             quantity: cartItem.quantity + event.cartItem.quantity,
-            flavors: cartItem.flavors,
-            questions: cartItem.questions,
+            flavors: event.cartItem.flavors,
+            questions: event.cartItem.questions,
           );
         }
         return cartItem;

@@ -7,12 +7,11 @@ class Amount extends StatelessWidget {
   final double subTotalAmount;
   final double taxAmount;
   final double discountAmount;
-  final String currency;
+
   const Amount(
       {super.key,
       required this.subTotalAmount,
       required this.taxAmount,
-      required this.currency,
       required this.discountAmount});
   Widget _customListTile(String title, String value, BuildContext context) {
     final style = Theme.of(context).textTheme.bodyMedium!.copyWith(
@@ -27,7 +26,7 @@ class Amount extends StatelessWidget {
           ),
         ),
         Text(
-          value + ' ' + currency,
+          value,
           style: style,
         ),
       ],
@@ -41,7 +40,7 @@ class Amount extends StatelessWidget {
       elevation: 0,
       color: Theme.of(context).hintColor.withAlpha(15),
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           spacing: 3,

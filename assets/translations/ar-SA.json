@@ -230,5 +230,9 @@
   "checkout": "الدفع",
   "clear": "مسح",
   "checkoutCash": "كاش",
-  "checkoutVisa": "فيزا"
+  "checkoutVisa": "فيزا",
+  "pending": "في الانتظار",
+  "note": "ملاحظة",
+  "quentity": "الكمية",
+  "add_note": "اضافة ملاحظة"
 }

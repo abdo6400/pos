@@ -230,5 +230,9 @@
   "checkout": "Checkout",
   "clear": "Clear",
   "checkoutCash": "Cash",
-  "checkoutVisa": "Visa"
+  "checkoutVisa": "Visa",
+  "pending": "Pending",
+  "note": "Note",
+  "quentity": "Quentity",
+  "add_note": "Add Note"
 }

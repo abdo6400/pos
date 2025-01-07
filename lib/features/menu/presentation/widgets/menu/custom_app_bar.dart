@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import '../../../../../core/bloc/cubit/user_cubit.dart';
+import '../../../../../core/entities/auth_tokens.dart';
 import '../../../../../core/utils/enums/string_enums.dart';
 import '../../../../../core/widgets/lang_theme_options.dart';
 import '../../bloc/cubit/category_selection_cubit.dart';
@@ -19,6 +21,65 @@ class CustomAppBar extends StatelessWidget {
       child: Row(
         spacing: 10,
         children: [
+          Expanded(
+            flex: 3,
+            child: BlocBuilder<UserCubit, AuthTokens?>(
+              builder: (context, state) {
+                return Skeletonizer(
+                  enabled: state == null,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Info(StringEnums.user_name.name.tr(),
+                            state?.username ?? ""),
+                        // Info(StringEnums.branch.name.tr(),
+                        //     state?.defaultBranch ?? ""),
+                        Info(StringEnums.currency.name.tr(),
+                            state?.defaultCurrency ?? ""),
+                      ]
+                          .map(
+                            (e) => Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Text(
+                                    e.title,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .copyWith(
+                                          fontSize: context.ResponsiveValu(12,
+                                              mobile: 10,
+                                              tablet: 18,
+                                              desktop: 25),
+                                        ),
+                                  ),
+                                  Text(
+                                    e.value,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .copyWith(
+                                          fontSize: context.ResponsiveValu(12,
+                                              mobile: 10,
+                                              tablet: 18,
+                                              desktop: 25),
+                                        ),
+                                  ),
+                                ]),
+                          )
+                          .toList()),
+                );
+              },
+            ),
+          ),
+          Spacer(flex: 1),
           Expanded(
               flex: 8,
               child: BlocBuilder<ProductBloc, ProductState>(
@@ -71,10 +132,16 @@ class CustomAppBar extends StatelessWidget {
                   );
                 },
               )),
-          Spacer(flex: 4),
+          Spacer(flex: 1),
           LangThemeOptions()
         ],
       ),
     );
   }
+}
+
+class Info {
+  final String title;
+  final String value;
+  Info(this.title, this.value);
 }

@@ -29,7 +29,7 @@ class MenuScreen extends StatelessWidget {
               child: CategoriesList()),
           Expanded(
               flex: context.ResponsiveValu(14,
-                      mobile: 14, tablet: 14, desktop: 16)
+                      mobile: 14, tablet: 19, desktop: 16)
                   .toInt(),
               child: ProductsList()),
         ],

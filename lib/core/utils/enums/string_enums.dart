@@ -157,5 +157,10 @@ enum StringEnums {
   checkout,
   clear,
   checkoutCash,
-  checkoutVisa
+  checkoutVisa,
+  pending,
+  remove,
+  note,
+  quentity,
+  add_note
 }

@@ -22,21 +22,20 @@ class CartScreen extends StatelessWidget {
           children: [
             Expanded(child: CustomAppBar()),
             Expanded(
-              flex: context.ResponsiveValu(4, mobile: 5, tablet: 6, desktop: 6)
+              flex: context.ResponsiveValu(4, mobile: 5, tablet: 8, desktop: 6)
                   .toInt(),
               child: Column(
                 children: [
                   Expanded(child: CartList()),
                   Padding(
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(5),
                     child: Column(
-                      spacing: 10,
+                      spacing: 5,
                       children: [
                         Amount(
                           subTotalAmount: 0.0,
                           taxAmount: 0.0,
                           discountAmount: 0.0,
-                          currency: 'jod',
                         ),
                         Row(
                           spacing: 10,
