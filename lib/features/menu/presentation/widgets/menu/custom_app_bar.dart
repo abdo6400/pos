@@ -47,28 +47,28 @@ class CustomAppBar extends StatelessWidget {
                                   Text(
                                     e.title,
                                     overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
+                                    maxLines: 1,
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyLarge!
                                         .copyWith(
                                           fontSize: context.ResponsiveValu(12,
                                               mobile: 10,
-                                              tablet: 18,
+                                              tablet: 17,
                                               desktop: 25),
                                         ),
                                   ),
                                   Text(
                                     e.value,
                                     overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
+                                    maxLines: 1,
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyLarge!
                                         .copyWith(
                                           fontSize: context.ResponsiveValu(12,
                                               mobile: 10,
-                                              tablet: 18,
+                                              tablet: 17,
                                               desktop: 25),
                                         ),
                                   ),

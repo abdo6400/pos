@@ -68,7 +68,7 @@ class Options extends StatelessWidget {
                                         .copyWith(
                                             fontSize: context.ResponsiveValu(11,
                                                 mobile: 10,
-                                                tablet: 20,
+                                                tablet: 16,
                                                 desktop: 30))),
                               ),
                             ],

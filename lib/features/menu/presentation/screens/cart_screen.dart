@@ -1,8 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
 import '../../../../core/utils/enums/string_enums.dart';
 import '../../../../core/widgets/custom_button.dart';
+import '../bloc/cart/cart_bloc.dart';
 import '../widgets/cart/amount.dart';
 import '../widgets/cart/cart_list.dart';
 import '../widgets/cart/custom_app_bar.dart';
@@ -22,20 +24,36 @@ class CartScreen extends StatelessWidget {
           children: [
             Expanded(child: CustomAppBar()),
             Expanded(
-              flex: context.ResponsiveValu(4, mobile: 5, tablet: 8, desktop: 6)
+              flex: context.ResponsiveValu(4, mobile: 5, tablet: 7, desktop: 6)
                   .toInt(),
               child: Column(
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(StringEnums.current_order.name.tr(),
+                        textAlign: TextAlign.start,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium!
+                            .copyWith(
+                              fontSize: context.ResponsiveValu(12,
+                                  mobile: 10, tablet: 20, desktop: 25),
+                            )),
+                  ),
                   Expanded(child: CartList()),
                   Padding(
                     padding: const EdgeInsets.all(5),
                     child: Column(
                       spacing: 5,
                       children: [
-                        Amount(
-                          subTotalAmount: 0.0,
-                          taxAmount: 0.0,
-                          discountAmount: 0.0,
+                        BlocBuilder<CartBloc, CartState>(
+                          builder: (context, state) {
+                            return Amount(
+                              subTotalAmount: state.totalPrice,
+                              taxAmount: 0.0,
+                              discountAmount: 0.0,
+                            );
+                          },
                         ),
                         Row(
                           spacing: 10,

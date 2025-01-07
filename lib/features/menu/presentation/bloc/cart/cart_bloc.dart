@@ -38,6 +38,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
             quantity: cartItem.quantity + event.cartItem.quantity,
             flavors: event.cartItem.flavors,
             questions: event.cartItem.questions,
+            note: event.cartItem.note,
           );
         }
         return cartItem;
@@ -58,6 +59,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           quantity: event.cartItem.quantity,
           flavors: event.cartItem.flavors,
           questions: event.cartItem.questions,
+          note: event.cartItem.note,
         );
       }
       return cartItem;
