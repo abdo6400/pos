@@ -70,16 +70,16 @@ class Amount extends StatelessWidget {
                             ),
                             offset: Offset(-50, -50),
                             initialValue: state.discounts.first,
-                            onSelected: (Discount? discount) {
-                              context
-                                  .read<DiscountSelection>()
-                                  .changeDiscount(discount);
-                            },
                             itemBuilder: (BuildContext context) =>
                                 [null, ...state.discounts]
                                     .map(
                                       (e) => PopupMenuItem<Discount?>(
                                           value: e,
+                                          onTap: () {
+                                            context
+                                                .read<DiscountSelection>()
+                                                .changeDiscount(e);
+                                          },
                                           child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,

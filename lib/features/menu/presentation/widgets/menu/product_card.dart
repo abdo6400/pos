@@ -9,6 +9,7 @@ import '../../../domain/entities/product.dart';
 import '../../../domain/entities/question.dart';
 import '../../bloc/cart/cart_bloc.dart';
 import '../../bloc/flavor/flavor_bloc.dart';
+import '../../bloc/product/product_bloc.dart';
 import '../../bloc/question/question_bloc.dart';
 import '../custom_dialog.dart';
 
@@ -49,6 +50,7 @@ class ProductCard extends StatelessWidget {
             providers: [
               BlocProvider.value(value: context.read<FlavorBloc>()),
               BlocProvider.value(value: context.read<QuestionBloc>()),
+              BlocProvider.value(value: context.read<ProductBloc>()),
             ],
             child: CustomDialog(
               flavorsController: _flavorsController,
