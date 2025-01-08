@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:retail/features/menu/domain/entities/category.dart';
+import 'package:retail/features/menu/domain/entities/discount.dart';
 import 'package:retail/features/menu/domain/entities/flavor.dart';
 import 'package:retail/features/menu/domain/entities/product.dart';
 import 'package:retail/features/menu/domain/entities/question.dart';
@@ -56,5 +57,13 @@ class MenuRepositoryImpl extends MenuRepository {
       cacheData: _menuLocalDataSource.insertQuestions,
       localRequest: _menuLocalDataSource.getQuestions,
     );
+  }
+
+  @override
+  Future<Either<Failure, List<Discount>>> getDiscounts(String branchId) {
+    return _networkInfo.handleNetworkRequest<List<Discount>>(
+        remoteRequest: () => _menuRemoteDataSource.getDiscounts(branchId),
+        cacheData: (data) async {},
+        localRequest: () async => <Discount>[]);
   }
 }

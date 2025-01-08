@@ -162,5 +162,6 @@ enum StringEnums {
   remove,
   note,
   quentity,
-  add_note
+  add_note,
+  no_discount
 }

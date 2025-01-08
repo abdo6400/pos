@@ -14,8 +14,6 @@ abstract class MenuLocalDataSource {
   Future<void> insertProducts(List<Map<String, dynamic>> dataList);
   Future<void> insertFlavors(List<Map<String, dynamic>> dataList);
   Future<void> insertQuestions(List<Map<String, dynamic>> dataList);
-  //Future<void> deleteAll(String table);
-  //Future<void> insert(String table, Map<String, dynamic> data);
 }
 
 class MenuLocalDataSourceImpl extends MenuLocalDataSource {

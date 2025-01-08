@@ -18,11 +18,6 @@ class Options extends StatelessWidget {
         icon: Icons.delivery_dining,
         color: Colors.green,
         onPress: () {}),
-    Option(
-        title: StringEnums.discounts.name,
-        icon: Icons.discount_outlined,
-        color: Colors.blueAccent,
-        onPress: () {}),
   ];
   @override
   Widget build(BuildContext context) {

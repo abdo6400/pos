@@ -7,6 +7,7 @@ import '../../../home/presentation/screens/home_screen.dart';
 import '../../../../../core/utils/extensions/extensions.dart';
 import '../../../menu/presentation/bloc/cart/cart_bloc.dart';
 import '../../../menu/presentation/bloc/category/category_bloc.dart';
+import '../../../menu/presentation/bloc/discount/discount_bloc.dart';
 import '../../../menu/presentation/bloc/flavor/flavor_bloc.dart';
 import '../../../menu/presentation/bloc/product/product_bloc.dart';
 import '../../../menu/presentation/bloc/question/question_bloc.dart';
@@ -40,6 +41,9 @@ class MainScreen extends StatelessWidget {
         BlocProvider(
           create: (context) =>
               locator<QuestionBloc>()..add(GetQuestionsEvent()),
+        ),
+        BlocProvider(
+          create: (context) => locator<DiscountBloc>()..add(GetDiscountEvent()),
         ),
       ],
       child: Scaffold(

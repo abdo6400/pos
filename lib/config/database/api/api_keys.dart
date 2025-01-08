@@ -103,4 +103,11 @@ class ApiKeys {
   static const String productPrice = "ProductPrice";
   static const String isRequired = "IsRequired";
   static const String questionAr = "QuestionAr";
+
+  // discount
+  static const String serial = "Serial";
+  static const String discountPercentage = "DiscountPercentage";
+  static const String discountTypeAr = "DiscountTypeAr";
+  static const String discountTypeEn = "DiscountTypeEn";
+  static const String active = "Active";
 }
