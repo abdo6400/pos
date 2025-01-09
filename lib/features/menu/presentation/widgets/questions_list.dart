@@ -15,8 +15,8 @@ import '../bloc/question/question_bloc.dart';
 
 class QuestionsList extends StatelessWidget {
   final String productId;
-  final MultiSelectController<Question> controller;
-  final List<Question> selectedQuestions;
+  final MultiSelectController<Product> controller;
+  final List<Product> selectedQuestions;
   const QuestionsList(
       {super.key,
       required this.productId,
@@ -25,6 +25,11 @@ class QuestionsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final style = Theme.of(context).textTheme.bodyLarge!.copyWith(
+          fontWeight: FontWeight.bold,
+          fontSize: context.AppResponsiveValue(16,
+              mobile: 14, tablet: 20, desktop: 25),
+        );
     return BlocBuilder<ProductBloc, ProductState>(
       builder: (context, state) {
         final List<Product> products =
@@ -38,9 +43,11 @@ class QuestionsList extends StatelessWidget {
                   context.read<QuestionBloc>().add(GetQuestionsEvent()),
             );
           }
-          final List<Question> questions = state is QuestionSuccess
-              ? state.filterQuestionsByProduct(productId)
-              : [];
+          final Map<int, List<Question>> questions = state is QuestionSuccess
+              ? state
+                  .filterQuestionsByProduct(productId)
+                  .groupListsBy((x) => x.productQuestionId)
+              : Map();
           if (state is QuestionSuccess && questions.isEmpty) {
             return Center(
               child: EmptyMessage(
@@ -74,7 +81,7 @@ class QuestionsList extends StatelessWidget {
                           style:
                               Theme.of(context).textTheme.bodyLarge!.copyWith(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: context.ResponsiveValu(16,
+                                    fontSize: context.AppResponsiveValue(16,
                                         mobile: 14, tablet: 20, desktop: 25),
                                   ),
                         ),
@@ -83,66 +90,67 @@ class QuestionsList extends StatelessWidget {
                   ),
                   Expanded(
                     child: state is QuestionSuccess
-                        ? MultiSelectCheckList<Question>(
-                            maxSelectableCount: questions.length,
-                            listViewSettings: ListViewSettings(
-                                separatorBuilder: (context, index) =>
-                                    const Divider(
-                                      height: 0,
-                                    )),
-                            controller: controller,
-                            items: List.generate(questions.length, (index) {
-                              final product = products.firstWhereOrNull((x) =>
-                                  x.proId ==
-                                  questions[index].questionElements1);
-                              return CheckListCard(
-                                value: questions[index],
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                selected: selectedQuestions
-                                    .contains(questions[index]),
-                                title: Text(
-                                  questions[index].questionAr +
-                                      " - " +
-                                      " ${product != null ? context.trValue(product.proArName, product.proEnName) : ""}",
-                                ),
-                                textStyles: MultiSelectItemTextStyles(
-                                  selectedTextStyle: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: context.ResponsiveValu(16,
-                                            mobile: 14,
-                                            tablet: 20,
-                                            desktop: 25),
-                                      ),
-                                  disabledTextStyle: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: context.ResponsiveValu(16,
-                                            mobile: 14,
-                                            tablet: 20,
-                                            desktop: 25),
-                                      ),
-                                  textStyle: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: context.ResponsiveValu(16,
-                                            mobile: 14,
-                                            tablet: 20,
-                                            desktop: 25),
-                                      ),
-                                ),
+                        ? ListView.builder(
+                            itemCount: questions.keys.toList().length,
+                            itemBuilder: (context, key) {
+                              return Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Row(
+                                    spacing: 10,
+                                    children: [
+                                      Text("${key + 1}".toString(),
+                                          style: style),
+                                      Text(
+                                          questions[
+                                                  questions.keys.toList()[key]]!
+                                              .first
+                                              .questionAr,
+                                          style: style),
+                                    ],
+                                  ),
+                                  const Divider(),
+                                  MultiSelectCheckList<Product>(
+                                    maxSelectableCount:
+                                        questions[questions.keys.toList()[key]]!
+                                            .length,
+                                    listViewSettings: ListViewSettings(
+                                        separatorBuilder: (context, index) =>
+                                            const Divider(
+                                              height: 0,
+                                            )),
+                                    controller: controller,
+                                    items: List.generate(
+                                        questions[questions.keys.toList()[key]]!
+                                            .length, (index) {
+                                      final question = questions[
+                                          questions.keys.toList()[key]]![index];
+                                      final product = products.firstWhere((x) =>
+                                          x.proId ==
+                                          question.questionElements1);
+                                      return CheckListCard(
+                                        value: product,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        selected:
+                                            selectedQuestions.contains(product),
+                                        title: Text(
+                                          "${context.trValue(product.proArName, product.proEnName)}",
+                                        ),
+                                        textStyles: MultiSelectItemTextStyles(
+                                            selectedTextStyle: style,
+                                            disabledTextStyle: style,
+                                            textStyle: style),
+                                      );
+                                    }),
+                                    onChange:
+                                        (allSelectedItems, selectedItem) {},
+                                  ),
+                                ],
                               );
-                            }),
-                            onChange: (allSelectedItems, selectedItem) {},
-                          )
+                            })
                         : Card(),
                   )
                 ],

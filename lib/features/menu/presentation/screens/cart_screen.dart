@@ -4,8 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
 import '../../../../core/utils/enums/string_enums.dart';
 import '../../../../core/widgets/custom_button.dart';
-import '../bloc/cart/cart_bloc.dart';
-import '../bloc/cubit/discount_selection.dart';
+import '../bloc/cubit/discount_selection_cubit.dart';
 import '../widgets/cart/amount.dart';
 import '../widgets/cart/cart_list.dart';
 import '../widgets/cart/custom_app_bar.dart';
@@ -17,7 +16,7 @@ class CartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => DiscountSelection()),
+        BlocProvider(create: (_) => DiscountSelectionCubit()),
       ],
       child: Card(
           margin: EdgeInsets.zero,
@@ -29,9 +28,9 @@ class CartScreen extends StatelessWidget {
             children: [
               Expanded(child: CustomAppBar()),
               Expanded(
-                flex:
-                    context.ResponsiveValu(4, mobile: 5, tablet: 7, desktop: 6)
-                        .toInt(),
+                flex: context.AppResponsiveValue(4,
+                        mobile: 5, tablet: 7, desktop: 6)
+                    .toInt(),
                 child: Column(
                   children: [
                     Padding(
@@ -42,7 +41,7 @@ class CartScreen extends StatelessWidget {
                               .textTheme
                               .headlineMedium!
                               .copyWith(
-                                fontSize: context.ResponsiveValu(12,
+                                fontSize: context.AppResponsiveValue(12,
                                     mobile: 10, tablet: 20, desktop: 25),
                               )),
                     ),
@@ -52,13 +51,8 @@ class CartScreen extends StatelessWidget {
                       child: Column(
                         spacing: 5,
                         children: [
-                          BlocBuilder<CartBloc, CartState>(
-                            builder: (context, state) {
-                              return Amount(
-                                subTotalAmount: state.totalPrice,
-                                taxAmount: 0.0,
-                              );
-                            },
+                          Amount(
+                            taxAmount: 0.0,
                           ),
                           Row(
                             spacing: 10,

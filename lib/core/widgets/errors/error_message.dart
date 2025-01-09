@@ -15,7 +15,7 @@ class ErrorMessage extends StatelessWidget {
       alignment: Alignment.center,
       padding: const EdgeInsets.all(8.0),
       child: Row(
-        spacing: context.ResponsiveValu(10, mobile: 5, tablet: 15),
+        spacing: context.AppResponsiveValue(10, mobile: 5, tablet: 15),
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
@@ -25,21 +25,21 @@ class ErrorMessage extends StatelessWidget {
                           .contains(StringEnums.no_internet_connection.name))
                   ? Icons.signal_wifi_connected_no_internet_4_outlined
                   : Icons.error_outline,
-              size: context.ResponsiveValu(45,
+              size: context.AppResponsiveValue(45,
                   mobile: 40, tablet: 55, desktop: 70),
               color: Theme.of(context).colorScheme.error),
           (message == null)
               ? Text(
                   StringEnums.error.name.tr(),
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        fontSize: context.ResponsiveValu(16,
+                        fontSize: context.AppResponsiveValue(16,
                             mobile: 12, tablet: 24, desktop: 30),
                       ),
                 )
               : Text(
                   message!.trExists() ? message!.tr() : message!,
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        fontSize: context.ResponsiveValu(12,
+                        fontSize: context.AppResponsiveValue(12,
                             mobile: 8, tablet: 20, desktop: 30),
                       ),
                 ),
@@ -58,7 +58,7 @@ class ErrorMessage extends StatelessWidget {
               child: Text(
                 StringEnums.retry.name.tr(),
                 style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      fontSize: context.ResponsiveValu(12,
+                      fontSize: context.AppResponsiveValue(12,
                           mobile: 8, tablet: 20, desktop: 30),
                     ),
               ))

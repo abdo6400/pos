@@ -1,11 +1,12 @@
 import 'flavor.dart';
+import 'offer.dart';
 import 'product.dart';
-import 'question.dart';
 
 class CartItem {
   final Product product;
   final List<Flavor> flavors;
-  final List<Question> questions;
+  final List<Product> questions;
+  final List<Offer> offers;
   final int quantity;
   final String note;
 
@@ -14,6 +15,7 @@ class CartItem {
     required this.quantity,
     required this.flavors,
     required this.questions,
+    required this.offers,
     this.note = '',
   });
 }

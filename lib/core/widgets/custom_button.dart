@@ -28,7 +28,7 @@ class CustomButton extends StatelessWidget {
           textStyle: WidgetStatePropertyAll(
             Theme.of(context).textTheme.bodyLarge!.copyWith(
                   color: Colors.white,
-                  fontSize: context.ResponsiveValu(12,
+                  fontSize: context.AppResponsiveValue(12,
                       mobile: 10, tablet: 20, desktop: 24),
                 ),
           )),
@@ -45,7 +45,7 @@ class CustomButton extends StatelessWidget {
           if (iconData != null)
             Icon(iconData,
                 color: Colors.white,
-                size: context.ResponsiveValu(15,
+                size: context.AppResponsiveValue(15,
                     mobile: 15, tablet: 25, desktop: 30)),
         ],
       ),

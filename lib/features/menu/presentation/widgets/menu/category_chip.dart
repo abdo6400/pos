@@ -6,6 +6,7 @@ import 'package:retail/core/utils/extensions/extensions.dart';
 import '../../../../../core/utils/enums/string_enums.dart';
 import '../../../domain/entities/category.dart';
 import '../../bloc/cubit/category_selection_cubit.dart';
+import '../../bloc/cubit/offer_selection_cubit.dart';
 
 class CategoryChip extends StatelessWidget {
   final Category? category;
@@ -14,11 +15,15 @@ class CategoryChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final selected =
-        context.watch<CategorySelectionCubit>().state?.catId == category?.catId;
+    final selected = context.watch<OfferSelectionCubit>().state
+        ? false
+        : context.watch<CategorySelectionCubit>().state?.catId ==
+            category?.catId;
     return InkWell(
-      onTap: () =>
-          context.read<CategorySelectionCubit>().selectCategory(category),
+      onTap: () {
+        context.read<OfferSelectionCubit>().ShowHideOffer(false);
+        context.read<CategorySelectionCubit>().selectCategory(category);
+      },
       child: Chip(
         elevation: 10,
         label: Text(category != null
@@ -32,7 +37,7 @@ class CategoryChip extends StatelessWidget {
             : null,
         labelStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
               color: selected ? Colors.white : null,
-              fontSize: context.ResponsiveValu(13,
+              fontSize: context.AppResponsiveValue(13,
                   mobile: 12, tablet: 16, desktop: 23),
             ),
       ),

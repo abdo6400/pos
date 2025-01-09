@@ -27,12 +27,12 @@ class LoginFormBuilder extends StatelessWidget {
       color: Theme.of(context).cardColor.withValues(alpha: 0.8),
       child: Padding(
         padding: EdgeInsets.symmetric(
-          vertical:
-              context.ResponsiveValu(10, mobile: 10, tablet: 20, desktop: 35),
+          vertical: context.AppResponsiveValue(10,
+              mobile: 10, tablet: 20, desktop: 35),
         ),
         child: Column(
           spacing:
-              context.ResponsiveValu(8, mobile: 5, tablet: 20, desktop: 35),
+              context.AppResponsiveValue(8, mobile: 5, tablet: 20, desktop: 35),
           mainAxisSize: MainAxisSize.min,
           children: [
             AppLogo(),

@@ -8,18 +8,18 @@ class AppLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: context.ResponsiveValu(80,
+      width: context.AppResponsiveValue(80,
           mobile: 70, tablet: 150, desktop: 200, large: 250),
-      height: context.ResponsiveValu(80,
+      height: context.AppResponsiveValue(80,
           mobile: 70, tablet: 150, desktop: 200, large: 250),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(50),
       ),
       child: Center(
         child: SizedBox(
-          width: context.ResponsiveValu(80,
+          width: context.AppResponsiveValue(80,
               mobile: 70, tablet: 150, desktop: 200, large: 250),
-          height: context.ResponsiveValu(80,
+          height: context.AppResponsiveValue(80,
               mobile: 70, tablet: 150, desktop: 200, large: 250),
           child: Image.asset(
             Assets.logo,

@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import '../../../domain/entities/cart_item.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
@@ -39,6 +40,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
             flavors: event.cartItem.flavors,
             questions: event.cartItem.questions,
             note: event.cartItem.note,
+            offers: cartItem.offers,
           );
         }
         return cartItem;
@@ -60,6 +62,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           flavors: event.cartItem.flavors,
           questions: event.cartItem.questions,
           note: event.cartItem.note,
+          offers: cartItem.offers,
         );
       }
       return cartItem;
@@ -79,7 +82,33 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   void _onCalculateTotalPrice(
       CalculateTotalPriceEvent event, Emitter<CartState> emit) {
     final totalPrice = state.cart.fold(0.0, (sum, cartItem) {
-      return sum + (cartItem.product.price * cartItem.quantity);
+      final offer = cartItem.offers.firstWhereOrNull((x) =>
+          x.isActive == true &&
+          x.productId == cartItem.product.proId &&
+          x.toDate.isBefore(DateTime.now()));
+      if (offer != null) {
+        if (offer.priceOffer) {
+          //offer price = new product price
+          final newPrice = offer.price;
+        } else if (offer.extraOffer && offer.qty >= cartItem.quantity) {
+          // calculate qty for free product
+          final q = (cartItem.quantity / offer.qty).floor();
+          // free product add to cart with its qty
+          // final offerProduct = ;
+        } else if (offer.qtyOffer && cartItem.quantity >= offer.qty) {
+          // calculate offer price per unit if qty for product >= offer qty
+          double offerPricePerUnit = offer.price / offer.qty;
+        }
+        return sum + (cartItem.product.price * cartItem.quantity);
+      } else {
+        cartItem.flavors.forEach((flavor) {
+          sum += flavor.price;
+        });
+        cartItem.questions.forEach((question) {
+          sum += question.price;
+        });
+        return sum + (cartItem.product.price * cartItem.quantity);
+      }
     });
     emit(state.copyWith(totalPrice: totalPrice));
   }

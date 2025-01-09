@@ -22,10 +22,12 @@ class OtpDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final defaultPinTheme = PinTheme(
       margin: EdgeInsetsDirectional.only(
-        end: context.ResponsiveValu(5, mobile: 5, tablet: 20, desktop: 30),
+        end: context.AppResponsiveValue(5, mobile: 5, tablet: 20, desktop: 30),
       ),
-      width: context.ResponsiveValu(45, mobile: 30, tablet: 60, desktop: 100),
-      height: context.ResponsiveValu(45, mobile: 30, tablet: 60, desktop: 100),
+      width:
+          context.AppResponsiveValue(45, mobile: 30, tablet: 60, desktop: 100),
+      height:
+          context.AppResponsiveValue(45, mobile: 30, tablet: 60, desktop: 100),
       decoration: BoxDecoration(
         border:
             Border.all(color: Theme.of(context).textTheme.bodyLarge!.color!),
@@ -48,10 +50,10 @@ class OtpDialog extends StatelessWidget {
       insetPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal:
-              context.ResponsiveValu(10, mobile: 5, tablet: 30, desktop: 100),
-          vertical:
-              context.ResponsiveValu(20, mobile: 10, tablet: 80, desktop: 100),
+          horizontal: context.AppResponsiveValue(10,
+              mobile: 5, tablet: 30, desktop: 100),
+          vertical: context.AppResponsiveValue(20,
+              mobile: 10, tablet: 80, desktop: 100),
         ),
         child: FormBuilder(
           key: _formKey,
@@ -62,7 +64,7 @@ class OtpDialog extends StatelessWidget {
                 StringEnums.otp_heading.name.tr(),
                 style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                       color: Theme.of(context).primaryColor,
-                      fontSize: context.ResponsiveValu(16,
+                      fontSize: context.AppResponsiveValue(16,
                           mobile: 14, tablet: 20, desktop: 24),
                     ),
               ),
@@ -71,7 +73,7 @@ class OtpDialog extends StatelessWidget {
                 StringEnums.otp_description.name.tr(),
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      fontSize: context.ResponsiveValu(12,
+                      fontSize: context.AppResponsiveValue(12,
                           mobile: 10, tablet: 18, desktop: 20),
                     ),
               ),
@@ -108,7 +110,7 @@ class OtpDialog extends StatelessWidget {
                 StringEnums.resend_otp.name.tr(),
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      fontSize: context.ResponsiveValu(12,
+                      fontSize: context.AppResponsiveValue(12,
                           mobile: 10, tablet: 18, desktop: 20),
                     ),
               ),
@@ -121,7 +123,7 @@ class OtpDialog extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         decoration: TextDecoration.underline,
                         decorationColor: Theme.of(context).primaryColor,
-                        fontSize: context.ResponsiveValu(10,
+                        fontSize: context.AppResponsiveValue(10,
                             mobile: 10, tablet: 18, desktop: 20),
                       ),
                 ),

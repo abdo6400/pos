@@ -24,7 +24,7 @@ class CustomSignButton extends StatelessWidget {
           textStyle: WidgetStatePropertyAll(
             Theme.of(context).textTheme.bodyLarge!.copyWith(
                   color: Colors.white,
-                  fontSize: context.ResponsiveValu(14,
+                  fontSize: context.AppResponsiveValue(14,
                       mobile: 10, tablet: 20, desktop: 24),
                 ),
           )),

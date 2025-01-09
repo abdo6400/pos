@@ -20,9 +20,9 @@ class CustomFormBuilderTextField extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(
         vertical:
-            context.ResponsiveValu(15, mobile: 5, tablet: 30, desktop: 25),
+            context.AppResponsiveValue(15, mobile: 5, tablet: 30, desktop: 25),
         horizontal:
-            context.ResponsiveValu(15, mobile: 5, tablet: 40, desktop: 45),
+            context.AppResponsiveValue(15, mobile: 5, tablet: 40, desktop: 45),
       ),
       child: StatefulBuilder(
         builder: (BuildContext context, setState) {
@@ -33,7 +33,7 @@ class CustomFormBuilderTextField extends StatelessWidget {
             maxLines: fieldModel.isPassword ? 1 : fieldModel.maxLines,
             initialValue: fieldModel.initialValue,
             style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  fontSize: context.ResponsiveValu(13,
+                  fontSize: context.AppResponsiveValue(13,
                       mobile: 12, tablet: 23, desktop: 24),
                 ),
             decoration: InputDecoration(
@@ -43,23 +43,23 @@ class CustomFormBuilderTextField extends StatelessWidget {
                   .bodyLarge!
                   .copyWith(
                     color: Theme.of(context).hintColor.withValues(alpha: 0.9),
-                    fontSize: context.ResponsiveValu(14,
+                    fontSize: context.AppResponsiveValue(14,
                         mobile: 13, tablet: 24, desktop: 25),
                   ),
               labelStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
                     color: Theme.of(context).hintColor.withValues(alpha: 0.9),
-                    fontSize: context.ResponsiveValu(14,
+                    fontSize: context.AppResponsiveValue(14,
                         mobile: 13, tablet: 24, desktop: 25),
                   ),
               hintStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
                     color: Theme.of(context).hintColor.withValues(alpha: 0.9),
-                    fontSize: context.ResponsiveValu(14,
+                    fontSize: context.AppResponsiveValue(14,
                         mobile: 13, tablet: 24, desktop: 25),
                   ),
               hintFadeDuration: Duration(milliseconds: 1000),
               errorStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
                     color: Theme.of(context).colorScheme.error,
-                    fontSize: context.ResponsiveValu(14,
+                    fontSize: context.AppResponsiveValue(14,
                         mobile: 13, tablet: 20, desktop: 24),
                   ),
               contentPadding: EdgeInsetsDirectional.symmetric(horizontal: 20),
@@ -94,9 +94,9 @@ class CustomFormBuilderTextField extends StatelessWidget {
                 ),
               ),
               prefixIconConstraints: BoxConstraints(
-                minWidth: context.ResponsiveValu(60,
+                minWidth: context.AppResponsiveValue(60,
                     mobile: 40, tablet: 75, desktop: 80),
-                minHeight: context.ResponsiveValu(45,
+                minHeight: context.AppResponsiveValue(45,
                     mobile: 40, tablet: 60, desktop: 65),
               ),
             ),

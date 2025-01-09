@@ -33,7 +33,7 @@ class SignWithSocial extends StatelessWidget {
           Text(
             buttonLabel.tr(),
             style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  fontSize: context.ResponsiveValu(14,
+                  fontSize: context.AppResponsiveValue(14,
                       mobile: 10, tablet: 20, desktop: 24),
                 ),
           ),

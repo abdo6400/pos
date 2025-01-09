@@ -49,7 +49,7 @@ class Options extends StatelessWidget {
                                 child: Icon(
                                   e.icon,
                                   color: e.color,
-                                  size: context.ResponsiveValu(20,
+                                  size: context.AppResponsiveValue(20,
                                       mobile: 20, tablet: 35, desktop: 45),
                                 ),
                               ),
@@ -59,10 +59,11 @@ class Options extends StatelessWidget {
                                         .textTheme
                                         .bodyLarge!
                                         .copyWith(
-                                            fontSize: context.ResponsiveValu(11,
-                                                mobile: 10,
-                                                tablet: 16,
-                                                desktop: 30))),
+                                            fontSize:
+                                                context.AppResponsiveValue(11,
+                                                    mobile: 10,
+                                                    tablet: 16,
+                                                    desktop: 30))),
                               ),
                             ],
                           ),

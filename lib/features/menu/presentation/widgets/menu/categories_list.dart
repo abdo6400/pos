@@ -7,6 +7,7 @@ import '../../../../../core/utils/enums/string_enums.dart';
 import '../../../../../core/widgets/empty_message.dart';
 import '../../../../../core/widgets/errors/error_message.dart';
 import '../../bloc/category/category_bloc.dart';
+import '../../bloc/cubit/offer_selection_cubit.dart';
 import 'category_chip.dart';
 
 class CategoriesList extends StatelessWidget {
@@ -34,14 +35,29 @@ class CategoriesList extends StatelessWidget {
             children: [
               const SizedBox(width: 10),
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  context.read<OfferSelectionCubit>().ShowHideOffer(true);
+                },
                 child: Chip(
+                    elevation: 10,
+                    backgroundColor: (context
+                            .watch<OfferSelectionCubit>()
+                            .state)
+                        ? Theme.of(context).colorScheme.secondary.withAlpha(50)
+                        : null,
+                    labelStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          color: context.watch<OfferSelectionCubit>().state
+                              ? Colors.white
+                              : null,
+                          fontSize: context.AppResponsiveValue(13,
+                              mobile: 12, tablet: 16, desktop: 23),
+                        ),
                     label: Icon(
-                  Icons.local_offer_sharp,
-                  color: Colors.red,
-                  size: context.ResponsiveValu(13,
-                      mobile: 12, tablet: 25, desktop: 35),
-                )),
+                      Icons.local_offer_sharp,
+                      color: Colors.red,
+                      size: context.AppResponsiveValue(13,
+                          mobile: 12, tablet: 25, desktop: 35),
+                    )),
               ),
               Expanded(
                 child: ListView.separated(

@@ -14,9 +14,9 @@ class SplashScreen extends StatelessWidget {
     return SafeArea(
       child: CustomSplashScreen.fadeIn(
           gifPath: Assets.logo,
-          gifWidth: context.ResponsiveValu(120,
+          gifWidth: context.AppResponsiveValue(120,
               mobile: 100, tablet: 200, desktop: 250, large: 300),
-          gifHeight: context.ResponsiveValu(120,
+          gifHeight: context.AppResponsiveValue(120,
               mobile: 100, tablet: 200, desktop: 250, large: 300),
           duration: Duration(seconds: 4),
           onEnd: () async => (await storage.isAuthenticatedState())

@@ -8,6 +8,7 @@ import '../../../../../core/entities/auth_tokens.dart';
 import '../../../../../core/utils/enums/string_enums.dart';
 import '../../../../../core/widgets/lang_theme_options.dart';
 import '../../bloc/cubit/category_selection_cubit.dart';
+import '../../bloc/cubit/offer_selection_cubit.dart';
 import '../../bloc/cubit/search_cubit.dart';
 import '../../bloc/product/product_bloc.dart';
 
@@ -52,7 +53,8 @@ class CustomAppBar extends StatelessWidget {
                                         .textTheme
                                         .bodyLarge!
                                         .copyWith(
-                                          fontSize: context.ResponsiveValu(12,
+                                          fontSize: context.AppResponsiveValue(
+                                              12,
                                               mobile: 10,
                                               tablet: 17,
                                               desktop: 25),
@@ -66,7 +68,8 @@ class CustomAppBar extends StatelessWidget {
                                         .textTheme
                                         .bodyLarge!
                                         .copyWith(
-                                          fontSize: context.ResponsiveValu(12,
+                                          fontSize: context.AppResponsiveValue(
+                                              12,
                                               mobile: 10,
                                               tablet: 17,
                                               desktop: 25),
@@ -96,10 +99,13 @@ class CustomAppBar extends StatelessWidget {
                           .textTheme
                           .bodyLarge!
                           .copyWith(
-                              fontSize: context.ResponsiveValu(14,
+                              fontSize: context.AppResponsiveValue(14,
                                   mobile: 10, tablet: 20, desktop: 24))),
                       onChanged: (value) {
                         if (value.isNotEmpty) {
+                          context
+                              .read<OfferSelectionCubit>()
+                              .ShowHideOffer(false);
                           context
                               .read<CategorySelectionCubit>()
                               .selectCategory(null);
@@ -114,7 +120,7 @@ class CustomAppBar extends StatelessWidget {
                           .bodyLarge!
                           .copyWith(
                               color: Theme.of(context).hintColor,
-                              fontSize: context.ResponsiveValu(14,
+                              fontSize: context.AppResponsiveValue(14,
                                   mobile: 10, tablet: 20, desktop: 24))),
                       trailing: [
                         context.watch<SearchCubit>().state != null

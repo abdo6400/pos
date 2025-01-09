@@ -20,12 +20,12 @@ extension Dialogs on BuildContext {
       useRootNavigator: true,
       btnCancelText: StringEnums.cancel.name.tr(),
       titleTextStyle: Theme.of(this).textTheme.headlineSmall!.copyWith(
-            fontSize:
-                this.ResponsiveValu(20, mobile: 15, tablet: 24, desktop: 32),
+            fontSize: this
+                .AppResponsiveValue(20, mobile: 15, tablet: 24, desktop: 32),
           ),
       buttonsTextStyle: Theme.of(this).textTheme.bodyLarge!.copyWith(
-            fontSize:
-                this.ResponsiveValu(16, mobile: 15, tablet: 24, desktop: 32),
+            fontSize: this
+                .AppResponsiveValue(16, mobile: 15, tablet: 24, desktop: 32),
           ),
       btnCancelOnPress: () {
         Navigator.pop(this);
@@ -51,7 +51,7 @@ extension Dialogs on BuildContext {
             Text(
               title.tr(),
               style: Theme.of(this).textTheme.headlineSmall!.copyWith(
-                    fontSize: this.ResponsiveValu(20,
+                    fontSize: this.AppResponsiveValue(20,
                         mobile: 15, tablet: 24, desktop: 32),
                   ),
             ),
@@ -77,8 +77,8 @@ extension Dialogs on BuildContext {
       btnOkText: StringEnums.confirm.name.tr(),
       dialogType: DialogType.warning,
       titleTextStyle: Theme.of(this).textTheme.headlineSmall!.copyWith(
-            fontSize:
-                this.ResponsiveValu(20, mobile: 15, tablet: 24, desktop: 32),
+            fontSize: this
+                .AppResponsiveValue(20, mobile: 15, tablet: 24, desktop: 32),
           ),
       title: title.tr(),
       btnCancelOnPress: () {},
@@ -102,8 +102,8 @@ extension Dialogs on BuildContext {
       btnCancelText: StringEnums.cancel.name.tr(),
       buttonsTextStyle: Theme.of(this).textTheme.bodyLarge!.copyWith(
             color: Colors.white,
-            fontSize:
-                this.ResponsiveValu(16, mobile: 15, tablet: 24, desktop: 32),
+            fontSize: this
+                .AppResponsiveValue(16, mobile: 15, tablet: 24, desktop: 32),
           ),
       btnOkOnPress: () => onSubmit(),
       btnCancelOnPress: () {},
@@ -121,8 +121,8 @@ extension Dialogs on BuildContext {
           Text(
             title.tr(),
             style: Theme.of(this).textTheme.headlineSmall!.copyWith(
-                  fontSize: this
-                      .ResponsiveValu(20, mobile: 15, tablet: 24, desktop: 32),
+                  fontSize: this.AppResponsiveValue(20,
+                      mobile: 15, tablet: 24, desktop: 32),
                 ),
           ),
           Divider(),

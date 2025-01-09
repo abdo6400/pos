@@ -15,7 +15,8 @@ class LangPopMenu extends StatelessWidget {
         child: Icon(
           Icons.language_rounded,
           color: Theme.of(context).primaryColor,
-          size: context.ResponsiveValu(30, mobile: 20, tablet: 35, desktop: 40),
+          size: context.AppResponsiveValue(30,
+              mobile: 20, tablet: 35, desktop: 40),
         ),
       ),
       offset: Offset(10, 50),

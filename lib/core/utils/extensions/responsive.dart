@@ -23,7 +23,7 @@ extension Responsive on BuildContext {
     return ResponsiveBreakpoints.of(this).between(name1, name2);
   }
 
-  double ResponsiveValu(double defaultValue,
+  double AppResponsiveValue(double defaultValue,
           {double? mobile, double? tablet, double? desktop, double? large}) =>
       ResponsiveValue(
         this,

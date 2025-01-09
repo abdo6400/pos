@@ -20,8 +20,8 @@ class LangThemeOptions extends StatelessWidget {
           icon: Icon(AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark
               ? Icons.dark_mode_outlined
               : Icons.light_mode_outlined),
-          iconSize:
-              context.ResponsiveValu(30, mobile: 25, tablet: 35, desktop: 40),
+          iconSize: context.AppResponsiveValue(30,
+              mobile: 25, tablet: 35, desktop: 40),
         ),
         Container(
           width: 3,

@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:retail/features/menu/domain/entities/category.dart';
 import 'package:retail/features/menu/domain/entities/discount.dart';
 import 'package:retail/features/menu/domain/entities/flavor.dart';
+import 'package:retail/features/menu/domain/entities/offer.dart';
 import 'package:retail/features/menu/domain/entities/product.dart';
 import 'package:retail/features/menu/domain/entities/question.dart';
 import '../../../../config/database/error/failures.dart';
@@ -65,5 +66,13 @@ class MenuRepositoryImpl extends MenuRepository {
         remoteRequest: () => _menuRemoteDataSource.getDiscounts(branchId),
         cacheData: (data) async {},
         localRequest: () async => <Discount>[]);
+  }
+
+  @override
+  Future<Either<Failure, List<Offer>>> getOffers(String branchId) {
+    return _networkInfo.handleNetworkRequest<List<Offer>>(
+        remoteRequest: () => _menuRemoteDataSource.getOffers(branchId),
+        cacheData: (data) async {},
+        localRequest: () async => <Offer>[]);
   }
 }

@@ -37,7 +37,7 @@ class LoginScreen extends StatelessWidget {
                 height: double.infinity,
                 child: SingleChildScrollView(
                   child: SizedBox(
-                    width: context.ResponsiveValu(300,
+                    width: context.AppResponsiveValue(300,
                         mobile: 200, tablet: 500, desktop: 600),
                     child: BlocConsumer<LoginBloc, LoginState>(
                       listener: (context, state) async {

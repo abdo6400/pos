@@ -62,7 +62,7 @@ class FlavorsList extends StatelessWidget {
                       StringEnums.flavors.name.tr(),
                       style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             fontWeight: FontWeight.bold,
-                            fontSize: context.ResponsiveValu(16,
+                            fontSize: context.AppResponsiveValue(16,
                                 mobile: 14, tablet: 20, desktop: 25),
                           ),
                     ),
@@ -97,7 +97,8 @@ class FlavorsList extends StatelessWidget {
                                         .bodyLarge!
                                         .copyWith(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: context.ResponsiveValu(16,
+                                          fontSize: context.AppResponsiveValue(
+                                              16,
                                               mobile: 14,
                                               tablet: 20,
                                               desktop: 25),
@@ -107,7 +108,8 @@ class FlavorsList extends StatelessWidget {
                                         .bodyLarge!
                                         .copyWith(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: context.ResponsiveValu(16,
+                                          fontSize: context.AppResponsiveValue(
+                                              16,
                                               mobile: 14,
                                               tablet: 20,
                                               desktop: 25),
@@ -117,7 +119,8 @@ class FlavorsList extends StatelessWidget {
                                         .bodyLarge!
                                         .copyWith(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: context.ResponsiveValu(16,
+                                          fontSize: context.AppResponsiveValue(
+                                              16,
                                               mobile: 14,
                                               tablet: 20,
                                               desktop: 25),

@@ -110,4 +110,33 @@ class ApiKeys {
   static const String discountTypeAr = "DiscountTypeAr";
   static const String discountTypeEn = "DiscountTypeEn";
   static const String active = "Active";
+
+  static const String offerId = "OfferId";
+  static const String productNameAr = "ProductNameAr";
+  static const String productNameEn = "ProductNameEn";
+  static const String fromDate = "FromDate";
+  static const String toDate = "ToDate";
+  static const String priceOffer = "PriceOffer";
+  static const String qtyOffer = "QtyOffer";
+  static const String extraOffer = "ExtraOffer";
+  static const String qty = "Qty";
+  static const String extraProduct = "ExtraProduct";
+  static const String extraProductAr = "ExtraProductAr";
+  static const String extraProductEn = "ExtraProductEn";
+  static const String offerTypeAr = "OfferTypeAr";
+  static const String offerTypeEn = "OfferTypeEn";
+  static const String offerValueAr = "offerValueAr";
+  static const String offerValueEn = "offerValueEn";
+
+  static const String settingId = "SettingId";
+  static const String settingArdesc = "SettingArdesc";
+  static const String settingEndesc = "SettingEndesc";
+  static const String value1 = "Value1";
+  static const String value2 = "Value2";
+  static const String value3 = "Value3";
+  static const String value4 = "Value4";
+  static const String value5 = "Value5";
+  static const String visible = "Visible";
+  static const String groupTypeAr = "GroupTypeAr";
+  static const String groupTypeEn = "GroupTypeEn";
 }
