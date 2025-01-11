@@ -34,7 +34,7 @@ class OfferModel extends Offer {
         qtyOffer: json[ApiKeys.qtyOffer],
         extraOffer: json[ApiKeys.extraOffer],
         price: double.tryParse(json[ApiKeys.price].toString()) ?? 0.0,
-        qty: int.tryParse(json[ApiKeys.qty].toString()) ?? 0,
+        qty: double.tryParse(json[ApiKeys.qty].toString()) ?? 0.0,
         extraProduct: json[ApiKeys.extraProduct],
         isActive: json[ApiKeys.isActive],
         extraProductAr: json[ApiKeys.extraProductAr],

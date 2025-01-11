@@ -9,7 +9,6 @@ import '../../../../core/utils/enums/string_enums.dart';
 import '../../../../core/widgets/empty_message.dart';
 import '../../../../core/widgets/errors/error_card.dart';
 import '../../domain/entities/product.dart';
-import '../../domain/entities/question.dart';
 import '../bloc/product/product_bloc.dart';
 import '../bloc/question/question_bloc.dart';
 
@@ -43,10 +42,21 @@ class QuestionsList extends StatelessWidget {
                   context.read<QuestionBloc>().add(GetQuestionsEvent()),
             );
           }
-          final Map<int, List<Question>> questions = state is QuestionSuccess
+          final Map<String, List<Product>> questions = state is QuestionSuccess
               ? state
                   .filterQuestionsByProduct(productId)
                   .groupListsBy((x) => x.productQuestionId)
+                  .map((key, value) {
+                  // For each question, find matching products and collect them
+                  final validProducts = value
+                      .expand((question) => products
+                          .where((x) => x.proId == question.questionElements1)
+                          .toList())
+                      .toList();
+
+                  // Return the valid products (or an empty list if none are found)
+                  return MapEntry(value.first.questionAr, validProducts);
+                })
               : Map();
           if (state is QuestionSuccess && questions.isEmpty) {
             return Center(
@@ -101,11 +111,7 @@ class QuestionsList extends StatelessWidget {
                                     children: [
                                       Text("${key + 1}".toString(),
                                           style: style),
-                                      Text(
-                                          questions[
-                                                  questions.keys.toList()[key]]!
-                                              .first
-                                              .questionAr,
+                                      Text(questions.keys.toList()[key],
                                           style: style),
                                     ],
                                   ),
@@ -123,11 +129,8 @@ class QuestionsList extends StatelessWidget {
                                     items: List.generate(
                                         questions[questions.keys.toList()[key]]!
                                             .length, (index) {
-                                      final question = questions[
+                                      final product = questions[
                                           questions.keys.toList()[key]]![index];
-                                      final product = products.firstWhere((x) =>
-                                          x.proId ==
-                                          question.questionElements1);
                                       return CheckListCard(
                                         value: product,
                                         shape: RoundedRectangleBorder(

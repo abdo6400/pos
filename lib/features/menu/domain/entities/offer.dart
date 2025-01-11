@@ -11,7 +11,7 @@ abstract class Offer extends Equatable {
   final bool qtyOffer;
   final bool extraOffer;
   final double price;
-  final int qty;
+  final double qty;
   final String extraProduct;
   final bool isActive;
   final String? extraProductAr;

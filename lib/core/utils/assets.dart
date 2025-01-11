@@ -9,4 +9,6 @@ class Assets {
   static const String otp = 'assets/images/otp.png';
   static const String loader = 'assets/icons/loader.json';
   static const String loginBackground = 'assets/images/login_background.jpg';
+
+  static const String offer = 'assets/images/offer.png';
 }

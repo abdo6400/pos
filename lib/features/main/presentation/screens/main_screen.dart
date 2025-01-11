@@ -25,27 +25,29 @@ class MainScreen extends StatelessWidget {
         BlocProvider(
           create: (context) => ScreenCubit(),
         ),
-        BlocProvider.value(
-          value: locator<CategoryBloc>()..add(GetCategoriesEvent()),
+        BlocProvider(
+          create: (context) =>
+              locator<CategoryBloc>()..add(GetCategoriesEvent()),
         ),
-        BlocProvider.value(
-          value: locator<ProductBloc>()..add(GetProductsEvent()),
+        BlocProvider(
+          create: (context) => locator<ProductBloc>()..add(GetProductsEvent()),
         ),
         BlocProvider(create: (_) => CartBloc()),
-        BlocProvider.value(
-          value: UserCubit()..setUser(),
+        BlocProvider(
+          create: (context) => UserCubit()..setUser(),
         ),
-        BlocProvider.value(
-          value: locator<FlavorBloc>()..add(GetFlavorsEvent()),
+        BlocProvider(
+          create: (context) => locator<FlavorBloc>()..add(GetFlavorsEvent()),
         ),
-        BlocProvider.value(
-          value: locator<QuestionBloc>()..add(GetQuestionsEvent()),
+        BlocProvider(
+          create: (context) =>
+              locator<QuestionBloc>()..add(GetQuestionsEvent()),
         ),
-        BlocProvider.value(
-          value: locator<DiscountBloc>()..add(GetDiscountEvent()),
+        BlocProvider(
+          create: (context) => locator<DiscountBloc>()..add(GetDiscountEvent()),
         ),
-        BlocProvider.value(
-          value: locator<OfferBloc>()..add(GetOfferEvent()),
+        BlocProvider(
+          create: (context) => locator<OfferBloc>()..add(GetOfferEvent()),
         ),
       ],
       child: Scaffold(

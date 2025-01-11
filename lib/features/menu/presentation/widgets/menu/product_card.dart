@@ -1,9 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:collection/collection.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_select_items/flutter_multi_select_items.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
+import 'package:uuid/uuid.dart';
 import '../../../domain/entities/cart_item.dart';
 import '../../../domain/entities/flavor.dart';
 import '../../../domain/entities/offer.dart';
@@ -46,17 +47,16 @@ class ProductCard extends StatelessWidget {
             debugPrint(e.toString());
           }
           try {
-            print(offers);
             productOffers = [
               ...offers.where((x) => x.productId == product!.proId).toList(),
               ...offers
                   .where((x) => questions.any((q) => x.productId == q.proId))
                   .toList()
             ];
-            print(productOffers.length);
           } catch (e) {}
           context.read<CartBloc>().add(AddCartEvent(
                   cartItem: CartItem(
+                id: Uuid().v4(),
                 product: product!,
                 quantity: int.parse(_quantityController.text),
                 flavors: flavors,
@@ -87,7 +87,7 @@ class ProductCard extends StatelessWidget {
         final List<Offer> offers =
             offerState is OfferSuccess ? offerState.offers : [];
         final offer = product != null
-            ? offers.firstWhereOrNull((x) => x.productId == product!.proId)
+            ? offers.where((x) => x.productId == product!.proId).toList()
             : null;
         return Card(
           elevation: 0.5,
@@ -237,7 +237,7 @@ class ProductCard extends StatelessWidget {
                   ],
                 ),
               ),
-              if (offer != null)
+              if (offer != null && offer.isNotEmpty)
                 Align(
                   alignment: AlignmentDirectional.center,
                   child: Container(
@@ -246,15 +246,37 @@ class ProductCard extends StatelessWidget {
                     height: context.AppResponsiveValue(30,
                         mobile: 20, tablet: 40, desktop: 50),
                     decoration: BoxDecoration(color: Colors.red.withAlpha(225)),
-                    child: Text(
-                      context.trValue(offer.offerTypeAr, offer.offerTypeEn),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            color: Colors.white,
-                            fontSize: context.AppResponsiveValue(12,
-                                mobile: 10, tablet: 16, desktop: 25),
-                          ),
+                    child: CarouselSlider(
+                      options: CarouselOptions(
+                        aspectRatio: 10,
+                        viewportFraction: 1,
+                        initialPage: 0,
+                        enableInfiniteScroll: true,
+                        reverse: false,
+                        autoPlay: offer.length > 1 ? true : false,
+                        autoPlayInterval: Duration(seconds: 3),
+                        autoPlayAnimationDuration: Duration(milliseconds: 1000),
+                        autoPlayCurve: Curves.fastOutSlowIn,
+                        scrollDirection: Axis.horizontal,
+                      ),
+                      items: offer
+                          .map(
+                            (e) => Text(
+                              context.trValue(e.offerTypeAr, e.offerTypeEn),
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
+                              maxLines: 2,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(
+                                    color: Colors.white,
+                                    fontSize: context.AppResponsiveValue(12,
+                                        mobile: 10, tablet: 16, desktop: 25),
+                                  ),
+                            ),
+                          )
+                          .toList(),
                     ),
                   ),
                 ),
