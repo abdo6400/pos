@@ -12,6 +12,7 @@ import '../../../menu/presentation/bloc/flavor/flavor_bloc.dart';
 import '../../../menu/presentation/bloc/offer/offer_bloc.dart';
 import '../../../menu/presentation/bloc/product/product_bloc.dart';
 import '../../../menu/presentation/bloc/question/question_bloc.dart';
+import '../../../settings/presentation/bloc/settings_bloc.dart';
 import '../../../settings/presentation/screens/settings_screen.dart';
 import '../bloc/cubit/screen_cubit.dart';
 
@@ -25,6 +26,8 @@ class MainScreen extends StatelessWidget {
         BlocProvider(
           create: (context) => ScreenCubit(),
         ),
+        BlocProvider(
+            create: (_) => locator<SettingsBloc>()..add(GetSettingsEvent())),
         BlocProvider(
           create: (context) =>
               locator<CategoryBloc>()..add(GetCategoriesEvent()),

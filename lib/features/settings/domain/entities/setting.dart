@@ -5,8 +5,8 @@ abstract class Setting extends Equatable {
   final String settingArdesc;
   final String settingEndesc;
   final String value1;
-  final int value2;
-  final int value3;
+  final double value2;
+  final double value3;
   final bool value4;
   final DateTime value5;
   final bool visible;

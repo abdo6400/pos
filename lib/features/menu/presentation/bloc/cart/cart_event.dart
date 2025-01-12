@@ -34,6 +34,17 @@ class DeleteCartEvent extends CartEvent {
   List<Object> get props => [productId];
 }
 
-class CalculateTotalPriceEvent extends CartEvent {}
+class CalculateTotalPriceEvent extends CartEvent {
+  final double taxPercentage;
+  final bool priceIncludesTax;
+  final bool taxIncludesDiscount;
+  final double discount;
+
+  const CalculateTotalPriceEvent(
+      {required this.taxPercentage,
+      required this.priceIncludesTax,
+      required this.taxIncludesDiscount,
+      required this.discount});
+}
 
 class ClearCartEvent extends CartEvent {}

@@ -77,7 +77,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       newCart = List<CartItem>.from(state.cart)..add(event.cartItem);
     }
     emit(state.copyWith(cart: _applyOffers(newCart)));
-    add(CalculateTotalPriceEvent());
   }
 
   void _onUpdateCartItem(UpdateCartEvent event, Emitter<CartState> emit) {
@@ -139,7 +138,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         return !(cartItem.isOffer);
       }).toList();
       emit(state.copyWith(cart: _applyOffers(updatedCart)));
-      add(CalculateTotalPriceEvent());
     }
   }
 
@@ -155,7 +153,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         cartItem.extraItemId != null &&
         cartItem.extraItemId == cartItemToDelete.id);
     emit(state.copyWith(cart: updatedCart));
-    add(CalculateTotalPriceEvent());
   }
 
   void _onCalculateTotalPrice(
@@ -165,17 +162,12 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     double totalDiscount = 0.0;
     double grandTotal = 0.0;
 
-    double taxPercentage = 16.0;
-    bool priceIncludesTax = true;
-    bool taxIncludesDiscount = true;
-    double discount = 0.0;
-
     for (final cartItem in state.cart) {
       final totalPriceAndTax = cartItem.calculateTotalPriceAndTax(
-          taxPercentage: taxPercentage,
-          priceIncludesTax: priceIncludesTax,
-          discount: discount,
-          taxIncludesDiscount: taxIncludesDiscount);
+          taxPercentage: event.taxPercentage,
+          priceIncludesTax: event.priceIncludesTax,
+          discount: event.discount,
+          taxIncludesDiscount: event.taxIncludesDiscount);
       finalTotalPrice += totalPriceAndTax.price;
       totalDiscount += totalPriceAndTax.discount;
       totalTax += totalPriceAndTax.tax;

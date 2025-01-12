@@ -132,7 +132,7 @@ class CartList extends StatelessWidget {
                         alignment: AlignmentDirectional(-0.95, -0.8),
                         count: state.cart[index].quantity,
                         backgroundColor:
-                            Theme.of(context).colorScheme.secondary,
+                            Theme.of(context).primaryColor.withAlpha(225),
                         textColor: Colors.white,
                         textStyle: style.copyWith(
                           color: Colors.white,

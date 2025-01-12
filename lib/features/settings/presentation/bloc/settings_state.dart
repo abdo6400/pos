@@ -14,6 +14,10 @@ class SettingsLoading extends SettingsState {}
 class SettingsSuccess extends SettingsState {
   final List<Setting> settings;
   const SettingsSuccess({required this.settings});
+
+  Setting getSetting(int id) =>
+      settings.firstWhere((element) => element.settingId == id);
+
   @override
   List<Object> get props => [settings];
 }
