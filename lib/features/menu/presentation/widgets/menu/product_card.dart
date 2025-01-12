@@ -55,15 +55,15 @@ class ProductCard extends StatelessWidget {
             ];
           } catch (e) {}
           context.read<CartBloc>().add(AddCartEvent(
-                  cartItem: CartItem(
-                id: Uuid().v4(),
-                product: product!,
-                quantity: int.parse(_quantityController.text),
-                flavors: flavors,
-                questions: questions,
-                note: _noteController.text,
-                offers: productOffers,
-              )));
+              cartItem: CartItem(
+                  id: Uuid().v4(),
+                  product: product!,
+                  quantity: int.parse(_quantityController.text),
+                  flavors: flavors,
+                  questions: questions,
+                  note: _noteController.text,
+                  offers: productOffers,
+                  orignialPrice: product!.price)));
         },
         child: MultiBlocProvider(
             providers: [

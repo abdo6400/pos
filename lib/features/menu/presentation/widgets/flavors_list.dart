@@ -22,6 +22,11 @@ class FlavorsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final style = Theme.of(context).textTheme.bodyLarge!.copyWith(
+          fontWeight: FontWeight.bold,
+          fontSize: context.AppResponsiveValue(16,
+              mobile: 14, tablet: 20, desktop: 25),
+        );
     return BlocBuilder<FlavorBloc, FlavorState>(builder: (context, state) {
       if (state is FlavorError) {
         return ErrorCard(
@@ -91,41 +96,14 @@ class FlavorsList extends StatelessWidget {
                                   title: Text(context.trValue(
                                       flavors[index].flavorAr,
                                       flavors[index].flavorEn)),
-                                  textStyles: MultiSelectItemTextStyles(
-                                    selectedTextStyle: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge!
-                                        .copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: context.AppResponsiveValue(
-                                              16,
-                                              mobile: 14,
-                                              tablet: 20,
-                                              desktop: 25),
-                                        ),
-                                    disabledTextStyle: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge!
-                                        .copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: context.AppResponsiveValue(
-                                              16,
-                                              mobile: 14,
-                                              tablet: 20,
-                                              desktop: 25),
-                                        ),
-                                    textStyle: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge!
-                                        .copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: context.AppResponsiveValue(
-                                              16,
-                                              mobile: 14,
-                                              tablet: 20,
-                                              desktop: 25),
-                                        ),
+                                  subtitle: Text(
+                                    "${flavors[index].price}",
+                                    style: style,
                                   ),
+                                  textStyles: MultiSelectItemTextStyles(
+                                      selectedTextStyle: style,
+                                      disabledTextStyle: style,
+                                      textStyle: style),
                                 )),
                         onChange: (allSelectedItems, selectedItem) {},
                       )

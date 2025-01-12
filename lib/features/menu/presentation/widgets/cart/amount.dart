@@ -9,9 +9,7 @@ import '../../bloc/cubit/discount_selection_cubit.dart';
 import '../../bloc/discount/discount_bloc.dart';
 
 class Amount extends StatelessWidget {
-  final double taxAmount;
-
-  const Amount({super.key, required this.taxAmount});
+  const Amount({super.key});
 
   Widget _customListTile(String title, String value, BuildContext context) {
     final style = Theme.of(context).textTheme.bodyMedium!.copyWith(
@@ -43,7 +41,7 @@ class Amount extends StatelessWidget {
       margin: EdgeInsets.zero,
       elevation: 0,
       color: Theme.of(context).hintColor.withAlpha(15),
-      child: BlocBuilder<CartBloc, CartState>(builder: (context, state) {
+      child: BlocBuilder<CartBloc, CartState>(builder: (context, stats) {
         return Container(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
           child: Column(
@@ -51,9 +49,9 @@ class Amount extends StatelessWidget {
             spacing: 3,
             children: [
               _customListTile(StringEnums.subTotalAmount.name,
-                  state.totalPrice.toString(), context),
-              _customListTile(
-                  StringEnums.taxAmount.name, taxAmount.toString(), context),
+                  stats.totalPrice.toStringAsFixed(3), context),
+              _customListTile(StringEnums.taxAmount.name,
+                  stats.totalTax.toStringAsFixed(3), context),
               BlocBuilder<DiscountBloc, DiscountState>(
                 builder: (context, state) {
                   return Row(
@@ -109,7 +107,7 @@ class Amount extends StatelessWidget {
                             ),
                       Expanded(
                         child: _customListTile(StringEnums.discountAmount.name,
-                            discountAmount.toString(), context),
+                            stats.discount.toStringAsFixed(3), context),
                       ),
                     ],
                   );
@@ -118,10 +116,8 @@ class Amount extends StatelessWidget {
               Divider(
                 color: Theme.of(context).primaryColor,
               ),
-              _customListTile(
-                  StringEnums.totalAmount.name,
-                  ((state.totalPrice + taxAmount) - discountAmount).toString(),
-                  context),
+              _customListTile(StringEnums.totalAmount.name,
+                  ((stats.grandTotal)).toStringAsFixed(3), context),
             ],
           ),
         );

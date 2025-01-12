@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
 import '../../../../core/utils/enums/string_enums.dart';
 import '../../../../core/widgets/custom_button.dart';
+import '../bloc/cart/cart_bloc.dart';
 import '../bloc/cubit/discount_selection_cubit.dart';
 import '../widgets/cart/amount.dart';
 import '../widgets/cart/cart_list.dart';
@@ -51,9 +52,7 @@ class CartScreen extends StatelessWidget {
                       child: Column(
                         spacing: 5,
                         children: [
-                          Amount(
-                            taxAmount: 0.0,
-                          ),
+                          Amount(),
                           Row(
                             spacing: 10,
                             children: [
@@ -90,7 +89,9 @@ class CartScreen extends StatelessWidget {
                               child: CustomButton(
                                 buttonLabel: StringEnums.clear.name.tr(),
                                 iconData: Icons.clear,
-                                onSubmit: () {},
+                                onSubmit: () => context
+                                    .read<CartBloc>()
+                                    .add(ClearCartEvent()),
                                 backgroundColor: Colors.red,
                               ),
                             ),

@@ -142,6 +142,10 @@ class QuestionsList extends StatelessWidget {
                                         title: Text(
                                           "${context.trValue(product.proArName, product.proEnName)}",
                                         ),
+                                        subtitle: Text(
+                                          "${product.price}",
+                                          style: style,
+                                        ),
                                         textStyles: MultiSelectItemTextStyles(
                                             selectedTextStyle: style,
                                             disabledTextStyle: style,

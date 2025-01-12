@@ -27,7 +27,7 @@ class Tables {
   static const String taxable = 'Taxable';
   static const String taxPercentage = 'TaxPercentage';
   static const String discountable = 'Discountable';
-  static const String icon = 'Icon';
+  static const String icon = 'ImgPath';
   static const String backColor = 'BackColor';
   static const String question1 = 'Question1';
   static const String question2 = 'Question2';

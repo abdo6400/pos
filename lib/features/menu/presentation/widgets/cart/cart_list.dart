@@ -59,15 +59,17 @@ class CartList extends StatelessWidget {
             ];
           } catch (e) {}
           context.read<CartBloc>().add(UpdateCartEvent(
-                  cartItem: CartItem(
-                id: cartItem.id,
-                product: cartItem.product,
-                note: _noteController.text,
-                quantity: int.parse(_quantityController.text),
-                flavors: flavors,
-                questions: questions,
-                offers: productOffers,
-              )));
+              cartItem: CartItem(
+                  id: cartItem.id,
+                  product: cartItem.product,
+                  note: _noteController.text,
+                  quantity: int.parse(_quantityController.text),
+                  flavors: flavors,
+                  questions: questions,
+                  offers: productOffers,
+                  isOffer: cartItem.isOffer,
+                  extraItemId: cartItem.extraItemId,
+                  orignialPrice: cartItem.orignialPrice)));
         },
         child: MultiBlocProvider(
             providers: [
@@ -105,7 +107,9 @@ class CartList extends StatelessWidget {
             itemBuilder: (context, index) {
               return Dismissible(
                 key: ValueKey(state.cart[index].id),
-                direction: DismissDirection.endToStart,
+                direction: state.cart[index].isOffer
+                    ? DismissDirection.none
+                    : DismissDirection.endToStart,
                 background: Container(
                   color: Colors.red,
                   alignment: AlignmentDirectional.centerEnd,
@@ -116,26 +120,24 @@ class CartList extends StatelessWidget {
                         mobile: 20, tablet: 35, desktop: 40),
                   ),
                 ),
-                confirmDismiss: (direction) async => !state.cart[index].isOffer,
-                onDismissed: (!state.cart[index].isOffer)
-                    ? (_) => context.read<CartBloc>().add(
-                          DeleteCartEvent(
-                            productId: state.cart[index].id,
-                          ),
-                        )
-                    : null,
+                onDismissed: (_) => context.read<CartBloc>().add(
+                      DeleteCartEvent(
+                        productId: state.cart[index].id,
+                      ),
+                    ),
                 child: Row(
                   children: [
                     Expanded(
                       child: Badge.count(
                         alignment: AlignmentDirectional(-0.95, -0.8),
                         count: state.cart[index].quantity,
-                        backgroundColor: Colors.red,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.secondary,
                         textColor: Colors.white,
                         textStyle: style.copyWith(
                           color: Colors.white,
-                          fontSize: context.AppResponsiveValue(12,
-                              mobile: 10, tablet: 14, desktop: 25),
+                          fontSize: context.AppResponsiveValue(14,
+                              mobile: 10, tablet: 16, desktop: 25),
                         ),
                         padding: EdgeInsets.all(3),
                         child: ListTile(
@@ -180,9 +182,10 @@ class CartList extends StatelessWidget {
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
-                          trailing: Text(
-                              state.cart[index].product.price.toString(),
-                              style: style),
+                          trailing: state.cart[index].isOffer
+                              ? null
+                              : Text(state.cart[index].product.price.toString(),
+                                  style: style),
                         ),
                       ),
                     ),

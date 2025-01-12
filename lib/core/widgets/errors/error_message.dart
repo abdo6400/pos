@@ -28,21 +28,25 @@ class ErrorMessage extends StatelessWidget {
               size: context.AppResponsiveValue(45,
                   mobile: 40, tablet: 55, desktop: 70),
               color: Theme.of(context).colorScheme.error),
-          (message == null)
-              ? Text(
-                  StringEnums.error.name.tr(),
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        fontSize: context.AppResponsiveValue(16,
-                            mobile: 12, tablet: 24, desktop: 30),
-                      ),
-                )
-              : Text(
-                  message!.trExists() ? message!.tr() : message!,
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        fontSize: context.AppResponsiveValue(12,
-                            mobile: 8, tablet: 20, desktop: 30),
-                      ),
-                ),
+          Expanded(
+            child: (message == null)
+                ? Text(
+                    StringEnums.error.name.tr(),
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontSize: context.AppResponsiveValue(16,
+                              mobile: 12, tablet: 24, desktop: 30),
+                        ),
+                  )
+                : Text(
+                    message!.trExists() ? message!.tr() : message!,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontSize: context.AppResponsiveValue(12,
+                              mobile: 8, tablet: 20, desktop: 30),
+                        ),
+                  ),
+          ),
           TextButton(
               onPressed: () => onRetry!(),
               style: Theme.of(context).elevatedButtonTheme.style!.copyWith(

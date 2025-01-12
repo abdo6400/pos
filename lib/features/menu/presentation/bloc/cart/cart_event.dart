@@ -35,3 +35,5 @@ class DeleteCartEvent extends CartEvent {
 }
 
 class CalculateTotalPriceEvent extends CartEvent {}
+
+class ClearCartEvent extends CartEvent {}

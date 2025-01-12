@@ -4,32 +4,33 @@ class CartState extends Equatable {
   final List<CartItem> cart;
   final double totalPrice;
   final double totalTax;
-  final double serviceCharge;
-  final double serviceChargeTax;
+  final double discount;
+  final double grandTotal;
 
-  const CartState(
-      {required this.cart,
-      required this.totalPrice,
-      required this.totalTax,
-      required this.serviceCharge,
-      required this.serviceChargeTax});
+  const CartState({
+    required this.cart,
+    required this.totalPrice,
+    required this.totalTax,
+    required this.discount,
+    required this.grandTotal,
+  });
 
-  CartState copyWith(
-      {List<CartItem>? cart,
-      double? totalPrice,
-      double? totalTax,
-      double? serviceCharge,
-      double? serviceChargeTax}) {
+  CartState copyWith({
+    List<CartItem>? cart,
+    double? totalPrice,
+    double? totalTax,
+    double? discount,
+    double? grandTotal,
+  }) {
     return CartState(
       cart: cart ?? this.cart,
       totalPrice: totalPrice ?? this.totalPrice,
       totalTax: totalTax ?? this.totalTax,
-      serviceCharge: serviceCharge ?? this.serviceCharge,
-      serviceChargeTax: serviceChargeTax ?? this.serviceChargeTax,
+      discount: discount ?? this.discount,
+      grandTotal: grandTotal ?? this.grandTotal,
     );
   }
 
   @override
-  List<Object> get props =>
-      [cart, totalPrice, totalTax, serviceCharge, serviceChargeTax];
+  List<Object> get props => [cart, totalPrice, totalTax, discount, grandTotal];
 }

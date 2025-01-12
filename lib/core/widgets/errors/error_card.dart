@@ -38,6 +38,8 @@ class ErrorCard extends StatelessWidget {
           if (message != null)
             Text(
               message!.trExists() ? message!.tr() : message!,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     fontSize: context.AppResponsiveValue(12,
                         mobile: 8, tablet: 20, desktop: 30),
