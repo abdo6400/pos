@@ -91,8 +91,8 @@ class CartList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final style = Theme.of(context).textTheme.bodyMedium!.copyWith(
-        fontSize: context.AppResponsiveValue(12,
-            mobile: 10, tablet: 16, desktop: 25));
+        fontSize:
+            context.AppResponsiveValue(9, mobile: 9, tablet: 16, desktop: 25));
     return BlocBuilder<OfferBloc, OfferState>(
       builder: (context, offerState) {
         return BlocBuilder<CartBloc, CartState>(builder: (context, state) {
@@ -116,7 +116,7 @@ class CartList extends StatelessWidget {
                   child: Icon(
                     Icons.delete,
                     color: Colors.white,
-                    size: context.AppResponsiveValue(30,
+                    size: context.AppResponsiveValue(25,
                         mobile: 20, tablet: 35, desktop: 40),
                   ),
                 ),
@@ -136,7 +136,7 @@ class CartList extends StatelessWidget {
                         textColor: Colors.white,
                         textStyle: style.copyWith(
                           color: Colors.white,
-                          fontSize: context.AppResponsiveValue(14,
+                          fontSize: context.AppResponsiveValue(10,
                               mobile: 10, tablet: 16, desktop: 25),
                         ),
                         padding: EdgeInsets.all(3),
@@ -145,9 +145,9 @@ class CartList extends StatelessWidget {
                               ? Image.asset(
                                   Assets.offer,
                                   fit: BoxFit.fill,
-                                  width: context.AppResponsiveValue(50,
+                                  width: context.AppResponsiveValue(40,
                                       mobile: 40, tablet: 80, desktop: 100),
-                                  height: context.AppResponsiveValue(50,
+                                  height: context.AppResponsiveValue(40,
                                       mobile: 40, tablet: 80, desktop: 100),
                                 )
                               : (state.cart[index].product.icon != null
@@ -191,9 +191,11 @@ class CartList extends StatelessWidget {
                     ),
                     if (!state.cart[index].isOffer)
                       IconButton(
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.edit_outlined,
                           color: Colors.green,
+                          size: context.AppResponsiveValue(20,
+                              mobile: 20, tablet: 35, desktop: 40),
                         ),
                         onPressed: () => _flavorsQuestionsDialog(
                             context, state.cart[index],

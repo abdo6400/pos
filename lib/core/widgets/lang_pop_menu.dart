@@ -15,8 +15,8 @@ class LangPopMenu extends StatelessWidget {
         child: Icon(
           Icons.language_rounded,
           color: Theme.of(context).primaryColor,
-          size: context.AppResponsiveValue(30,
-              mobile: 20, tablet: 35, desktop: 40),
+          size: context.AppResponsiveValue(25,
+              mobile: 20, tablet: 35, desktop: 50),
         ),
       ),
       offset: Offset(10, 50),
@@ -32,12 +32,17 @@ class LangPopMenu extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(StringEnums.arabic.name.tr()),
+              Text(StringEnums.arabic.name.tr(),
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        fontSize: context.AppResponsiveValue(12,
+                            mobile: 10, tablet: 16, desktop: 25),
+                      )),
               Icon(
                   context.locale.languageCode != localArabic.languageCode
                       ? Icons.circle_outlined
                       : Icons.circle,
-                  size: 15,
+                  size: context.AppResponsiveValue(15,
+                      mobile: 15, tablet: 20, desktop: 25),
                   color: Theme.of(context).primaryColor),
             ],
           ),
@@ -47,12 +52,17 @@ class LangPopMenu extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(StringEnums.english.name.tr()),
+              Text(StringEnums.english.name.tr(),
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        fontSize: context.AppResponsiveValue(12,
+                            mobile: 10, tablet: 16, desktop: 25),
+                      )),
               Icon(
                   context.locale.languageCode != localEnglish.languageCode
                       ? Icons.circle_outlined
                       : Icons.circle,
-                  size: 15,
+                  size: context.AppResponsiveValue(15,
+                      mobile: 15, tablet: 20, desktop: 25),
                   color: Theme.of(context).primaryColor),
             ],
           ),

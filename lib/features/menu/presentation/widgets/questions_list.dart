@@ -102,6 +102,7 @@ class QuestionsList extends StatelessWidget {
                     child: state is QuestionSuccess
                         ? ListView.builder(
                             itemCount: questions.keys.toList().length,
+                            shrinkWrap: true,
                             itemBuilder: (context, key) {
                               return Column(
                                 mainAxisSize: MainAxisSize.min,

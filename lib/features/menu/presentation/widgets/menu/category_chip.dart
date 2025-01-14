@@ -37,8 +37,8 @@ class CategoryChip extends StatelessWidget {
             : null,
         labelStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
               color: selected ? Colors.white : null,
-              fontSize: context.AppResponsiveValue(13,
-                  mobile: 12, tablet: 16, desktop: 23),
+              fontSize: context.AppResponsiveValue(11,
+                  mobile: 11, tablet: 16, desktop: 23),
             ),
       ),
     );

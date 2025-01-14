@@ -19,6 +19,9 @@ class CustomButton extends StatelessWidget {
     return ElevatedButton(
       style: Theme.of(context).elevatedButtonTheme.style!.copyWith(
           elevation: const WidgetStatePropertyAll(1),
+          padding: WidgetStatePropertyAll(EdgeInsets.symmetric(
+              vertical: context.AppResponsiveValue(1,
+                  mobile: 1, tablet: 10, desktop: 10))),
           shape: WidgetStatePropertyAll(RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(6),
           )),
@@ -28,8 +31,8 @@ class CustomButton extends StatelessWidget {
           textStyle: WidgetStatePropertyAll(
             Theme.of(context).textTheme.bodyLarge!.copyWith(
                   color: Colors.white,
-                  fontSize: context.AppResponsiveValue(12,
-                      mobile: 10, tablet: 20, desktop: 24),
+                  fontSize: context.AppResponsiveValue(10,
+                      mobile: 10, tablet: 16, desktop: 24),
                 ),
           )),
       onPressed: () {
@@ -37,7 +40,7 @@ class CustomButton extends StatelessWidget {
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        spacing: 5,
+        spacing: 3,
         children: [
           Text(
             buttonLabel.tr(),

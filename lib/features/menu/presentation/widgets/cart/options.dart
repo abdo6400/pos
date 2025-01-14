@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
 
-import '../../../../core/utils/enums/string_enums.dart';
+import '../../../../../core/utils/enums/string_enums.dart';
 
 class Options extends StatelessWidget {
   const Options({super.key});
@@ -21,9 +21,10 @@ class Options extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 5),
+    return Padding(
+      padding: const EdgeInsets.only(top: 2),
       child: Row(
+          spacing: 20,
           children: options
               .map((e) => Flexible(
                     child: InkWell(
@@ -41,8 +42,8 @@ class Options extends StatelessWidget {
                             layout: ResponsiveRowColumnType.COLUMN,
                             rowMainAxisAlignment: MainAxisAlignment.center,
                             columnMainAxisAlignment: MainAxisAlignment.center,
-                            rowSpacing: 10,
-                            columnSpacing: 10,
+                            rowSpacing: 1,
+                            columnSpacing: 1,
                             rowPadding: const EdgeInsets.all(8),
                             children: [
                               ResponsiveRowColumnItem(
@@ -62,8 +63,8 @@ class Options extends StatelessWidget {
                                             fontSize:
                                                 context.AppResponsiveValue(11,
                                                     mobile: 10,
-                                                    tablet: 16,
-                                                    desktop: 30))),
+                                                    tablet: 14,
+                                                    desktop: 25))),
                               ),
                             ],
                           ),

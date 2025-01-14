@@ -30,7 +30,7 @@ class CustomAppBar extends StatelessWidget {
                   enabled: state == null,
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Info(StringEnums.user_name.name.tr(),
                             state?.username ?? ""),
@@ -82,63 +82,66 @@ class CustomAppBar extends StatelessWidget {
               },
             ),
           ),
-          Spacer(flex: 1),
           Expanded(
               flex: 8,
               child: BlocBuilder<ProductBloc, ProductState>(
                 builder: (context, state) {
                   return Skeletonizer(
                     enabled: state is ProductLoading,
-                    child: SearchBar(
-                      controller: _controller,
-                      elevation: WidgetStatePropertyAll(0.2),
-                      shape: WidgetStatePropertyAll(RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      )),
-                      textStyle: WidgetStatePropertyAll(Theme.of(context)
-                          .textTheme
-                          .bodyLarge!
-                          .copyWith(
-                              fontSize: context.AppResponsiveValue(14,
-                                  mobile: 10, tablet: 20, desktop: 24))),
-                      onChanged: (value) {
-                        if (value.isNotEmpty) {
-                          context
-                              .read<OfferSelectionCubit>()
-                              .ShowHideOffer(false);
-                          context
-                              .read<CategorySelectionCubit>()
-                              .selectCategory(null);
-                          context.read<SearchCubit>().changeSearch(value);
-                        } else {
-                          context.read<SearchCubit>().changeSearch(null);
-                        }
-                      },
-                      hintText: StringEnums.search_about_item.name.tr(),
-                      hintStyle: WidgetStatePropertyAll(Theme.of(context)
-                          .textTheme
-                          .bodyLarge!
-                          .copyWith(
-                              color: Theme.of(context).hintColor,
-                              fontSize: context.AppResponsiveValue(14,
-                                  mobile: 10, tablet: 20, desktop: 24))),
-                      trailing: [
-                        context.watch<SearchCubit>().state != null
-                            ? IconButton(
-                                onPressed: () {
-                                  context
-                                      .read<SearchCubit>()
-                                      .changeSearch(null);
-                                  _controller.clear();
-                                },
-                                icon: Icon(Icons.clear))
-                            : Icon(Icons.search)
-                      ],
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: context.AppResponsiveValue(5,
+                              mobile: 5, tablet: 0, desktop: 0)),
+                      child: SearchBar(
+                        controller: _controller,
+                        elevation: WidgetStatePropertyAll(0.2),
+                        shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        )),
+                        textStyle: WidgetStatePropertyAll(Theme.of(context)
+                            .textTheme
+                            .bodyLarge!
+                            .copyWith(
+                                fontSize: context.AppResponsiveValue(12,
+                                    mobile: 10, tablet: 20, desktop: 28))),
+                        onChanged: (value) {
+                          if (value.isNotEmpty) {
+                            context
+                                .read<OfferSelectionCubit>()
+                                .ShowHideOffer(false);
+                            context
+                                .read<CategorySelectionCubit>()
+                                .selectCategory(null);
+                            context.read<SearchCubit>().changeSearch(value);
+                          } else {
+                            context.read<SearchCubit>().changeSearch(null);
+                          }
+                        },
+                        hintText: StringEnums.search_about_item.name.tr(),
+                        hintStyle: WidgetStatePropertyAll(Theme.of(context)
+                            .textTheme
+                            .bodyLarge!
+                            .copyWith(
+                                color: Theme.of(context).hintColor,
+                                fontSize: context.AppResponsiveValue(12,
+                                    mobile: 10, tablet: 20, desktop: 30))),
+                        trailing: [
+                          context.watch<SearchCubit>().state != null
+                              ? IconButton(
+                                  onPressed: () {
+                                    context
+                                        .read<SearchCubit>()
+                                        .changeSearch(null);
+                                    _controller.clear();
+                                  },
+                                  icon: Icon(Icons.clear))
+                              : Icon(Icons.search)
+                        ],
+                      ),
                     ),
                   );
                 },
               )),
-          Spacer(flex: 1),
           LangThemeOptions()
         ],
       ),

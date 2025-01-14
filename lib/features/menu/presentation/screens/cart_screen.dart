@@ -20,39 +20,35 @@ class CartScreen extends StatelessWidget {
         BlocProvider(create: (_) => DiscountSelectionCubit()),
       ],
       child: Card(
-          margin: EdgeInsets.zero,
-          elevation: 0.2,
-          shape: BorderDirectional(
-            start: BorderSide(color: Theme.of(context).hintColor.withAlpha(50)),
-          ),
-          child: Column(
-            children: [
-              Expanded(child: CustomAppBar()),
-              Expanded(
-                flex: context.AppResponsiveValue(4,
-                        mobile: 5, tablet: 7, desktop: 6)
+        margin: EdgeInsets.zero,
+        elevation: 0.2,
+        shape: BorderDirectional(
+          start: BorderSide(color: Theme.of(context).hintColor.withAlpha(50)),
+        ),
+        child: Column(
+          children: [
+            Expanded(
+                flex: context.AppResponsiveValue(2,
+                        mobile: 2, tablet: 1, desktop: 1)
                     .toInt(),
+                child: CustomAppBar()),
+            Expanded(flex: 10, child: CartList()),
+            Expanded(
+              flex: context.AppResponsiveValue(8,
+                      mobile: 8, tablet: 5, desktop: 4)
+                  .toInt(),
+              child: Padding(
+                padding: const EdgeInsets.all(5),
                 child: Column(
+                  spacing: context.AppResponsiveValue(1,
+                      mobile: 1, tablet: 10, desktop: 15),
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(StringEnums.current_order.name.tr(),
-                          textAlign: TextAlign.start,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineMedium!
-                              .copyWith(
-                                fontSize: context.AppResponsiveValue(12,
-                                    mobile: 10, tablet: 20, desktop: 25),
-                              )),
-                    ),
-                    Expanded(child: CartList()),
-                    Padding(
-                      padding: const EdgeInsets.all(5),
-                      child: Column(
-                        spacing: 5,
+                    Expanded(child: Amount()),
+                    Column(
+                        spacing: context.AppResponsiveValue(0,
+                            mobile: 0, tablet: 5, desktop: 5),
+                        mainAxisSize: MainAxisSize.max,
                         children: [
-                          Amount(),
                           Row(
                             spacing: 10,
                             children: [
@@ -96,20 +92,14 @@ class CartScreen extends StatelessWidget {
                               ),
                             ),
                           ]),
-                          CustomButton(
-                            buttonLabel: StringEnums.pendingOrders.name.tr(),
-                            iconData: Icons.pending_actions_outlined,
-                            onSubmit: () {},
-                            backgroundColor: Colors.amber,
-                          ),
-                        ],
-                      ),
-                    ),
+                        ]),
                   ],
                 ),
               ),
-            ],
-          )),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

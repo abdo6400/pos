@@ -7,15 +7,14 @@ import '../../../../settings/presentation/bloc/settings_bloc.dart';
 import '../../../domain/entities/discount.dart';
 import '../../bloc/cart/cart_bloc.dart';
 import '../../bloc/cubit/discount_selection_cubit.dart';
-import 'discount_popup.dart';
 
 class Amount extends StatelessWidget {
   const Amount({super.key});
 
   Widget _customListTile(String title, String value, BuildContext context) {
     final style = Theme.of(context).textTheme.bodyMedium!.copyWith(
-        fontSize: context.AppResponsiveValue(12,
-            mobile: 10, tablet: 20, desktop: 25));
+        fontSize:
+            context.AppResponsiveValue(8, mobile: 8, tablet: 16, desktop: 22));
     return Row(
       children: [
         Expanded(
@@ -74,26 +73,17 @@ class Amount extends StatelessWidget {
             builder: (context, stats) {
               return Container(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                    const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  spacing: 3,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     _customListTile(StringEnums.subTotalAmount.name,
                         stats.totalPrice.toStringAsFixed(3), context),
                     _customListTile(StringEnums.taxAmount.name,
                         stats.totalTax.toStringAsFixed(3), context),
-                    Row(
-                      children: [
-                        DiscountPopup(),
-                        Expanded(
-                          child: _customListTile(
-                              StringEnums.discountAmount.name,
-                              stats.discount.toStringAsFixed(3),
-                              context),
-                        ),
-                      ],
-                    ),
+                    _customListTile(StringEnums.discountAmount.name,
+                        stats.discount.toStringAsFixed(3), context),
                     Divider(
                       color: Theme.of(context).primaryColor,
                     ),

@@ -6,6 +6,7 @@ class Tables {
   static const categoryTable = 'categoryTable';
   static const flavorTable = 'flavorTable';
   static const productQuestionsTable = 'productQuestionsTable';
+  static const pendingOrdersTable = 'pendingOrdersTable';
   static const paymentTable = 'paymentTable';
   static const invoiceHeaderTable = 'invoiceHeaderTable';
   static const invoiceDetailsTable = 'invoiceDetailsTable';

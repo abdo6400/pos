@@ -4,6 +4,6 @@ import 'package:flutter/material.dart';
 import '../constants.dart';
 
 extension Translation on BuildContext {
-  String trValue(String arValue, String enValue) =>
+  dynamic trValue(dynamic arValue, dynamic enValue) =>
       this.locale.languageCode != localEnglish.languageCode ? arValue : enValue;
 }

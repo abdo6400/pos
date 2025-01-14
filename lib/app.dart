@@ -29,7 +29,7 @@ class App extends StatelessWidget {
           ignorePluralRules: false,
           child: MediaQuery(
             data: MediaQuery.of(context)
-                .copyWith(textScaler: TextScaler.linear(1.2)),
+                .copyWith(textScaler: TextScaler.linear(1.1)),
             child: Builder(
               builder: (context) {
                 return AdaptiveTheme(

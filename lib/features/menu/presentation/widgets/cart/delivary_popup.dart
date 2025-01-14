@@ -7,8 +7,8 @@ import '../../../domain/entities/discount.dart';
 import '../../bloc/cubit/discount_selection_cubit.dart';
 import '../../bloc/discount/discount_bloc.dart';
 
-class DiscountPopup extends StatelessWidget {
-  const DiscountPopup({super.key});
+class DelivaryPopup extends StatelessWidget {
+  const DelivaryPopup({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +18,8 @@ class DiscountPopup extends StatelessWidget {
             ? PopupMenuButton<Discount?>(
                 icon: SizedBox(
                   child: Icon(
-                    Icons.discount_outlined,
-                    color: Colors.blueAccent,
+                    Icons.delivery_dining_outlined,
+                    color: Colors.green,
                     size: context.AppResponsiveValue(10,
                         mobile: 10, tablet: 30, desktop: 40),
                   ),
@@ -52,8 +52,8 @@ class DiscountPopup extends StatelessWidget {
                         )
                         .toList())
             : Icon(
-                Icons.discount_outlined,
-                color: Colors.blueAccent,
+                Icons.delivery_dining_outlined,
+                color: Colors.green,
                 size: context.AppResponsiveValue(10,
                     mobile: 10, tablet: 30, desktop: 40),
               );

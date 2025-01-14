@@ -2,14 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
+
 import '../../../../../core/utils/enums/string_enums.dart';
 import '../../../domain/entities/discount.dart';
 import '../../bloc/cubit/discount_selection_cubit.dart';
 import '../../bloc/discount/discount_bloc.dart';
 
-class DiscountPopup extends StatelessWidget {
-  const DiscountPopup({super.key});
-
+class PendingOrdersPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DiscountBloc, DiscountState>(
@@ -18,13 +17,13 @@ class DiscountPopup extends StatelessWidget {
             ? PopupMenuButton<Discount?>(
                 icon: SizedBox(
                   child: Icon(
-                    Icons.discount_outlined,
-                    color: Colors.blueAccent,
+                    Icons.pending_actions_outlined,
+                    color: Colors.yellow,
                     size: context.AppResponsiveValue(10,
                         mobile: 10, tablet: 30, desktop: 40),
                   ),
                 ),
-                offset: Offset(-50, -50),
+                offset: Offset(0, 0),
                 initialValue: state.discounts.first,
                 itemBuilder: (BuildContext context) =>
                     [null, ...state.discounts]
@@ -52,8 +51,8 @@ class DiscountPopup extends StatelessWidget {
                         )
                         .toList())
             : Icon(
-                Icons.discount_outlined,
-                color: Colors.blueAccent,
+                Icons.pending_actions_outlined,
+                color: Colors.yellow,
                 size: context.AppResponsiveValue(10,
                     mobile: 10, tablet: 30, desktop: 40),
               );

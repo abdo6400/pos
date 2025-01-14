@@ -26,14 +26,10 @@ class MenuScreen extends StatelessWidget {
                       mobile: 2, tablet: 2, desktop: 2)
                   .toInt(),
               child: CustomAppBar()),
-          Expanded(
-              flex: context.AppResponsiveValue(4,
-                      mobile: 2, tablet: 2, desktop: 2)
-                  .toInt(),
-              child: CategoriesList()),
+          Expanded(flex: 2, child: CategoriesList()),
           Expanded(
               flex: context.AppResponsiveValue(14,
-                      mobile: 14, tablet: 19, desktop: 16)
+                      mobile: 14, tablet: 19, desktop: 20)
                   .toInt(),
               child: ProductsList()),
         ],

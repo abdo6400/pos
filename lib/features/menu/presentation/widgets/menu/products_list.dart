@@ -60,10 +60,14 @@ class ProductsList extends StatelessWidget {
                       padding:
                           EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       gridDelegate: ResponsiveGridDelegate(
-                          maxCrossAxisExtent: context.AppResponsiveValue(200,
+                          maxCrossAxisExtent: context.AppResponsiveValue(190,
                               mobile: 100, tablet: 250, desktop: 350),
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10),
+                          childAspectRatio: context.AppResponsiveValue(3 / 4,
+                              mobile: 1.5, tablet: 4 / 5, desktop: 4 / 5),
+                          crossAxisSpacing: context.AppResponsiveValue(2,
+                              mobile: 2, tablet: 10, desktop: 15),
+                          mainAxisSpacing: context.AppResponsiveValue(2,
+                              mobile: 2, tablet: 10, desktop: 15)),
                       itemCount: state is ProductSuccess ? products.length : 10,
                       itemBuilder: (context, index) => ProductCard(
                             product: state is ProductSuccess
