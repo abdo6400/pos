@@ -19,11 +19,12 @@ class PendingOrdersPopup extends StatelessWidget {
                   child: Icon(
                     Icons.pending_actions_outlined,
                     color: Colors.yellow,
-                    size: context.AppResponsiveValue(10,
-                        mobile: 10, tablet: 30, desktop: 40),
+                    size: context.AppResponsiveValue(15,
+                        mobile: 15, tablet: 30, desktop: 40),
                   ),
                 ),
                 offset: Offset(0, 0),
+                padding: EdgeInsets.zero,
                 initialValue: state.discounts.first,
                 itemBuilder: (BuildContext context) =>
                     [null, ...state.discounts]
@@ -53,8 +54,8 @@ class PendingOrdersPopup extends StatelessWidget {
             : Icon(
                 Icons.pending_actions_outlined,
                 color: Colors.yellow,
-                size: context.AppResponsiveValue(10,
-                    mobile: 10, tablet: 30, desktop: 40),
+                size: context.AppResponsiveValue(15,
+                    mobile: 15, tablet: 30, desktop: 40),
               );
       },
     );

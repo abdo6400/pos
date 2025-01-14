@@ -20,10 +20,11 @@ class DiscountPopup extends StatelessWidget {
                   child: Icon(
                     Icons.discount_outlined,
                     color: Colors.blueAccent,
-                    size: context.AppResponsiveValue(10,
-                        mobile: 10, tablet: 30, desktop: 40),
+                    size: context.AppResponsiveValue(15,
+                        mobile: 15, tablet: 30, desktop: 40),
                   ),
                 ),
+                padding: EdgeInsets.zero,
                 offset: Offset(-50, -50),
                 initialValue: state.discounts.first,
                 itemBuilder: (BuildContext context) =>
@@ -54,8 +55,8 @@ class DiscountPopup extends StatelessWidget {
             : Icon(
                 Icons.discount_outlined,
                 color: Colors.blueAccent,
-                size: context.AppResponsiveValue(10,
-                    mobile: 10, tablet: 30, desktop: 40),
+                size: context.AppResponsiveValue(15,
+                    mobile: 15, tablet: 30, desktop: 40),
               );
       },
     );

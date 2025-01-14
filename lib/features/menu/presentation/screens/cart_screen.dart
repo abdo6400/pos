@@ -27,74 +27,63 @@ class CartScreen extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Expanded(
-                flex: context.AppResponsiveValue(2,
-                        mobile: 2, tablet: 1, desktop: 1)
-                    .toInt(),
-                child: CustomAppBar()),
-            Expanded(flex: 10, child: CartList()),
-            Expanded(
-              flex: context.AppResponsiveValue(8,
-                      mobile: 8, tablet: 5, desktop: 4)
-                  .toInt(),
-              child: Padding(
-                padding: const EdgeInsets.all(5),
-                child: Column(
-                  spacing: context.AppResponsiveValue(1,
-                      mobile: 1, tablet: 10, desktop: 15),
-                  children: [
-                    Expanded(child: Amount()),
-                    Column(
-                        spacing: context.AppResponsiveValue(0,
-                            mobile: 0, tablet: 5, desktop: 5),
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Row(
-                            spacing: 10,
-                            children: [
-                              Flexible(
-                                child: CustomButton(
-                                  buttonLabel:
-                                      StringEnums.checkoutCash.name.tr(),
-                                  iconData: Icons.money_outlined,
-                                  onSubmit: () {},
-                                  backgroundColor: Colors.green,
-                                ),
-                              ),
-                              Flexible(
-                                child: CustomButton(
-                                  buttonLabel:
-                                      StringEnums.checkoutVisa.name.tr(),
-                                  iconData: Icons.payment_outlined,
-                                  onSubmit: () {},
-                                  backgroundColor: Colors.blue,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(spacing: 10, children: [
+            CustomAppBar(),
+            Expanded(child: CartList()),
+            Padding(
+              padding: const EdgeInsets.all(5),
+              child: Column(
+                spacing: context.AppResponsiveValue(1,
+                    mobile: 1, tablet: 10, desktop: 15),
+                children: [
+                  Amount(),
+                  Column(
+                      spacing: context.AppResponsiveValue(0,
+                          mobile: 0, tablet: 5, desktop: 5),
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Row(
+                          spacing: 10,
+                          children: [
                             Flexible(
                               child: CustomButton(
-                                buttonLabel: StringEnums.save.name.tr(),
-                                iconData: Icons.cached_outlined,
+                                buttonLabel: StringEnums.checkoutCash.name.tr(),
+                                iconData: Icons.money_outlined,
                                 onSubmit: () {},
-                                backgroundColor: Colors.purple,
+                                backgroundColor: Colors.green,
                               ),
                             ),
                             Flexible(
                               child: CustomButton(
-                                buttonLabel: StringEnums.clear.name.tr(),
-                                iconData: Icons.clear,
-                                onSubmit: () => context
-                                    .read<CartBloc>()
-                                    .add(ClearCartEvent()),
-                                backgroundColor: Colors.red,
+                                buttonLabel: StringEnums.checkoutVisa.name.tr(),
+                                iconData: Icons.payment_outlined,
+                                onSubmit: () {},
+                                backgroundColor: Colors.blue,
                               ),
                             ),
-                          ]),
+                          ],
+                        ),
+                        Row(spacing: 10, children: [
+                          Flexible(
+                            child: CustomButton(
+                              buttonLabel: StringEnums.save.name.tr(),
+                              iconData: Icons.cached_outlined,
+                              onSubmit: () {},
+                              backgroundColor: Colors.purple,
+                            ),
+                          ),
+                          Flexible(
+                            child: CustomButton(
+                              buttonLabel: StringEnums.clear.name.tr(),
+                              iconData: Icons.clear,
+                              onSubmit: () => context
+                                  .read<CartBloc>()
+                                  .add(ClearCartEvent()),
+                              backgroundColor: Colors.red,
+                            ),
+                          ),
                         ]),
-                  ],
-                ),
+                      ]),
+                ],
               ),
             ),
           ],

@@ -20,10 +20,11 @@ class DelivaryPopup extends StatelessWidget {
                   child: Icon(
                     Icons.delivery_dining_outlined,
                     color: Colors.green,
-                    size: context.AppResponsiveValue(10,
-                        mobile: 10, tablet: 30, desktop: 40),
+                    size: context.AppResponsiveValue(15,
+                        mobile: 15, tablet: 30, desktop: 40),
                   ),
                 ),
+                padding: EdgeInsets.zero,
                 offset: Offset(-50, -50),
                 initialValue: state.discounts.first,
                 itemBuilder: (BuildContext context) =>
@@ -54,7 +55,7 @@ class DelivaryPopup extends StatelessWidget {
             : Icon(
                 Icons.delivery_dining_outlined,
                 color: Colors.green,
-                size: context.AppResponsiveValue(10,
+                size: context.AppResponsiveValue(15,
                     mobile: 10, tablet: 30, desktop: 40),
               );
       },

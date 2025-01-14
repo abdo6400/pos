@@ -13,7 +13,10 @@ class CustomAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         alignment: AlignmentDirectional.center,
-        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+        padding: EdgeInsets.symmetric(
+            vertical: context.AppResponsiveValue(5,
+                mobile: 5, tablet: 10, desktop: 15),
+            horizontal: 10),
         decoration: BoxDecoration(
           border: BorderDirectional(
             bottom:
@@ -23,23 +26,23 @@ class CustomAppBar extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                Text(StringEnums.current_order.name.tr(),
-                    textAlign: TextAlign.start,
-                    style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                          fontSize: context.AppResponsiveValue(12,
-                              mobile: 10, tablet: 20, desktop: 25),
-                        )),
-              ],
+            Flexible(
+              child: Text(StringEnums.current_order.name.tr(),
+                  textAlign: TextAlign.start,
+                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                        fontSize: context.AppResponsiveValue(12,
+                            mobile: 10, tablet: 20, desktop: 25),
+                      )),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                DelivaryPopup(),
-                PendingOrdersPopup(),
-                DiscountPopup(),
-              ],
+            Flexible(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  DelivaryPopup(),
+                  PendingOrdersPopup(),
+                  DiscountPopup(),
+                ],
+              ),
             )
           ],
         ));
