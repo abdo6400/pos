@@ -6,6 +6,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 import '../../../../../core/utils/enums/string_enums.dart';
 import '../../../../../core/widgets/empty_message.dart';
 import '../../../../../core/widgets/errors/error_message.dart';
+import '../../../domain/entities/category.dart';
 import '../../bloc/category/category_bloc.dart';
 import '../../bloc/cubit/offer_selection_cubit.dart';
 import 'category_chip.dart';
@@ -29,6 +30,9 @@ class CategoriesList extends StatelessWidget {
             message: StringEnums.no_categories_found.name.tr(),
           );
         }
+        final List<Category> categories = state is CategorySuccess
+            ? state.categories.where((c) => c.saleable).toList()
+            : [];
         return Skeletonizer(
           enabled: state is CategoryLoading,
           child: Row(
@@ -66,15 +70,14 @@ class CategoriesList extends StatelessWidget {
                     itemBuilder: (context, index) => CategoryChip(
                           loading: state is CategoryLoading,
                           category: (state is CategorySuccess && index != 0)
-                              ? state.categories[index - 1]
+                              ? categories[index - 1]
                               : null,
                         ),
                     separatorBuilder: (context, index) => SizedBox(
                           width: 10,
                         ),
-                    itemCount: state is CategorySuccess
-                        ? state.categories.length + 1
-                        : 10),
+                    itemCount:
+                        state is CategorySuccess ? categories.length + 1 : 10),
               ),
             ],
           ),
