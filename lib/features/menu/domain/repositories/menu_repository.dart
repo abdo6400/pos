@@ -6,6 +6,7 @@ import '../entities/flavor.dart';
 import '../entities/offer.dart';
 import '../entities/product.dart';
 import '../entities/question.dart';
+import '../entities/order.dart' as order;
 
 abstract class MenuRepository {
   Future<Either<Failure, List<Category>>> getCategories();
@@ -14,4 +15,8 @@ abstract class MenuRepository {
   Future<Either<Failure, List<Question>>> getQuestions();
   Future<Either<Failure, List<Discount>>> getDiscounts(String branchId);
   Future<Either<Failure, List<Offer>>> getOffers(String branchId);
+  Future<Either<Failure, List<order.Order>>> getOrders();
+  Future<Either<Failure, void>> deleteOrder(String orderId);
+  Future<Either<Failure, void>> clearOrder();
+  Future<Either<Failure, void>> addOrder(Map<String, dynamic> order);
 }

@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
 import '../../../../core/utils/enums/string_enums.dart';
 import '../../../../core/widgets/custom_button.dart';
-import '../bloc/cart/cart_bloc.dart';
 import '../bloc/cubit/discount_selection_cubit.dart';
+import '../bloc/cubit/oder_selection_cubit.dart';
 import '../widgets/cart/amount.dart';
 import '../widgets/cart/cart_list.dart';
 import '../widgets/cart/custom_app_bar.dart';
@@ -18,6 +18,7 @@ class CartScreen extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => DiscountSelectionCubit()),
+        BlocProvider(create: (_) => OderSelectionCubit()),
       ],
       child: Card(
         margin: EdgeInsets.zero,
@@ -69,16 +70,6 @@ class CartScreen extends StatelessWidget {
                               iconData: Icons.cached_outlined,
                               onSubmit: () {},
                               backgroundColor: Colors.purple,
-                            ),
-                          ),
-                          Flexible(
-                            child: CustomButton(
-                              buttonLabel: StringEnums.clear.name.tr(),
-                              iconData: Icons.clear,
-                              onSubmit: () => context
-                                  .read<CartBloc>()
-                                  .add(ClearCartEvent()),
-                              backgroundColor: Colors.red,
                             ),
                           ),
                         ]),

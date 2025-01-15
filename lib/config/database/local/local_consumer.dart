@@ -28,7 +28,7 @@ abstract class LocalConsumer {
   Future<int?> getLastUpdateTime(String tableName);
   Future<void> refreshDataIfNeeded(
       String table, List<Map<String, dynamic>> newData,
-      {int intervalInDays = 7});
+      {int intervalInHours = 24});
   // Close the database
   Future<void> close();
 }

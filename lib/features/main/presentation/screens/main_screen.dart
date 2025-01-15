@@ -10,6 +10,7 @@ import '../../../menu/presentation/bloc/category/category_bloc.dart';
 import '../../../menu/presentation/bloc/discount/discount_bloc.dart';
 import '../../../menu/presentation/bloc/flavor/flavor_bloc.dart';
 import '../../../menu/presentation/bloc/offer/offer_bloc.dart';
+import '../../../menu/presentation/bloc/order/order_bloc.dart';
 import '../../../menu/presentation/bloc/product/product_bloc.dart';
 import '../../../menu/presentation/bloc/question/question_bloc.dart';
 import '../../../settings/presentation/bloc/settings_bloc.dart';
@@ -52,6 +53,8 @@ class MainScreen extends StatelessWidget {
         BlocProvider(
           create: (context) => locator<OfferBloc>()..add(GetOfferEvent()),
         ),
+        BlocProvider(
+            create: (context) => locator<OrderBloc>()..add(GetOrdersEvent())),
       ],
       child: Scaffold(
           resizeToAvoidBottomInset: false,

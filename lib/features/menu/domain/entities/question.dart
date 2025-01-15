@@ -1,4 +1,6 @@
-abstract class Question {
+import 'package:equatable/equatable.dart';
+
+abstract class Question extends Equatable {
   final String productId;
   final String questionElements1;
   final int productQuestionId;
@@ -14,4 +16,16 @@ abstract class Question {
     required this.isRequired,
     required this.questionAr,
   });
+
+  Map<String, dynamic> toJson();
+
+  @override
+  List<Object?> get props => [
+        productId,
+        questionElements1,
+        productQuestionId,
+        productPrice,
+        isRequired,
+        questionAr,
+      ];
 }

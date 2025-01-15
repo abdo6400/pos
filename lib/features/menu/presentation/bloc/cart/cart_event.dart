@@ -7,6 +7,15 @@ abstract class CartEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class AddCartsEvent extends CartEvent {
+  final List<CartItem> cartItems;
+
+  const AddCartsEvent({required this.cartItems});
+
+  @override
+  List<Object> get props => [cartItems];
+}
+
 class AddCartEvent extends CartEvent {
   final CartItem cartItem;
 
@@ -32,19 +41,6 @@ class DeleteCartEvent extends CartEvent {
 
   @override
   List<Object> get props => [productId];
-}
-
-class CalculateTotalPriceEvent extends CartEvent {
-  final double taxPercentage;
-  final bool priceIncludesTax;
-  final bool taxIncludesDiscount;
-  final double discount;
-
-  const CalculateTotalPriceEvent(
-      {required this.taxPercentage,
-      required this.priceIncludesTax,
-      required this.taxIncludesDiscount,
-      required this.discount});
 }
 
 class ClearCartEvent extends CartEvent {}

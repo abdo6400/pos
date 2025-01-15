@@ -1,62 +1,61 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
-
-import '../../../../../core/utils/enums/string_enums.dart';
-import '../../../domain/entities/discount.dart';
-import '../../bloc/cubit/discount_selection_cubit.dart';
-import '../../bloc/discount/discount_bloc.dart';
+import 'package:retail/features/menu/presentation/bloc/order/order_item.dart';
+import '../../bloc/cart/cart_bloc.dart';
+import '../../bloc/cubit/oder_selection_cubit.dart';
+import '../../bloc/order/order_bloc.dart';
 
 class PendingOrdersPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DiscountBloc, DiscountState>(
+    return BlocBuilder<OrderBloc, OrderState>(
       builder: (context, state) {
-        return state is DiscountSuccess
-            ? PopupMenuButton<Discount?>(
-                icon: SizedBox(
-                  child: Icon(
-                    Icons.pending_actions_outlined,
-                    color: Colors.yellow,
-                    size: context.AppResponsiveValue(15,
-                        mobile: 15, tablet: 30, desktop: 40),
-                  ),
+        return PopupMenuButton<OrderItem>(
+            shape: BeveledRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
+              side: BorderSide(color: Colors.yellow),
+            ),
+            icon: Card(
+              elevation: 0.5,
+              color: Colors.yellow,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(
+                  Icons.pending_actions_outlined,
+                  color: Colors.white,
+                  size: context.AppResponsiveValue(15,
+                      mobile: 15, tablet: 30, desktop: 40),
                 ),
-                offset: Offset(0, 0),
-                padding: EdgeInsets.zero,
-                initialValue: state.discounts.first,
-                itemBuilder: (BuildContext context) =>
-                    [null, ...state.discounts]
-                        .map(
-                          (e) => PopupMenuItem<Discount?>(
-                              value: e,
-                              onTap: () {
-                                context
-                                    .read<DiscountSelectionCubit>()
-                                    .changeDiscount(e);
-                              },
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(e != null
-                                      ? context.trValue(
-                                          e.discountTypeAr, e.discountTypeEn)
-                                      : StringEnums.no_discount.name.tr()),
-                                  Text(e != null
-                                      ? e.discountPercentage.toString()
-                                      : "0.0")
-                                ],
-                              )),
-                        )
-                        .toList())
-            : Icon(
-                Icons.pending_actions_outlined,
-                color: Colors.yellow,
-                size: context.AppResponsiveValue(15,
-                    mobile: 15, tablet: 30, desktop: 40),
-              );
+              ),
+            ),
+            offset: Offset(0, 0),
+            padding: EdgeInsets.zero,
+            initialValue: state.orders.isNotEmpty ? state.orders.first : null,
+            enabled: state.orders.isNotEmpty,
+            itemBuilder: (BuildContext context) => state.orders
+                .map(
+                  (e) => PopupMenuItem<OrderItem>(
+                      value: e,
+                      onTap: () {
+                        context.read<OderSelectionCubit>().selectOrder(e);
+                        context
+                            .read<CartBloc>()
+                            .add(AddCartsEvent(cartItems: e.cartItems));
+                        context.read<OrderBloc>().add(DeleteOrderEvent(
+                              e.orderId,
+                            ));
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            " ${DateTime.parse(e.orderDate).day} / ${DateTime.parse(e.orderDate).month} / ${DateTime.parse(e.orderDate).year} - ${DateTime.parse(e.orderDate).minute} : ${DateTime.parse(e.orderDate).hour} ",
+                          ),
+                        ],
+                      )),
+                )
+                .toList());
       },
     );
   }

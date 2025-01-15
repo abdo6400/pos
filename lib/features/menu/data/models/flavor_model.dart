@@ -23,6 +23,7 @@ class FlavorModel extends Flavor {
         isActive: bool.tryParse(json[ApiKeys.isActive].toString()) ?? false,
       );
 
+  @override
   Map<String, dynamic> toJson() => {
         ApiKeys.flavorNo: flavorNo,
         ApiKeys.flavorAr: flavorAr,

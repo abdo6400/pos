@@ -2,35 +2,43 @@ part of 'cart_bloc.dart';
 
 class CartState extends Equatable {
   final List<CartItem> cart;
-  final double totalPrice;
-  final double totalTax;
-  final double discount;
-  final double grandTotal;
 
-  const CartState({
-    required this.cart,
-    required this.totalPrice,
-    required this.totalTax,
-    required this.discount,
-    required this.grandTotal,
-  });
+  const CartState({required this.cart});
 
-  CartState copyWith({
-    List<CartItem>? cart,
-    double? totalPrice,
-    double? totalTax,
-    double? discount,
-    double? grandTotal,
-  }) {
+  CartState copyWith({List<CartItem>? cart}) {
     return CartState(
       cart: cart ?? this.cart,
-      totalPrice: totalPrice ?? this.totalPrice,
-      totalTax: totalTax ?? this.totalTax,
-      discount: discount ?? this.discount,
-      grandTotal: grandTotal ?? this.grandTotal,
     );
   }
 
+  PriceAndTax calculateTotalPrice(
+      {double taxPercentage = 16.0,
+      bool priceIncludesTax = true,
+      double discount = 0.0,
+      bool taxIncludesDiscount = true}) {
+    double finalTotalPrice = 0.0;
+    double totalTax = 0.0;
+    double totalDiscount = 0.0;
+    double grandTotal = 0.0;
+
+    for (final cartItem in cart) {
+      final totalPriceAndTax = cartItem.calculateTotalPriceAndTax(
+          taxPercentage: taxPercentage,
+          priceIncludesTax: priceIncludesTax,
+          discount: discount,
+          taxIncludesDiscount: taxIncludesDiscount);
+      finalTotalPrice += totalPriceAndTax.price;
+      totalDiscount += totalPriceAndTax.discount;
+      totalTax += totalPriceAndTax.tax;
+      grandTotal += totalPriceAndTax.grandTotal;
+    }
+    return PriceAndTax(
+        price: finalTotalPrice,
+        tax: totalTax,
+        discount: totalDiscount,
+        grandTotal: grandTotal);
+  }
+
   @override
-  List<Object> get props => [cart, totalPrice, totalTax, discount, grandTotal];
+  List<Object> get props => [cart];
 }

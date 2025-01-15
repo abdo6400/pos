@@ -14,50 +14,65 @@ class DiscountPopup extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<DiscountBloc, DiscountState>(
       builder: (context, state) {
-        return state is DiscountSuccess
-            ? PopupMenuButton<Discount?>(
-                icon: SizedBox(
-                  child: Icon(
-                    Icons.discount_outlined,
-                    color: Colors.blueAccent,
-                    size: context.AppResponsiveValue(15,
-                        mobile: 15, tablet: 30, desktop: 40),
-                  ),
+        return PopupMenuButton<Discount?>(
+            shape: BeveledRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
+              side: BorderSide(color: Colors.blue),
+            ),
+            enabled: state is DiscountSuccess,
+            icon: Card(
+              elevation: 0.5,
+              color: Colors.blue,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(
+                  Icons.discount_outlined,
+                  color: Colors.white,
+                  size: context.AppResponsiveValue(15,
+                      mobile: 15, tablet: 30, desktop: 40),
                 ),
-                padding: EdgeInsets.zero,
-                offset: Offset(-50, -50),
-                initialValue: state.discounts.first,
-                itemBuilder: (BuildContext context) =>
-                    [null, ...state.discounts]
-                        .map(
-                          (e) => PopupMenuItem<Discount?>(
-                              value: e,
-                              onTap: () {
-                                context
-                                    .read<DiscountSelectionCubit>()
-                                    .changeDiscount(e);
-                              },
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(e != null
-                                      ? context.trValue(
-                                          e.discountTypeAr, e.discountTypeEn)
-                                      : StringEnums.no_discount.name.tr()),
-                                  Text(e != null
-                                      ? e.discountPercentage.toString()
-                                      : "0.0")
-                                ],
-                              )),
-                        )
-                        .toList())
-            : Icon(
-                Icons.discount_outlined,
-                color: Colors.blueAccent,
-                size: context.AppResponsiveValue(15,
-                    mobile: 15, tablet: 30, desktop: 40),
-              );
+              ),
+            ),
+            padding: EdgeInsets.zero,
+            offset: Offset(-50, -50),
+            initialValue:
+                state is DiscountSuccess ? state.discounts.first : null,
+            itemBuilder: (BuildContext context) => state is DiscountSuccess
+                ? ([null, ...state.discounts]
+                    .map(
+                      (e) => PopupMenuItem<Discount?>(
+                          value: e,
+                          onTap: () {
+                            context
+                                .read<DiscountSelectionCubit>()
+                                .changeDiscount(e);
+                          },
+                          labelTextStyle: WidgetStatePropertyAll(
+                              Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                  fontSize: context.AppResponsiveValue(12,
+                                      mobile: 10, tablet: 16, desktop: 25),
+                                  color: context
+                                              .read<DiscountSelectionCubit>()
+                                              .state
+                                              ?.discountPercentage ==
+                                          e?.discountPercentage
+                                      ? Colors.blue
+                                      : Colors.black)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(e != null
+                                  ? context.trValue(
+                                      e.discountTypeAr, e.discountTypeEn)
+                                  : StringEnums.no_discount.name.tr()),
+                              Text(e != null
+                                  ? e.discountPercentage.toString()
+                                  : "0.0")
+                            ],
+                          )),
+                    )
+                    .toList())
+                : []);
       },
     );
   }

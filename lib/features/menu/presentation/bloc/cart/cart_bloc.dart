@@ -3,24 +3,21 @@ import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
-import '../../../domain/entities/cart_item.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-
 import '../../../domain/entities/offer.dart';
 import '../../../domain/entities/product.dart';
+import 'cart_item.dart';
 part 'cart_event.dart';
 part 'cart_state.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
-  CartBloc()
-      : super(CartState(
-            cart: [],
-            totalPrice: 0.0,
-            totalTax: 0.0,
-            discount: 0.0,
-            grandTotal: 0.0)) {
+  CartBloc() : super(CartState(cart: [])) {
     on<AddCartEvent>(
       _onAddCartItem,
+      transformer: sequential(),
+    );
+    on<AddCartsEvent>(
+      _onAddCarts,
       transformer: sequential(),
     );
     on<UpdateCartEvent>(
@@ -31,10 +28,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       _onDeleteCartItem,
       transformer: sequential(),
     );
-    on<CalculateTotalPriceEvent>(
-      _onCalculateTotalPrice,
-      transformer: sequential(),
-    );
     on<ClearCartEvent>(
       _onClearCart,
       transformer: sequential(),
@@ -42,12 +35,11 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   }
 
   void _onClearCart(ClearCartEvent event, Emitter<CartState> emit) {
-    emit(CartState(
-        cart: [],
-        totalPrice: 0.0,
-        totalTax: 0.0,
-        discount: 0.0,
-        grandTotal: 0.0));
+    emit(CartState(cart: []));
+  }
+
+  void _onAddCarts(AddCartsEvent event, Emitter<CartState> emit) {
+    emit(state.copyWith(cart: event.cartItems));
   }
 
   void _onAddCartItem(AddCartEvent event, Emitter<CartState> emit) {
@@ -153,31 +145,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         cartItem.extraItemId != null &&
         cartItem.extraItemId == cartItemToDelete.id);
     emit(state.copyWith(cart: updatedCart));
-  }
-
-  void _onCalculateTotalPrice(
-      CalculateTotalPriceEvent event, Emitter<CartState> emit) {
-    double finalTotalPrice = 0.0;
-    double totalTax = 0.0;
-    double totalDiscount = 0.0;
-    double grandTotal = 0.0;
-
-    for (final cartItem in state.cart) {
-      final totalPriceAndTax = cartItem.calculateTotalPriceAndTax(
-          taxPercentage: event.taxPercentage,
-          priceIncludesTax: event.priceIncludesTax,
-          discount: event.discount,
-          taxIncludesDiscount: event.taxIncludesDiscount);
-      finalTotalPrice += totalPriceAndTax.price;
-      totalDiscount += totalPriceAndTax.discount;
-      totalTax += totalPriceAndTax.tax;
-      grandTotal += totalPriceAndTax.grandTotal;
-    }
-    emit(state.copyWith(
-        totalPrice: finalTotalPrice,
-        totalTax: totalTax,
-        discount: totalDiscount,
-        grandTotal: grandTotal));
   }
 
   List<CartItem> _applyOffers(List<CartItem> cart) {

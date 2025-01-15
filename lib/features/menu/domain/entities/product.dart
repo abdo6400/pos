@@ -1,4 +1,6 @@
-abstract class Product {
+import 'package:equatable/equatable.dart';
+
+abstract class Product extends Equatable {
   final String proId;
   final String barcode;
   final String proArName;
@@ -116,4 +118,46 @@ abstract class Product {
     String? question4Qty,
     String? question5Qty,
   });
+  Map<String, dynamic> toJson();
+
+  @override
+  List<Object?> get props => [
+        proId,
+        barcode,
+        proArName,
+        proEnName,
+        catId,
+        categoryAr,
+        categoryEn,
+        father,
+        price,
+        price2,
+        price3,
+        price4,
+        taxable,
+        taxPercentage,
+        discountable,
+        icon,
+        backColor,
+        foreColor,
+        printer,
+        printer2,
+        tag,
+        question1,
+        question2,
+        question3,
+        question4,
+        question5,
+        standardItem,
+        isActive,
+        rawMaterial,
+        compositeMaterial,
+        compo,
+        isMaximumQty,
+        question1Qty,
+        question2Qty,
+        question3Qty,
+        question4Qty,
+        question5Qty
+      ];
 }

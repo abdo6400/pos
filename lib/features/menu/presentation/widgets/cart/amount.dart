@@ -43,34 +43,21 @@ class Amount extends StatelessWidget {
         priceIncludesTax = setting.getSetting(3).value4;
         taxIncludesDiscount = setting.getSetting(5).value4;
       }
-      return BlocListener<DiscountSelectionCubit, Discount?>(
-        listener: (context, state) {
-          context.read<CartBloc>().add(CalculateTotalPriceEvent(
-                taxPercentage: taxPercentage,
-                priceIncludesTax: priceIncludesTax,
-                taxIncludesDiscount: taxIncludesDiscount,
-                discount: state?.discountPercentage ?? 0.0,
-              ));
-        },
-        child: Card(
+      return BlocBuilder<DiscountSelectionCubit, Discount?>(
+        builder: (context, discount) => Card(
           margin: EdgeInsets.zero,
           elevation: 0,
           color: Theme.of(context).hintColor.withAlpha(15),
           child: BlocConsumer<CartBloc, CartState>(
-            listenWhen: (previous, current) => previous != current,
-            listener: (context, state) {
-              context.read<CartBloc>().add(CalculateTotalPriceEvent(
-                    taxPercentage: taxPercentage,
-                    priceIncludesTax: priceIncludesTax,
-                    taxIncludesDiscount: taxIncludesDiscount,
-                    discount: context
-                            .read<DiscountSelectionCubit>()
-                            .state
-                            ?.discountPercentage ??
-                        0.0,
-                  ));
-            },
+            listener: (context, state) {},
+            //  listenWhen: (previous, current) => previous != current,
             builder: (context, stats) {
+              final data = stats.calculateTotalPrice(
+                taxPercentage: taxPercentage,
+                priceIncludesTax: priceIncludesTax,
+                taxIncludesDiscount: taxIncludesDiscount,
+                discount: discount?.discountPercentage ?? 0.0,
+              );
               return Container(
                 padding:
                     const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
@@ -79,16 +66,16 @@ class Amount extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     _customListTile(StringEnums.subTotalAmount.name,
-                        stats.totalPrice.toStringAsFixed(3), context),
+                        data.price.toStringAsFixed(3), context),
                     _customListTile(StringEnums.taxAmount.name,
-                        stats.totalTax.toStringAsFixed(3), context),
+                        data.tax.toStringAsFixed(3), context),
                     _customListTile(StringEnums.discountAmount.name,
-                        stats.discount.toStringAsFixed(3), context),
+                        data.discount.toStringAsFixed(3), context),
                     Divider(
                       color: Theme.of(context).primaryColor,
                     ),
                     _customListTile(StringEnums.totalAmount.name,
-                        ((stats.grandTotal)).toStringAsFixed(3), context),
+                        ((data.grandTotal)).toStringAsFixed(3), context),
                   ],
                 ),
               );

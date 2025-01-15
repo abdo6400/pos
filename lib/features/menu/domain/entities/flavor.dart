@@ -1,4 +1,6 @@
-abstract class Flavor {
+import 'package:equatable/equatable.dart';
+
+abstract class Flavor extends Equatable {
   final int flavorNo;
   final String flavorAr;
   final String flavorEn;
@@ -16,4 +18,17 @@ abstract class Flavor {
     required this.category,
     required this.isActive,
   });
+
+  Map<String, dynamic> toJson();
+
+  @override
+  List<Object?> get props => [
+        flavorNo,
+        flavorAr,
+        flavorEn,
+        price,
+        warehouse,
+        category,
+        isActive,
+      ];
 }

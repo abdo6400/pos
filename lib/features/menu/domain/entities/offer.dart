@@ -43,6 +43,27 @@ abstract class Offer extends Equatable {
     required this.offerValueEn,
   });
 
+  Map<String, dynamic> toJson();
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [
+        offerId,
+        productId,
+        productNameAr,
+        productNameEn,
+        fromDate,
+        toDate,
+        priceOffer,
+        qtyOffer,
+        extraOffer,
+        price,
+        qty,
+        extraProduct,
+        isActive,
+        extraProductAr,
+        extraProductEn,
+        offerTypeAr,
+        offerTypeEn,
+        offerValueAr,
+        offerValueEn
+      ];
 }

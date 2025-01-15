@@ -5,8 +5,10 @@ import 'package:retail/features/menu/domain/entities/flavor.dart';
 import 'package:retail/features/menu/domain/entities/offer.dart';
 import 'package:retail/features/menu/domain/entities/product.dart';
 import 'package:retail/features/menu/domain/entities/question.dart';
+import '../../../../config/database/error/exceptions.dart';
 import '../../../../config/database/error/failures.dart';
 import '../../../../config/database/network/netwok_info.dart';
+import '../../domain/entities/order.dart' as order;
 import '../../domain/repositories/menu_repository.dart';
 import '../datasources/menu_local_data_source.dart';
 import '../datasources/menu_remote_data_source.dart';
@@ -38,7 +40,7 @@ class MenuRepositoryImpl extends MenuRepository {
     return _networkInfo.handleNetworkRequest<List<Product>>(
       remoteRequest: () => _menuRemoteDataSource.getProducts(branchId),
       cacheData: _menuLocalDataSource.insertProducts,
-      localRequest: () => _menuLocalDataSource.getProducts(),
+      localRequest: _menuLocalDataSource.getProducts,
     );
   }
 
@@ -72,7 +74,51 @@ class MenuRepositoryImpl extends MenuRepository {
   Future<Either<Failure, List<Offer>>> getOffers(String branchId) {
     return _networkInfo.handleNetworkRequest<List<Offer>>(
         remoteRequest: () => _menuRemoteDataSource.getOffers(branchId),
-        cacheData: (data) async {},
-        localRequest: () async => <Offer>[]);
+        cacheData: _menuLocalDataSource.insertOffers,
+        localRequest: _menuLocalDataSource.getOffers);
+  }
+
+  @override
+  Future<Either<Failure, List<order.Order>>> getOrders() async {
+    try {
+      return Right(await _menuLocalDataSource.getOrders());
+    } on LocalException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> addOrder(Map<String, dynamic> order) async {
+    try {
+      return Right(await _menuLocalDataSource.insertOrder(order));
+    } on LocalException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> clearOrder() async {
+    try {
+      return Right(await _menuLocalDataSource.clearOrder());
+    } on LocalException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteOrder(String orderId) async {
+    try {
+      return Right(await _menuLocalDataSource.deleteOrder(orderId));
+    } on LocalException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
   }
 }

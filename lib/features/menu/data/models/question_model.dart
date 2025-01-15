@@ -18,7 +18,7 @@ class QuestionModel extends Question {
         isRequired: bool.tryParse(json[ApiKeys.isRequired].toString()) ?? false,
         questionAr: json[ApiKeys.questionAr],
       );
-
+  @override
   Map<String, dynamic> toJson() => {
         ApiKeys.productId: productId,
         ApiKeys.questionElements1: questionElements1,

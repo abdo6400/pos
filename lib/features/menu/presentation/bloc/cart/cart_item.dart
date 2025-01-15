@@ -1,10 +1,12 @@
-import 'package:equatable/equatable.dart';
+import 'dart:convert';
 
-import 'flavor.dart';
-import 'offer.dart';
-import 'product.dart';
+import '../../../../../config/database/local/tables_keys.dart';
+import '../../../domain/entities/cart.dart';
+import '../../../domain/entities/flavor.dart';
+import '../../../domain/entities/offer.dart';
+import '../../../domain/entities/product.dart';
 
-class CartItem extends Equatable {
+class CartItem {
   final String id;
   final Product product;
   final bool isOffer;
@@ -14,20 +16,49 @@ class CartItem extends Equatable {
   final int quantity;
   final String note;
   final String? extraItemId;
-  final double orignialPrice;
+  final double? orignialPrice;
 
-  const CartItem({
+  CartItem({
     required this.id,
     required this.product,
-    required this.quantity,
+    this.isOffer = false,
     required this.flavors,
     required this.questions,
     required this.offers,
-    this.isOffer = false,
-    this.note = '',
+    required this.quantity,
+    this.note = "",
     this.extraItemId,
-    required this.orignialPrice,
+    this.orignialPrice,
   });
+
+  factory CartItem.convert(Cart cart) => CartItem(
+        id: cart.id,
+        product: cart.product,
+        isOffer: cart.isOffer,
+        flavors: cart.flavors,
+        questions: cart.questions,
+        offers: cart.offers,
+        quantity: cart.quantity,
+        note: cart.note,
+        extraItemId: cart.extraItemId,
+        orignialPrice: cart.orignialPrice,
+      );
+
+  Map<String, dynamic> toJson() => {
+        TablesKeys.cartItemId: id,
+        TablesKeys.cartItemProductId: product.proId,
+        TablesKeys.cartItemIsOffer: jsonEncode(isOffer),
+        TablesKeys.cartItemFlavorTable:
+            flavors.map((flavor) => flavor.flavorNo).toList(),
+        TablesKeys.cartItemQuestionTable:
+            questions.map((question) => question.proId).toList(),
+        TablesKeys.cartItemOfferTable:
+            offers.map((offer) => offer.offerId).toList(),
+        TablesKeys.cartItemQuantity: quantity,
+        TablesKeys.cartItemNote: note,
+        TablesKeys.cartItemExtraItemId: extraItemId,
+        TablesKeys.cartItemOriginalPrice: orignialPrice,
+      };
 
   CartItem copyWith({
     Product? product,
@@ -54,19 +85,6 @@ class CartItem extends Equatable {
       orignialPrice: orignialPrice ?? this.orignialPrice,
     );
   }
-
-  @override
-  List<Object?> get props => [
-        id,
-        product,
-        isOffer,
-        flavors,
-        questions,
-        offers,
-        quantity,
-        note,
-        extraItemId,
-      ];
 
   PriceAndTax calculateTotalPriceAndTax({
     double taxPercentage = 16.0,

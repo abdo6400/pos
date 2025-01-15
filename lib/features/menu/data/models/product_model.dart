@@ -85,7 +85,7 @@ class ProductModel extends Product {
         question4Qty: json[ApiKeys.question4Qty].toString(),
         question5Qty: json[ApiKeys.question5Qty].toString(),
       );
-
+  @override
   Map<String, dynamic> toJson() => {
         ApiKeys.proId: proId,
         ApiKeys.barcode: barcode,
