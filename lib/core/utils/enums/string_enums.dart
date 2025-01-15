@@ -163,5 +163,6 @@ enum StringEnums {
   note,
   quentity,
   add_note,
-  no_discount
+  no_discount,
+  no_delivery
 }

@@ -61,6 +61,13 @@ class DiscountPopup extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
+                              Checkbox(
+                                  value: context
+                                          .read<DiscountSelectionCubit>()
+                                          .state
+                                          ?.discountPercentage ==
+                                      e?.discountPercentage,
+                                  onChanged: (e) {}),
                               Text(e != null
                                   ? context.trValue(
                                       e.discountTypeAr, e.discountTypeEn)

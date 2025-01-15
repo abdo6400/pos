@@ -34,6 +34,8 @@ class EndPoints {
 
   static const String getAllPaymentTypes = 'PaymentsType/v1.0/AppGetAll';
   static const String getAllDeliveryCompanies = 'DeliveyCompany/v1.0/AppGetAll';
+  static const String getAllDeliveryDiscount =
+      'DeliveyCompany/v1.0/GetAllDeliveryDiscount';
   // Invoice Endpoints
   static const String getInvoicesByIntervalDateAndUser =
       'RestaurantInvoices/v1.0/GetByIntervalDateAndUser';

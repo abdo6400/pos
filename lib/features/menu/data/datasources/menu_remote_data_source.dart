@@ -2,6 +2,7 @@ import '../../../../config/database/api/api_consumer.dart';
 import '../../../../config/database/api/api_keys.dart';
 import '../../../../config/database/api/end_points.dart';
 import '../models/category_model.dart';
+import '../models/delivery_model.dart';
 import '../models/discount_model.dart';
 import '../models/flavor_model.dart';
 import '../models/offer_model.dart';
@@ -15,6 +16,7 @@ abstract class MenuRemoteDataSource {
   Future<List<QuestionModel>> getQuestions();
   Future<List<DiscountModel>> getDiscounts(String branchId);
   Future<List<OfferModel>> getOffers(String branchId);
+  Future<List<DeliveryModel>> getDeliveries();
 }
 
 class MenuRemoteDataSourceImpl implements MenuRemoteDataSource {
@@ -76,5 +78,13 @@ class MenuRemoteDataSourceImpl implements MenuRemoteDataSource {
           ApiKeys.pageSize: '32'
         });
     return List<OfferModel>.from(response.map((x) => OfferModel.fromJson(x)));
+  }
+
+  @override
+  Future<List<DeliveryModel>> getDeliveries() async {
+    final response = await _apiConsumer.get(EndPoints.getAllDeliveryCompanies,
+        queryParameters: {ApiKeys.pageNumber: '32', ApiKeys.pageSize: '32'});
+    return List<DeliveryModel>.from(
+        response.map((x) => DeliveryModel.fromJson(x)));
   }
 }

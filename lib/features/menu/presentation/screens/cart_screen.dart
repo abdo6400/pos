@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
+import 'package:retail/features/menu/presentation/bloc/cubit/delivery_selection_cubit.dart';
 import '../../../../core/utils/enums/string_enums.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../bloc/cubit/discount_selection_cubit.dart';
@@ -19,6 +20,7 @@ class CartScreen extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => DiscountSelectionCubit()),
         BlocProvider(create: (_) => OderSelectionCubit()),
+        BlocProvider(create: (_) => DeliverySelectionCubit()),
       ],
       child: Card(
         margin: EdgeInsets.zero,

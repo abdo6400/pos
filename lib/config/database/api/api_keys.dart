@@ -139,4 +139,9 @@ class ApiKeys {
   static const String visible = "Visible";
   static const String groupTypeAr = "GroupTypeAr";
   static const String groupTypeEn = "GroupTypeEn";
+
+  static const String companyId = "CompanyId";
+  static const String companyName = "CompanyName";
+  static const String percent = "Percent";
+  static const String priceCategory = "PriceCategory";
 }

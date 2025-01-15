@@ -7,6 +7,7 @@ import '../../../home/presentation/screens/home_screen.dart';
 import '../../../../../core/utils/extensions/extensions.dart';
 import '../../../menu/presentation/bloc/cart/cart_bloc.dart';
 import '../../../menu/presentation/bloc/category/category_bloc.dart';
+import '../../../menu/presentation/bloc/delivery/delivery_bloc.dart';
 import '../../../menu/presentation/bloc/discount/discount_bloc.dart';
 import '../../../menu/presentation/bloc/flavor/flavor_bloc.dart';
 import '../../../menu/presentation/bloc/offer/offer_bloc.dart';
@@ -55,6 +56,9 @@ class MainScreen extends StatelessWidget {
         ),
         BlocProvider(
             create: (context) => locator<OrderBloc>()..add(GetOrdersEvent())),
+        BlocProvider(
+            create: (context) =>
+                locator<DeliveryBloc>()..add(GetDeliveriesEvent())),
       ],
       child: Scaffold(
           resizeToAvoidBottomInset: false,

@@ -2,19 +2,19 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
+import 'package:retail/features/menu/domain/entities/delivery.dart';
+import 'package:retail/features/menu/presentation/bloc/cubit/delivery_selection_cubit.dart';
+import 'package:retail/features/menu/presentation/bloc/delivery/delivery_bloc.dart';
 import '../../../../../core/utils/enums/string_enums.dart';
-import '../../../domain/entities/discount.dart';
-import '../../bloc/cubit/discount_selection_cubit.dart';
-import '../../bloc/discount/discount_bloc.dart';
 
 class DelivaryPopup extends StatelessWidget {
   const DelivaryPopup({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DiscountBloc, DiscountState>(
+    return BlocBuilder<DeliveryBloc, DeliveryState>(
       builder: (context, state) {
-        return PopupMenuButton<Discount?>(
+        return PopupMenuButton<Delivery?>(
             shape: BeveledRectangleBorder(
               borderRadius: BorderRadius.circular(5),
               side: BorderSide(color: Colors.green),
@@ -35,39 +35,42 @@ class DelivaryPopup extends StatelessWidget {
             padding: EdgeInsets.zero,
             offset: Offset(-50, -50),
             initialValue:
-                state is DiscountSuccess ? state.discounts.first : null,
-            enabled: state is DiscountSuccess,
-            itemBuilder: (BuildContext context) => state is DiscountSuccess
-                ? ([null, ...state.discounts]
+                state is DeliverySuccess ? state.deliveries.first : null,
+            enabled: state is DeliverySuccess,
+            itemBuilder: (BuildContext context) => state is DeliverySuccess
+                ? ([null, ...state.deliveries]
                     .map(
-                      (e) => PopupMenuItem<Discount?>(
+                      (e) => PopupMenuItem<Delivery?>(
                           value: e,
                           onTap: () {
                             context
-                                .read<DiscountSelectionCubit>()
-                                .changeDiscount(e);
+                                .read<DeliverySelectionCubit>()
+                                .changeDelivery(e);
                           },
                           labelTextStyle: WidgetStatePropertyAll(
                               Theme.of(context).textTheme.bodyLarge!.copyWith(
                                   fontSize: context.AppResponsiveValue(12,
                                       mobile: 10, tablet: 16, desktop: 25),
                                   color: context
-                                              .read<DiscountSelectionCubit>()
+                                              .read<DeliverySelectionCubit>()
                                               .state
-                                              ?.discountPercentage ==
-                                          e?.discountPercentage
+                                              ?.companyId ==
+                                          e?.companyId
                                       ? Colors.blue
                                       : Colors.black)),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
+                              Checkbox(
+                                  value: context
+                                          .read<DeliverySelectionCubit>()
+                                          .state
+                                          ?.companyId ==
+                                      e?.companyId,
+                                  onChanged: (e) {}),
                               Text(e != null
-                                  ? context.trValue(
-                                      e.discountTypeAr, e.discountTypeEn)
-                                  : StringEnums.no_discount.name.tr()),
-                              Text(e != null
-                                  ? e.discountPercentage.toString()
-                                  : "0.0")
+                                  ? e.companyName
+                                  : StringEnums.no_delivery.name.tr()),
                             ],
                           )),
                     )

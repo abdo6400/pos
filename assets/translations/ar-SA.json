@@ -235,5 +235,6 @@
   "note": "ملاحظة",
   "quentity": "الكمية",
   "add_note": "اضافة ملاحظة",
-  "no_discount": "لا يوجد خصم"
+  "no_discount": "لا يوجد خصم",
+  "no_delivery": "لا يوجد توصيل"
 }
