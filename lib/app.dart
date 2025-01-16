@@ -63,48 +63,22 @@ class App extends StatelessWidget {
                             ResponsiveTargetPlatform.web,
                           ],
                           breakpoints: [
+                            const Breakpoint(start: 0, end: 480, name: MOBILE),
                             const Breakpoint(
-                                start: 0,
-                                end: 480,
-                                name: MOBILE), // Small phones
+                                start: 481, end: 1279, name: TABLET),
                             const Breakpoint(
-                                start: 481,
-                                end: 768,
-                                name: TABLET), // Tablets and large phones
+                                start: 1280, end: 1920, name: DESKTOP),
                             const Breakpoint(
-                                start: 769,
-                                end: 1279,
-                                name: DESKTOP), // Small desktops and laptops
-                            const Breakpoint(
-                                start: 1280,
-                                end: double.infinity,
-                                name: '4K'), // Large desktops and 4K screens
+                                start: 1921, end: double.infinity, name: '4K'),
                           ],
                           breakpointsLandscape: [
+                            const Breakpoint(start: 0, end: 900, name: MOBILE),
                             const Breakpoint(
-                                start: 0,
-                                end: 900,
-                                name: MOBILE), // Small phones in landscape
+                                start: 901, end: 1920, name: TABLET),
                             const Breakpoint(
-                                start: 901,
-                                end: 1280,
-                                name:
-                                    TABLET), // Tablets and large phones in landscape
+                                start: 1921, end: 3840, name: DESKTOP),
                             const Breakpoint(
-                                start: 1281,
-                                end: 1920,
-                                name:
-                                    DESKTOP), // Small desktops and laptops in landscape
-                            const Breakpoint(
-                                start: 1921,
-                                end: 3840,
-                                name:
-                                    '4K'), // Large desktops and 4K screens in landscape
-                            const Breakpoint(
-                                start: 3841,
-                                end: double.infinity,
-                                name:
-                                    'ULTRA'), // Ultra-wide and 5K+ screens in landscape
+                                start: 3841, end: double.infinity, name: '4K'),
                           ],
                         );
                         child = DevicePreview.appBuilder(context, child);

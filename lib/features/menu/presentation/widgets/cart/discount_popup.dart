@@ -68,7 +68,7 @@ class DiscountPopup extends StatelessWidget {
                                           .state
                                           ?.discountPercentage ==
                                       e?.discountPercentage,
-                                  onChanged: (e) {}),
+                                  onChanged: null),
                               Text(e != null
                                   ? context.trValue(
                                       e.discountTypeAr, e.discountTypeEn)

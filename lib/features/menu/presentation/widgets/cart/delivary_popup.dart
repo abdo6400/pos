@@ -75,7 +75,7 @@ class DelivaryPopup extends StatelessWidget {
                                           ?.delivery
                                           ?.companyId ==
                                       e?.companyId,
-                                  onChanged: (e) {}),
+                                  onChanged: null),
                               Text(e != null
                                   ? e.companyName
                                   : StringEnums.no_delivery.name.tr()),
