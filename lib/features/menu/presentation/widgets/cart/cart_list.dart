@@ -13,6 +13,7 @@ import '../../../domain/entities/offer.dart';
 import '../../../domain/entities/product.dart';
 import '../../bloc/cart/cart_bloc.dart';
 import '../../bloc/cart/cart_item.dart';
+import '../../bloc/cubit/delivery_selection_cubit.dart';
 import '../../bloc/flavor/flavor_bloc.dart';
 import '../../bloc/offer/offer_bloc.dart';
 import '../../bloc/order/order_bloc.dart';
@@ -200,10 +201,27 @@ class CartList extends StatelessWidget {
                                 ),
                                 trailing: state.cart[index].isOffer
                                     ? null
-                                    : Text(
-                                        state.cart[index].product.price
-                                            .toString(),
-                                        style: style),
+                                    : BlocBuilder<DeliverySelectionCubit,
+                                        DeliveryWithDiscount?>(
+                                        builder: (context, delivery) {
+                                          return Text(
+                                              (delivery?.getPrice(
+                                                          state.cart[index]
+                                                              .product.price,
+                                                          state.cart[index]
+                                                              .product.price2,
+                                                          state.cart[index]
+                                                              .product.price3,
+                                                          state
+                                                              .cart[index]
+                                                              .product
+                                                              .price4) ??
+                                                      state.cart[index].product
+                                                          .price)
+                                                  .toString(),
+                                              style: style);
+                                        },
+                                      ),
                               ),
                             ),
                           ),

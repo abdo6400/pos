@@ -40,42 +40,24 @@ class CartScreen extends StatelessWidget {
                 children: [
                   Amount(),
                   Column(
-                      spacing: context.AppResponsiveValue(0,
-                          mobile: 0, tablet: 5, desktop: 5),
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Row(
-                          spacing: 10,
-                          children: [
-                            Flexible(
-                              child: CustomButton(
-                                buttonLabel: StringEnums.checkoutCash.name.tr(),
-                                iconData: Icons.money_outlined,
-                                onSubmit: () {},
-                                backgroundColor: Colors.green,
-                              ),
-                            ),
-                            Flexible(
-                              child: CustomButton(
-                                buttonLabel: StringEnums.checkoutVisa.name.tr(),
-                                iconData: Icons.payment_outlined,
-                                onSubmit: () {},
-                                backgroundColor: Colors.blue,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(spacing: 10, children: [
-                          Flexible(
-                            child: CustomButton(
-                              buttonLabel: StringEnums.save.name.tr(),
-                              iconData: Icons.cached_outlined,
-                              onSubmit: () {},
-                              backgroundColor: Colors.purple,
-                            ),
-                          ),
-                        ]),
-                      ]),
+                    spacing: context.AppResponsiveValue(5,
+                        mobile: 5, tablet: 10, desktop: 10),
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      CustomButton(
+                        buttonLabel: StringEnums.checkoutCash.name.tr(),
+                        iconData: Icons.money_outlined,
+                        onSubmit: () {},
+                        backgroundColor: Colors.green,
+                      ),
+                      CustomButton(
+                        buttonLabel: StringEnums.pay_by.name.tr(),
+                        iconData: Icons.payment_outlined,
+                        onSubmit: () {},
+                        backgroundColor: Colors.blue,
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),

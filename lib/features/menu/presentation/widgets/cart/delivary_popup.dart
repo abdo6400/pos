@@ -48,21 +48,17 @@ class DelivaryPopup extends StatelessWidget {
                             context
                                 .read<DeliverySelectionCubit>()
                                 .changeDelivery(DeliveryWithDiscount(
-                                    delivery: e,
-                                    discount: state.deliveryDiscounts
-                                        .firstWhereOrNull((e) =>
-                                            e.companyId == e.companyId)));
+                                    e,
+                                    state.deliveryDiscounts.firstWhereOrNull(
+                                        (e) => e.companyId == e.companyId)));
                           },
                           labelTextStyle: WidgetStatePropertyAll(
                               Theme.of(context).textTheme.bodyLarge!.copyWith(
                                   fontSize: context.AppResponsiveValue(12,
                                       mobile: 10, tablet: 16, desktop: 25),
                                   color: context
-                                              .read<DeliverySelectionCubit>()
-                                              .state
-                                              ?.delivery
-                                              ?.companyId ==
-                                          e?.companyId
+                                          .read<DeliverySelectionCubit>()
+                                          .isDeliverySelected(e?.companyId)
                                       ? Colors.blue
                                       : Colors.black)),
                           child: Row(
@@ -70,11 +66,8 @@ class DelivaryPopup extends StatelessWidget {
                             children: [
                               Checkbox(
                                   value: context
-                                          .read<DeliverySelectionCubit>()
-                                          .state
-                                          ?.delivery
-                                          ?.companyId ==
-                                      e?.companyId,
+                                      .read<DeliverySelectionCubit>()
+                                      .isDeliverySelected(e?.companyId),
                                   onChanged: null),
                               Text(e != null
                                   ? e.companyName

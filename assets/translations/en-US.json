@@ -238,5 +238,6 @@
   "no_discount": "No discount",
   "no_delivery": "No delivery",
   "settings": "Settings",
-  "logout": "Logout"
+  "logout": "Logout",
+  "pay_by": "Pay By"
 }

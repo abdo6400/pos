@@ -32,16 +32,6 @@ class Amount extends StatelessWidget {
     );
   }
 
-  bool isTimeBetween(
-      DateTime startTime, DateTime endTime, DateTime timeToCheck) {
-    // Handle cases where the endTime is on the next day (e.g., 23:00 to 02:00)
-    if (endTime.isBefore(startTime)) {
-      return timeToCheck.isAfter(startTime) || timeToCheck.isBefore(endTime);
-    }
-    // Normal case where startTime and endTime are on the same day
-    return timeToCheck.isAfter(startTime) && timeToCheck.isBefore(endTime);
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SettingsBloc, SettingsState>(
@@ -69,17 +59,8 @@ class Amount extends StatelessWidget {
                     priceIncludesTax: priceIncludesTax,
                     taxIncludesDiscount: taxIncludesDiscount,
                     discount: discount?.discountPercentage ?? 0.0,
-                    deliveryCategory: delivery?.delivery?.priceCategory ?? 1,
-                    deliveryDiscount:
-                        (delivery != null && delivery.discount != null)
-                            ? ((isTimeBetween(
-                                        delivery.discount!.fromDate,
-                                        delivery.discount!.toDate,
-                                        DateTime.now()) &&
-                                    delivery.discount!.isActive)
-                                ? delivery.discount!.discountValue
-                                : 0.0)
-                            : 0.0,
+                    deliveryCategory: delivery?.deliveryPriceCategory ?? 1,
+                    deliveryDiscount: delivery?.deliveryPriceDiscount ?? 0.0,
                   );
                   return Container(
                     padding:
