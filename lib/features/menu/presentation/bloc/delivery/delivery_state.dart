@@ -13,8 +13,9 @@ class DeliveryLoading extends DeliveryState {}
 
 class DeliverySuccess extends DeliveryState {
   final List<Delivery> deliveries;
+  final List<DeliveryDiscount> deliveryDiscounts;
 
-  const DeliverySuccess(this.deliveries);
+  const DeliverySuccess(this.deliveries, this.deliveryDiscounts);
 }
 
 class DeliveryError extends DeliveryState {

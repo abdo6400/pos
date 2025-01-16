@@ -20,18 +20,18 @@ class MenuScreen extends StatelessWidget {
         BlocProvider(create: (_) => OfferSelectionCubit()),
       ],
       child: Column(
+        spacing: 5,
         children: [
+          Expanded(child: CustomAppBar()),
           Expanded(
-              flex: context.AppResponsiveValue(3,
-                      mobile: 2, tablet: 2, desktop: 2)
-                  .toInt(),
-              child: CustomAppBar()),
-          Expanded(flex: 2, child: CategoriesList()),
-          Expanded(
-              flex: context.AppResponsiveValue(14,
-                      mobile: 14, tablet: 19, desktop: 20)
-                  .toInt(),
-              child: ProductsList()),
+              flex: 10,
+              child: Column(
+                children: [
+                  Expanded(child: CategoriesList()),
+                  Expanded(
+                      flex: context.isMobile ? 8 : 12, child: ProductsList()),
+                ],
+              )),
         ],
       ),
     );

@@ -7,6 +7,7 @@ import '../../features/menu/domain/usecases/clear_orders_usecase.dart';
 import '../../features/menu/domain/usecases/delete_order_usecase.dart';
 import '../../features/menu/domain/usecases/get_categories_usecase.dart';
 import '../../features/menu/domain/usecases/get_deliveries_usecase.dart';
+import '../../features/menu/domain/usecases/get_delivery_discounts_usecase.dart';
 import '../../features/menu/domain/usecases/get_discounts_usecase.dart';
 import '../../features/menu/domain/usecases/get_flavors_usecase.dart';
 import '../../features/menu/domain/usecases/get_offers_usecase.dart';
@@ -39,7 +40,10 @@ class AppLocator {
     locator.registerLazySingleton<OfferBloc>(() => OfferBloc(locator()));
     locator.registerLazySingleton<OrderBloc>(
         () => OrderBloc(locator(), locator(), locator(), locator()));
-    locator.registerLazySingleton<DeliveryBloc>(() => DeliveryBloc(locator()));
+    locator.registerLazySingleton<DeliveryBloc>(
+        () => DeliveryBloc(locator(), locator()));
+    locator.registerLazySingleton<GetDeliveryDiscountsUsecase>(
+        () => GetDeliveryDiscountsUsecase(locator()));
     locator.registerLazySingleton<GetDeliveriesUsecase>(
         () => GetDeliveriesUsecase(locator()));
     locator.registerLazySingleton<GetOrdersUseCase>(

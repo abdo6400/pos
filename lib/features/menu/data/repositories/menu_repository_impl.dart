@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:retail/features/menu/domain/entities/category.dart';
 import 'package:retail/features/menu/domain/entities/delivery.dart';
+import 'package:retail/features/menu/domain/entities/delivery_discount.dart';
 import 'package:retail/features/menu/domain/entities/discount.dart';
 import 'package:retail/features/menu/domain/entities/flavor.dart';
 import 'package:retail/features/menu/domain/entities/offer.dart';
@@ -129,5 +130,13 @@ class MenuRepositoryImpl extends MenuRepository {
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
+  }
+
+  @override
+  Future<Either<Failure, List<DeliveryDiscount>>> getDeliveryDiscounts() async {
+    return _networkInfo.handleNetworkRequest<List<DeliveryDiscount>>(
+        remoteRequest: () => _menuRemoteDataSource.getDeliveryDiscounts(),
+        cacheData: (data) async {},
+        localRequest: () async => <DeliveryDiscount>[]);
   }
 }

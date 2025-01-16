@@ -192,8 +192,8 @@ class ProductCard extends StatelessWidget {
                                   .bodyLarge!
                                   .copyWith(
                                     color: Colors.white,
-                                    fontSize: context.AppResponsiveValue(14,
-                                        mobile: 10, tablet: 18, desktop: 25),
+                                    fontSize: context.AppResponsiveValue(10,
+                                        mobile: 10, tablet: 16, desktop: 25),
                                   ),
                               textAlign: TextAlign.start),
                         ),

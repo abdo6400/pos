@@ -86,15 +86,40 @@ class CartItem {
     );
   }
 
-  PriceAndTax calculateTotalPriceAndTax({
-    double taxPercentage = 16.0,
-    bool priceIncludesTax = true,
-    bool taxIncludesDiscount = true,
-    double discount = 0.0,
-  }) {
+  double getPrice(double price, double price2, double price3, double price4,
+      int priceCategory, double discount) {
+    double priceFinal = 0;
+    switch (priceCategory) {
+      case 1:
+        priceFinal = price;
+        break;
+      case 2:
+        priceFinal = price2;
+        break;
+      case 3:
+        priceFinal = price3;
+        break;
+      case 4:
+        priceFinal = price4;
+        break;
+      default:
+        priceFinal = price;
+        break;
+    }
+    return priceFinal - ((discount / 100) * priceFinal);
+  }
+
+  PriceAndTax calculateTotalPriceAndTax(
+      {double taxPercentage = 16.0,
+      bool priceIncludesTax = true,
+      bool taxIncludesDiscount = true,
+      double discount = 0.0,
+      int deliveryCategory = 1,
+      double deliveryDiscount = 0.0}) {
     // Calculate price and tax for the product
     final productPriceAndTax = _calculatePriceAndTax(
-      price: product.price,
+      price: getPrice(product.price, product.price2, product.price3,
+          product.price4, deliveryCategory, deliveryDiscount),
       taxPercentage: taxPercentage,
       priceIncludesTax: priceIncludesTax,
       discount: discount,
@@ -120,7 +145,8 @@ class CartItem {
       (sum, question) =>
           sum +
           _calculatePriceAndTax(
-            price: question.price,
+            price: getPrice(question.price, question.price2, question.price3,
+                question.price4, deliveryCategory, deliveryDiscount),
             taxPercentage: taxPercentage,
             priceIncludesTax: priceIncludesTax,
             taxIncludesDiscount: taxIncludesDiscount,

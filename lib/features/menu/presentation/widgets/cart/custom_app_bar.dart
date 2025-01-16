@@ -15,8 +15,8 @@ class CustomAppBar extends StatelessWidget {
         alignment: AlignmentDirectional.center,
         padding: EdgeInsets.symmetric(
             vertical: context.AppResponsiveValue(5,
-                mobile: 5, tablet: 10, desktop: 15),
-            horizontal: 10),
+                mobile: 5, tablet: 10, desktop: 5),
+            horizontal: 5),
         decoration: BoxDecoration(
           border: BorderDirectional(
             bottom:
@@ -24,26 +24,25 @@ class CustomAppBar extends StatelessWidget {
           ),
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Flexible(
+            Expanded(
               child: Text(StringEnums.current_order.name.tr(),
                   textAlign: TextAlign.start,
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                         fontSize: context.AppResponsiveValue(12,
-                            mobile: 10, tablet: 20, desktop: 25),
+                            mobile: 10, tablet: 21, desktop: 25),
                       )),
             ),
-            Flexible(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  DelivaryPopup(),
-                  PendingOrdersPopup(),
-                  DiscountPopup(),
-                ],
-              ),
-            )
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              spacing: context.AppResponsiveValue(2,
+                  mobile: 2, tablet: 10, desktop: 15),
+              children: [
+                DelivaryPopup(),
+                PendingOrdersPopup(),
+                DiscountPopup(),
+              ],
+            ),
           ],
         ));
   }

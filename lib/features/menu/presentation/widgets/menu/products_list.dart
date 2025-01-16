@@ -40,7 +40,7 @@ class ProductsList extends StatelessWidget {
               enabled: state is ProductLoading,
               child: BlocBuilder<CategorySelectionCubit, Category?>(
                 builder: (context, category) {
-                  final List<Product> products = state is ProductSuccess
+                  List<Product> products = state is ProductSuccess
                       ? !context.watch<OfferSelectionCubit>().state
                           ? (category != null
                               ? state.filteredProductsByCategory(category.catId)
@@ -51,6 +51,7 @@ class ProductsList extends StatelessWidget {
                                   offers.any((y) => y.productId == x.proId))
                               .toList()
                       : [];
+                  products = products.where((x) => !x.rawMaterial).toList();
                   if (state is ProductSuccess && products.isEmpty) {
                     return EmptyMessage(
                       message: StringEnums.no_products_found.name.tr(),
@@ -60,10 +61,9 @@ class ProductsList extends StatelessWidget {
                       padding:
                           EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       gridDelegate: ResponsiveGridDelegate(
-                          maxCrossAxisExtent: context.AppResponsiveValue(190,
-                              mobile: 100, tablet: 250, desktop: 350),
-                          childAspectRatio: context.AppResponsiveValue(3 / 4,
-                              mobile: 1.5, tablet: 4 / 5, desktop: 4 / 5),
+                          maxCrossAxisExtent: context.AppResponsiveValue(150,
+                              mobile: 100, tablet: 200, desktop: 250),
+                          childAspectRatio: 4 / 5,
                           crossAxisSpacing: context.AppResponsiveValue(2,
                               mobile: 2, tablet: 10, desktop: 15),
                           mainAxisSpacing: context.AppResponsiveValue(2,

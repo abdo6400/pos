@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,13 +23,14 @@ class DelivaryPopup extends StatelessWidget {
             icon: Card(
               elevation: 0.5,
               color: Colors.green,
+              margin: EdgeInsets.all(0),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Icon(
                   Icons.delivery_dining_outlined,
                   color: Colors.white,
                   size: context.AppResponsiveValue(15,
-                      mobile: 15, tablet: 30, desktop: 40),
+                      mobile: 15, tablet: 25, desktop: 30),
                 ),
               ),
             ),
@@ -45,7 +47,11 @@ class DelivaryPopup extends StatelessWidget {
                           onTap: () {
                             context
                                 .read<DeliverySelectionCubit>()
-                                .changeDelivery(e);
+                                .changeDelivery(DeliveryWithDiscount(
+                                    delivery: e,
+                                    discount: state.deliveryDiscounts
+                                        .firstWhereOrNull((e) =>
+                                            e.companyId == e.companyId)));
                           },
                           labelTextStyle: WidgetStatePropertyAll(
                               Theme.of(context).textTheme.bodyLarge!.copyWith(
@@ -54,6 +60,7 @@ class DelivaryPopup extends StatelessWidget {
                                   color: context
                                               .read<DeliverySelectionCubit>()
                                               .state
+                                              ?.delivery
                                               ?.companyId ==
                                           e?.companyId
                                       ? Colors.blue
@@ -65,6 +72,7 @@ class DelivaryPopup extends StatelessWidget {
                                   value: context
                                           .read<DeliverySelectionCubit>()
                                           .state
+                                          ?.delivery
                                           ?.companyId ==
                                       e?.companyId,
                                   onChanged: (e) {}),

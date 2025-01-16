@@ -19,13 +19,14 @@ class PendingOrdersPopup extends StatelessWidget {
             icon: Card(
               elevation: 0.5,
               color: Colors.yellow,
+              margin: EdgeInsets.all(0),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Icon(
                   Icons.pending_actions_outlined,
                   color: Colors.white,
                   size: context.AppResponsiveValue(15,
-                      mobile: 15, tablet: 30, desktop: 40),
+                      mobile: 15, tablet: 25, desktop: 30),
                 ),
               ),
             ),

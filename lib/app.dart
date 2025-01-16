@@ -1,7 +1,6 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -28,66 +27,90 @@ class App extends StatelessWidget {
           startLocale: localArabic,
           ignorePluralRules: false,
           child: MediaQuery(
-            data: MediaQuery.of(context)
-                .copyWith(textScaler: TextScaler.linear(1.1)),
+            data: MediaQuery.of(context).copyWith(
+              textScaler: TextScaler.linear(1.0),
+              devicePixelRatio: 1.0,
+            ),
             child: Builder(
               builder: (context) {
                 return AdaptiveTheme(
-                    light: AppTheme.getApplicationLightTheme,
-                    dark: AppTheme.getApplicationDarkTheme,
-                    debugShowFloatingThemeButton: true,
-                    initial: themeMode,
-                    builder: (theme, darkTheme) => DevicePreview(
-                          enabled: !kReleaseMode,
-                          availableLocales: [localArabic, localEnglish],
-                          builder: (context) => MaterialApp.router(
-                              useInheritedMediaQuery: !kReleaseMode,
-                              debugShowCheckedModeBanner: false,
-                              routerDelegate:
-                                  AppRouterConfig.router.routerDelegate,
-                              routeInformationProvider: AppRouterConfig
-                                  .router.routeInformationProvider,
-                              routeInformationParser:
-                                  AppRouterConfig.router.routeInformationParser,
-                              localizationsDelegates:
-                                  context.localizationDelegates,
-                              supportedLocales: context.supportedLocales,
-                              locale: context.locale,
-                              theme: theme,
-                              darkTheme: darkTheme,
-                              builder: (context, child) =>
-                                  ResponsiveBreakpoints.builder(
-                                    child: child!,
-                                    breakpoints: [
-                                      const Breakpoint(
-                                          start: 0, end: 600, name: MOBILE),
-                                      const Breakpoint(
-                                          start: 601, end: 1024, name: TABLET),
-                                      const Breakpoint(
-                                          start: 1025,
-                                          end: 1920,
-                                          name: DESKTOP),
-                                      const Breakpoint(
-                                          start: 1921,
-                                          end: double.infinity,
-                                          name: '4K'),
-                                    ],
-                                    breakpointsLandscape: [
-                                      const Breakpoint(
-                                          start: 0, end: 899, name: MOBILE),
-                                      const Breakpoint(
-                                          start: 900, end: 1440, name: TABLET),
-                                      const Breakpoint(
-                                          start: 1441,
-                                          end: 2560,
-                                          name: DESKTOP),
-                                      const Breakpoint(
-                                          start: 2561,
-                                          end: double.infinity,
-                                          name: '4K'),
-                                    ],
-                                  )),
-                        ));
+                  light: AppTheme.getApplicationLightTheme,
+                  dark: AppTheme.getApplicationDarkTheme,
+                  initial: themeMode,
+                  builder: (theme, darkTheme) => MaterialApp.router(
+                      useInheritedMediaQuery: true,
+                      debugShowCheckedModeBanner: false,
+                      routerDelegate: AppRouterConfig.router.routerDelegate,
+                      routeInformationProvider:
+                          AppRouterConfig.router.routeInformationProvider,
+                      routeInformationParser:
+                          AppRouterConfig.router.routeInformationParser,
+                      localizationsDelegates: context.localizationDelegates,
+                      supportedLocales: context.supportedLocales,
+                      locale: context.locale,
+                      theme: theme,
+                      darkTheme: darkTheme,
+                      builder: (context, child) {
+                        child = ResponsiveBreakpoints.builder(
+                          child: child!,
+                          landscapePlatforms: const [
+                            ResponsiveTargetPlatform.fuchsia,
+                            ResponsiveTargetPlatform.iOS,
+                            ResponsiveTargetPlatform.macOS,
+                            ResponsiveTargetPlatform.android,
+                            ResponsiveTargetPlatform.linux,
+                            ResponsiveTargetPlatform.windows,
+                            ResponsiveTargetPlatform.web,
+                          ],
+                          breakpoints: [
+                            const Breakpoint(
+                                start: 0,
+                                end: 480,
+                                name: MOBILE), // Small phones
+                            const Breakpoint(
+                                start: 481,
+                                end: 768,
+                                name: TABLET), // Tablets and large phones
+                            const Breakpoint(
+                                start: 769,
+                                end: 1279,
+                                name: DESKTOP), // Small desktops and laptops
+                            const Breakpoint(
+                                start: 1280,
+                                end: double.infinity,
+                                name: '4K'), // Large desktops and 4K screens
+                          ],
+                          breakpointsLandscape: [
+                            const Breakpoint(
+                                start: 0,
+                                end: 900,
+                                name: MOBILE), // Small phones in landscape
+                            const Breakpoint(
+                                start: 901,
+                                end: 1280,
+                                name:
+                                    TABLET), // Tablets and large phones in landscape
+                            const Breakpoint(
+                                start: 1281,
+                                end: 1920,
+                                name:
+                                    DESKTOP), // Small desktops and laptops in landscape
+                            const Breakpoint(
+                                start: 1921,
+                                end: 3840,
+                                name:
+                                    '4K'), // Large desktops and 4K screens in landscape
+                            const Breakpoint(
+                                start: 3841,
+                                end: double.infinity,
+                                name:
+                                    'ULTRA'), // Ultra-wide and 5K+ screens in landscape
+                          ],
+                        );
+                        child = DevicePreview.appBuilder(context, child);
+                        return child;
+                      }),
+                );
               },
             ),
           )),

@@ -144,4 +144,12 @@ class ApiKeys {
   static const String companyName = "CompanyName";
   static const String percent = "Percent";
   static const String priceCategory = "PriceCategory";
+
+  static const String lineId = "LineId";
+
+  static const String companyDesc = "CompanyDesc";
+
+  static const String discountValue = "DiscountValue";
+  static const String branchId = "BranchId";
+  static const String branche = "Branche";
 }

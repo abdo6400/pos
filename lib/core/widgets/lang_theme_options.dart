@@ -10,8 +10,8 @@ class LangThemeOptions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
-      spacing: 5,
       children: [
+        LangPopMenu(),
         IconButton(
           onPressed: () =>
               AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark
@@ -21,15 +21,8 @@ class LangThemeOptions extends StatelessWidget {
               ? Icons.dark_mode_outlined
               : Icons.light_mode_outlined),
           iconSize: context.AppResponsiveValue(25,
-              mobile: 25, tablet: 35, desktop: 50),
-        ),
-        Container(
-          width: 2,
-          height: context.AppResponsiveValue(25,
               mobile: 25, tablet: 35, desktop: 40),
-          color: Theme.of(context).hintColor,
         ),
-        LangPopMenu(),
       ],
     );
   }

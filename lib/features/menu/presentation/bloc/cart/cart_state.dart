@@ -15,7 +15,9 @@ class CartState extends Equatable {
       {double taxPercentage = 16.0,
       bool priceIncludesTax = true,
       double discount = 0.0,
-      bool taxIncludesDiscount = true}) {
+      bool taxIncludesDiscount = true,
+      int deliveryCategory = 1,
+      double deliveryDiscount = 0.0}) {
     double finalTotalPrice = 0.0;
     double totalTax = 0.0;
     double totalDiscount = 0.0;
@@ -25,6 +27,8 @@ class CartState extends Equatable {
       final totalPriceAndTax = cartItem.calculateTotalPriceAndTax(
           taxPercentage: taxPercentage,
           priceIncludesTax: priceIncludesTax,
+          deliveryCategory: deliveryCategory,
+          deliveryDiscount: deliveryDiscount,
           discount: discount,
           taxIncludesDiscount: taxIncludesDiscount);
       finalTotalPrice += totalPriceAndTax.price;
