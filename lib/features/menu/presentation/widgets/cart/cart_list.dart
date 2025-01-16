@@ -95,7 +95,7 @@ class CartList extends StatelessWidget {
   Widget build(BuildContext context) {
     final style = Theme.of(context).textTheme.bodyMedium!.copyWith(
         fontSize:
-            context.AppResponsiveValue(9, mobile: 9, tablet: 16, desktop: 25));
+            context.AppResponsiveValue(9, mobile: 9, tablet: 16, desktop: 18));
     return BlocBuilder<OfferBloc, OfferState>(
       builder: (context, offerState) {
         return BlocBuilder<CartBloc, CartState>(builder: (context, state) {
@@ -123,7 +123,7 @@ class CartList extends StatelessWidget {
                           Icons.delete,
                           color: Colors.white,
                           size: context.AppResponsiveValue(25,
-                              mobile: 20, tablet: 35, desktop: 40),
+                              mobile: 20, tablet: 30, desktop: 35),
                         ),
                       ),
                       onDismissed: (_) => context.read<CartBloc>().add(
@@ -143,7 +143,7 @@ class CartList extends StatelessWidget {
                               textStyle: style.copyWith(
                                 color: Colors.white,
                                 fontSize: context.AppResponsiveValue(10,
-                                    mobile: 10, tablet: 16, desktop: 25),
+                                    mobile: 10, tablet: 16, desktop: 20),
                               ),
                               padding: EdgeInsets.all(3),
                               child: ListTile(
@@ -195,10 +195,7 @@ class CartList extends StatelessWidget {
                                 ),
                                 subtitle: Text(
                                   '${state.cart[index].flavors.map((x) => context.trValue(x.flavorAr, x.flavorEn)).join(', ') + " , " + state.cart[index].questions.map((x) => context.trValue(x.proArName, x.proEnName)).join(', ')}',
-                                  style: style.copyWith(
-                                    fontSize: context.AppResponsiveValue(8,
-                                        mobile: 7, tablet: 10, desktop: 20),
-                                  ),
+                                  style: style,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 trailing: state.cart[index].isOffer
@@ -216,7 +213,7 @@ class CartList extends StatelessWidget {
                                 Icons.edit_outlined,
                                 color: Colors.green,
                                 size: context.AppResponsiveValue(20,
-                                    mobile: 20, tablet: 35, desktop: 40),
+                                    mobile: 20, tablet: 30, desktop: 35),
                               ),
                               onPressed: () => _flavorsQuestionsDialog(
                                   context, state.cart[index],
@@ -246,7 +243,7 @@ class CartList extends StatelessWidget {
                           Icons.add_outlined,
                           color: Colors.yellow,
                           size: context.AppResponsiveValue(25,
-                              mobile: 25, tablet: 30, desktop: 50),
+                              mobile: 25, tablet: 30, desktop: 35),
                         ),
                         Text(StringEnums.pending.name.tr(), style: style),
                       ],
@@ -258,7 +255,7 @@ class CartList extends StatelessWidget {
                       Icons.delete_outline,
                       color: Colors.red,
                       size: context.AppResponsiveValue(25,
-                          mobile: 25, tablet: 30, desktop: 50),
+                          mobile: 25, tablet: 30, desktop: 35),
                     ))
               ]),
             ],
