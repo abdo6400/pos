@@ -50,15 +50,9 @@ class DiscountPopup extends StatelessWidget {
                           },
                           labelTextStyle: WidgetStatePropertyAll(
                               Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                  fontSize: context.AppResponsiveValue(12,
-                                      mobile: 10, tablet: 16, desktop: 25),
-                                  color: context
-                                              .read<DiscountSelectionCubit>()
-                                              .state
-                                              ?.discountPercentage ==
-                                          e?.discountPercentage
-                                      ? Colors.blue
-                                      : Colors.black)),
+                                    fontSize: context.AppResponsiveValue(12,
+                                        mobile: 10, tablet: 16, desktop: 25),
+                                  )),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.4"
+  animated_float_action_button:
+    dependency: "direct main"
+    description:
+      name: animated_float_action_button
+      sha256: c9a6ac4d9dcde40ba1a12077ba2601bbd67342f460462c8a6fbfe7c44682b853
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
   archive:
     dependency: transitive
     description:

@@ -1,10 +1,9 @@
+import 'package:animated_float_action_button/animated_floating_action_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../../core/widgets/floating_menu/animated_rail.dart';
 import '../../../../core/bloc/cubit/user_cubit.dart';
 import '../../../../core/utils/constants.dart';
 import '../../../home/presentation/screens/home_screen.dart';
-import '../../../../../core/utils/extensions/extensions.dart';
 import '../../../menu/presentation/bloc/cart/cart_bloc.dart';
 import '../../../menu/presentation/bloc/category/category_bloc.dart';
 import '../../../menu/presentation/bloc/delivery/delivery_bloc.dart';
@@ -15,7 +14,6 @@ import '../../../menu/presentation/bloc/order/order_bloc.dart';
 import '../../../menu/presentation/bloc/product/product_bloc.dart';
 import '../../../menu/presentation/bloc/question/question_bloc.dart';
 import '../../../settings/presentation/bloc/settings_bloc.dart';
-import '../../../settings/presentation/screens/settings_screen.dart';
 import '../bloc/cubit/screen_cubit.dart';
 
 class MainScreen extends StatelessWidget {
@@ -63,53 +61,49 @@ class MainScreen extends StatelessWidget {
               create: (context) =>
                   locator<DeliveryBloc>()..add(GetDeliveriesEvent())),
         ],
-        child: Scaffold(
-            resizeToAvoidBottomInset: false,
-            body: BlocBuilder<ScreenCubit, int>(
-              builder: (context, index) {
-                return Stack(
-                  children: [
-                    [HomeScreen(), SettingsScreen()][index],
-                    AnimatedRail(
-                      direction: Directionality.of(context),
-                      maxWidth: context.AppResponsiveValue(50,
-                          mobile: 45, tablet: 60, desktop: 100, large: 250),
-                      width: context.AppResponsiveValue(50,
-                          mobile: 45, tablet: 60, desktop: 100, large: 250),
-                      cursorSize: Size(
-                        context.AppResponsiveValue(60,
-                            mobile: 50, tablet: 80, desktop: 130, large: 140),
-                        context.AppResponsiveValue(60,
-                            mobile: 50, tablet: 80, desktop: 130, large: 140),
-                      ),
-                      expand: false,
-                      isStatic: false,
-                      onChange: (value) {
-                        context.read<ScreenCubit>().changeScreen(value);
-                      },
-                      background: Theme.of(context).textTheme.bodyLarge!.color,
-                      railTileConfig: RailTileConfig(
-                        iconSize: context.AppResponsiveValue(35,
-                            mobile: 30, tablet: 40, desktop: 60, large: 70),
-                        iconColor: Theme.of(context).scaffoldBackgroundColor,
-                        activeColor: Theme.of(context).colorScheme.secondary,
-                        hideCollapsedText: true,
-                      ),
-                      items: [
-                        RailItem(
-                          icon: Icon(Icons.home),
-                          label: "Home",
-                        ),
-                        RailItem(
-                          icon: Icon(Icons.message_outlined),
-                          label: 'Settings',
-                        ),
-                      ],
-                    ),
-                  ],
-                );
-              },
-            )),
+        child: BlocBuilder<ScreenCubit, int>(
+          builder: (context, index) {
+            return Scaffold(
+              resizeToAvoidBottomInset: false,
+              floatingActionButton: AnimatedFloatingActionButton(
+                fabButtons: <Widget>[
+                  FloatingActionButton(
+                      child: const Icon(Icons.home),
+                      onPressed: () {
+                        context.read<ScreenCubit>().changeScreen(0);
+                      }),
+                  FloatingActionButton(
+                      child: const Icon(Icons.receipt_long),
+                      onPressed: () {
+                        context.read<ScreenCubit>().changeScreen(1);
+                      }),
+                  FloatingActionButton(
+                      child: const Icon(Icons.money),
+                      onPressed: () {
+                        context.read<ScreenCubit>().changeScreen(2);
+                      }),
+                  FloatingActionButton(
+                      child: const Icon(Icons.timeline_rounded),
+                      onPressed: () {
+                        context.read<ScreenCubit>().changeScreen(3);
+                      }),
+                ],
+                animatedIconData: AnimatedIcons.menu_close,
+                colorStartAnimation: Theme.of(context).colorScheme.primary,
+                colorEndAnimation: Theme.of(context).colorScheme.secondary,
+              ),
+              body: IndexedStack(
+                index: index,
+                children: const [
+                  HomeScreen(),
+                  Center(child: Text('Search')),
+                  Center(child: Text('Search')),
+                  Center(child: Text('Search')),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
