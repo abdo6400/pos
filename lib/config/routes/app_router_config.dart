@@ -5,6 +5,7 @@ import '../../features/intro/presentation/screens/splash_screen.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../../features/main/presentation/screens/main_screen.dart';
+import '../../features/payment/presentation/screens/payment_screen.dart';
 import 'app_routes.dart';
 
 class AppRouterConfig {
@@ -59,6 +60,16 @@ class AppRouterConfig {
             context,
             state,
             child: MainScreen(),
+          );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.payment,
+        pageBuilder: (context, state) {
+          return _buildPageWithTransition(
+            context,
+            state,
+            child: PaymentScreen(),
           );
         },
       ),

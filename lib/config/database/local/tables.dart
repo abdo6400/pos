@@ -14,6 +14,10 @@ class Tables {
     await db.execute(createOfferTable);
     await db.execute(createLastUpdateTable);
     await db.execute(createOrderTable);
+    await db.execute(createPaymentTypeTable);
+    await db.execute(createInvoicesTable);
+    await db.execute(createInvoiceDtlTable);
+    await db.execute(createInvoicePaymentTable);
   }
 
   static String get createLastUpdateTable => '''
@@ -187,6 +191,80 @@ class Tables {
       ${TablesKeys.offerValueAr} TEXT,
       ${TablesKeys.offerValueEn} TEXT,
       FOREIGN KEY (${TablesKeys.offerProductId}) REFERENCES ${TablesKeys.productsTable}(${TablesKeys.proId})
+    )
+  ''';
+
+  static String get createPaymentTypeTable => '''
+    CREATE TABLE ${TablesKeys.paymentTypesTable}(
+      ${TablesKeys.ptype} INTEGER NOT NULL,
+      ${TablesKeys.paymentArDesc} TEXT NOT NULL,
+      ${TablesKeys.paymentEnDesc} TEXT NOT NULL,
+      ${TablesKeys.isActive} TEXT NOT NULL,
+      ${TablesKeys.cashMoney} TEXT NOT NULL,
+      ${TablesKeys.commissions} REAL NOT NULL,
+      ${TablesKeys.coupon} TEXT,
+      ${TablesKeys.isCredit} TEXT NOT NULL,
+      ${TablesKeys.companyId} INTEGER NOT NULL
+    )
+  ''';
+
+  static String get createInvoicesTable => '''
+    CREATE TABLE ${TablesKeys.paymentsTable}(
+      ${TablesKeys.invoiceNo} TEXT PRIMARY KEY,
+      ${TablesKeys.invoiceCashNo} INTEGER NOT NULL,
+      ${TablesKeys.invoiceSubTotal} INTEGER NOT NULL,
+      ${TablesKeys.invoiceDiscountTotal} INTEGER NOT NULL,
+      ${TablesKeys.invoiceServiceTotal} INTEGER NOT NULL,
+      ${TablesKeys.invoiceTaxTotal} INTEGER NOT NULL,
+      ${TablesKeys.invoiceGrandTotal} INTEGER NOT NULL,
+      ${TablesKeys.isPrinted} TEXT NOT NULL,
+      ${TablesKeys.customer} INTEGER NOT NULL,
+      ${TablesKeys.realTime} TEXT NOT NULL,
+      ${TablesKeys.tableNo} INTEGER NOT NULL,
+      ${TablesKeys.empTaker} INTEGER NOT NULL,
+      ${TablesKeys.takerName} TEXT NOT NULL,
+      ${TablesKeys.queue} INTEGER NOT NULL,
+      ${TablesKeys.cashPayment} INTEGER NOT NULL,
+      ${TablesKeys.warehouse} INTEGER NOT NULL,
+      ${TablesKeys.salesDate} TEXT NOT NULL,
+      ${TablesKeys.deliveryCompany} INTEGER NOT NULL,
+      ${TablesKeys.encryptionSeal} TEXT NOT NULL,
+      ${TablesKeys.guid} TEXT NOT NULL,
+      ${TablesKeys.qrcode} TEXT NOT NULL,
+      ${TablesKeys.stationId} TEXT NOT NULL
+    )
+  ''';
+
+  static String get createInvoiceDtlTable => '''
+    CREATE TABLE ${TablesKeys.invoiceDtlTable}(
+      ${TablesKeys.invoiceNo} TEXT NOT NULL,
+      ${TablesKeys.item} TEXT NOT NULL,
+      ${TablesKeys.qty} INTEGER NOT NULL,
+      ${TablesKeys.price} INTEGER NOT NULL,
+      ${TablesKeys.subtotal} INTEGER NOT NULL,
+      ${TablesKeys.discountV} INTEGER NOT NULL,
+      ${TablesKeys.discountP} INTEGER NOT NULL,
+      ${TablesKeys.taxP} INTEGER NOT NULL,
+      ${TablesKeys.taxV} INTEGER NOT NULL,
+      ${TablesKeys.grandTotal} INTEGER NOT NULL,
+      ${TablesKeys.taker} INTEGER NOT NULL,
+      ${TablesKeys.flavors} TEXT NOT NULL,
+      ${TablesKeys.warehouse} INTEGER NOT NULL,
+      ${TablesKeys.salesDate} TEXT NOT NULL,
+      ${TablesKeys.offerNo} INTEGER NOT NULL,
+      ${TablesKeys.lineId} INTEGER NOT NULL,
+      FOREIGN KEY (${TablesKeys.invoiceNo}) REFERENCES ${TablesKeys.paymentsTable}(${TablesKeys.invoiceNo}) ON DELETE CASCADE
+    )
+  ''';
+
+  static String get createInvoicePaymentTable => '''
+    CREATE TABLE ${TablesKeys.invoicePaymentTable}(
+      ${TablesKeys.invoiceId} TEXT NOT NULL,
+      ${TablesKeys.payType} INTEGER NOT NULL,
+      ${TablesKeys.payment} REAL NOT NULL,
+      ${TablesKeys.creditExpireDate} TEXT NOT NULL,
+      ${TablesKeys.warehouse} TEXT NOT NULL,
+      FOREIGN KEY (${TablesKeys.invoiceId}) REFERENCES ${TablesKeys.paymentsTable}(${TablesKeys.invoiceNo}) ON DELETE CASCADE
     )
   ''';
 }

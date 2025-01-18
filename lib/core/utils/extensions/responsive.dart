@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 extension Responsive on BuildContext {
+  double get width => MediaQuery.sizeOf(this).width;
+  double get height => MediaQuery.sizeOf(this).height;
+
   bool get isDesktop => ResponsiveBreakpoints.of(this).isDesktop;
   bool get isTablet => ResponsiveBreakpoints.of(this).isTablet;
   bool get isMobile => ResponsiveBreakpoints.of(this).isMobile;

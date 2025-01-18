@@ -146,10 +146,63 @@ class ApiKeys {
   static const String priceCategory = "PriceCategory";
 
   static const String lineId = "LineId";
-
   static const String companyDesc = "CompanyDesc";
-
   static const String discountValue = "DiscountValue";
   static const String branchId = "BranchId";
   static const String branche = "Branche";
+
+  static const String ptype = "Ptype";
+  static const String paymentArDesc = "PaymentArDesc";
+  static const String paymentEnDesc = "PaymentEnDesc";
+  static const String cashMoney = "CashMoney";
+  static const String commissions = "Commissions";
+  static const String coupon = "Coupon";
+  static const String isCredit = "IsCredit";
+
+  // InvoiceParams keys
+  static const String invoices = "invoices";
+  static const String invoiceDtl = "invoiceDtl";
+  static const String invoicePayment = "invoicePayment";
+
+  // InvoiceDtl keys
+  static const String invoiceNo = "InvoiceNo";
+  static const String item = "Item";
+  static const String subtotal = "Subtotal";
+  static const String discountV = "DiscountV";
+  static const String discountP = "DiscountP";
+  static const String taxP = "TaxP";
+  static const String taxV = "TaxV";
+  static const String grandTotal = "GrandTotal";
+  static const String taker = "Taker";
+  static const String flavors = "Flavors";
+  static const String salesDate = "SalesDate";
+  static const String offerNo = "OfferNo";
+  static const String lineID = "LineID";
+
+  // InvoicePayment keys
+  static const String invoiceId = "InvoiceId";
+  static const String payType = "PayType";
+  static const String payment = "Payment";
+  static const String creditExpireDate = "CreditExpireDate";
+
+  // Invoices keys
+  static const String invoiceCashNo = "InvoiceCashNo";
+  static const String invoiceSubTotal = "InvoiceSubTotal";
+  static const String invoiceDiscountTotal = "InvoiceDiscountTotal";
+  static const String invoiceServiceTotal = "InvoiceServiceTotal";
+  static const String invoiceTaxTotal = "InvoiceTaxTotal";
+  static const String invoiceGrandTotal = "InvoiceGrandTotal";
+  static const String isPrinted = "IsPrinted";
+  static const String customer = "Customer";
+  static const String realTime = "RealTime";
+  static const String tableNo = "TableNo";
+  static const String empTaker = "EmpTaker";
+  static const String takerName = "TakerName";
+  static const String queue = "Queue";
+  static const String cashPayment = "CashPayment";
+  static const String deliveryCompany = "DeliveryCompany";
+  static const String encryptionSeal = "EncryptionSeal";
+  static const String guid = "Guid";
+  static const String qrcode = "Qrcode";
+  static const String stationId = "StationId";
 }

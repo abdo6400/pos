@@ -38,27 +38,24 @@ class SqlfliteConsumer extends LocalConsumer {
     if (result.isNotEmpty) {
       return result.first[TablesKeys.lastUpdateColumn] as int?;
     }
-    return null; // Return null if no record exists
+    return null;
   }
 
   @override
   Future<void> refreshDataIfNeeded(
     String table,
     List<Map<String, dynamic>> newData, {
-    int intervalInHours = 24, // Refresh once per day (24 hours)
+    int intervalInHours = 24,
   }) async {
     await init();
     int? lastUpdateTime = await getLastUpdateTime(table);
     int currentTime = DateTime.now().millisecondsSinceEpoch;
-
-    // Calculate the time difference in hours
     bool needsRefresh = lastUpdateTime == null ||
         (currentTime - lastUpdateTime) > intervalInHours * 60 * 60 * 1000;
-
     if (needsRefresh) {
-      await _database!.delete(table); // Clear existing data
-      await insertMultiple(table, newData); // Insert new data
-      await setLastUpdateTime(table, currentTime); // Update last refresh time
+      await _database!.delete(table);
+      await insertMultiple(table, newData);
+      await setLastUpdateTime(table, currentTime);
       debugPrint('Data refreshed for table: $table');
     } else {
       debugPrint('No refresh needed for table: $table');
@@ -74,7 +71,7 @@ class SqlfliteConsumer extends LocalConsumer {
         TablesKeys.tableNameColumn: tableName,
         TablesKeys.lastUpdateColumn: timestamp,
       },
-      conflictAlgorithm: ConflictAlgorithm.replace, // Update if already exists
+      conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 

@@ -13,6 +13,8 @@ import '../../../menu/presentation/bloc/offer/offer_bloc.dart';
 import '../../../menu/presentation/bloc/order/order_bloc.dart';
 import '../../../menu/presentation/bloc/product/product_bloc.dart';
 import '../../../menu/presentation/bloc/question/question_bloc.dart';
+import '../../../payment/presentation/bloc/pay/pay_bloc.dart';
+import '../../../payment/presentation/bloc/payment_types/payment_types_bloc.dart';
 import '../../../settings/presentation/bloc/settings_bloc.dart';
 import '../bloc/cubit/screen_cubit.dart';
 
@@ -60,6 +62,10 @@ class MainScreen extends StatelessWidget {
           BlocProvider(
               create: (context) =>
                   locator<DeliveryBloc>()..add(GetDeliveriesEvent())),
+          BlocProvider(
+              create: (context) =>
+                  locator<PaymentTypesBloc>()..add(GetPaymentTypesEvent())),
+          BlocProvider(create: (_) => locator<PayBloc>())
         ],
         child: BlocBuilder<ScreenCubit, int>(
           builder: (context, index) {

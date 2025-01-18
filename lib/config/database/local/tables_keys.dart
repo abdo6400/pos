@@ -17,7 +17,11 @@ class TablesKeys {
   static const cartItemOfferTable =
       'cartItemOfferTable'; // Junction table for CartItem and Offer
   static const offersTable = 'offerTable'; // New table for Offer
-
+  static const String paymentTypesTable = 'paymentTypes';
+  static const String paymentsTable = 'paymentsTable';
+  static const String invoicesTable = 'invoices';
+  static const String invoiceDtlTable = 'invoiceDtlTable';
+  static const String invoicePaymentTable = 'invoicePaymentTable';
   // Column names for productsTable
   static const String barcode = "Barcode";
   static const String proArName = "Pro_AR_Name";
@@ -173,4 +177,28 @@ class TablesKeys {
   static const String ordersTable = "orderTable";
   static const String orderDate = "orderDate";
   static const String orderStatus = "orderStatus";
+
+  static const String cashMoney = "CashMoney";
+  static const String commissions = "Commissions";
+  static const String coupon = "Coupon";
+  static const String isCredit = "IsCredit";
+  static const String companyId = "CompanyId";
+
+  // InvoiceParams keys
+  static const String invoices = "invoices";
+  static const String invoiceDtl = "invoiceDtl";
+  static const String invoicePayment = "invoicePayment";
+
+  // InvoiceDtl keys
+  static const String subtotal = "Subtotal";
+  static const String taker = "Taker";
+  static const String lineID = "LineID";
+
+  // InvoicePayment keys
+  static const String invoiceId = "InvoiceId";
+
+  // Invoices keys
+  static const String takerName = "TakerName";
+  static const String encryptionSeal = "EncryptionSeal";
+  static const String guid = "Guid";
 }
