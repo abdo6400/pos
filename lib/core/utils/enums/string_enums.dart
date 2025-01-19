@@ -167,5 +167,6 @@ enum StringEnums {
   no_delivery,
   settings,
   logout,
-  pay_by
+  pay_by,
+  print
 }

@@ -4,10 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
 import 'package:retail/features/menu/presentation/bloc/cubit/delivery_selection_cubit.dart';
+import '../../../../config/routes/app_routes.dart';
 import '../../../../core/utils/enums/string_enums.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../payment/presentation/bloc/payment_types/payment_types_bloc.dart';
-import '../../../payment/presentation/screens/payment_screen.dart';
 import '../bloc/cubit/discount_selection_cubit.dart';
 import '../bloc/cubit/oder_selection_cubit.dart';
 import '../widgets/cart/amount.dart';
@@ -42,30 +42,29 @@ class CartScreen extends StatelessWidget {
                     mobile: 1, tablet: 10, desktop: 15),
                 children: [
                   Amount(),
-                  Column(
-                    spacing: context.AppResponsiveValue(5,
-                        mobile: 5, tablet: 10, desktop: 10),
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      CustomButton(
-                        buttonLabel: StringEnums.checkoutCash.name.tr(),
-                        iconData: Icons.money_outlined,
-                        onSubmit: () {},
-                        backgroundColor: Colors.green,
-                      ),
-                      CustomButton(
-                        buttonLabel: StringEnums.pay_by.name.tr(),
-                        iconData: Icons.payment_outlined,
-                        onSubmit: () => showGeneralDialog(
-                          context: context,
-                          pageBuilder: (_, __, ___) => BlocProvider.value(
-                            value: context.read<PaymentTypesBloc>(),
-                            child: PaymentScreen(),
-                          ),
+                  BlocBuilder<PaymentTypesBloc, PaymentTypesState>(
+                    builder: (context, state) => Column(
+                      spacing: context.AppResponsiveValue(5,
+                          mobile: 5, tablet: 10, desktop: 10),
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        CustomButton(
+                          buttonLabel: StringEnums.checkoutCash.name.tr(),
+                          iconData: Icons.money_outlined,
+                          onSubmit: () {},
+                          backgroundColor: Colors.green,
                         ),
-                        backgroundColor: Colors.blue,
-                      ),
-                    ],
+                        CustomButton(
+                          buttonLabel: StringEnums.pay_by.name.tr(),
+                          iconData: Icons.payment_outlined,
+                          onSubmit: state is PaymentTypesSuccess
+                              ? () => context.push(AppRoutes.payment,
+                                  extra: state.paymentTypes)
+                              : () {},
+                          backgroundColor: Colors.blue,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
