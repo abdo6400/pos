@@ -1,45 +1,53 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
 import 'package:retail/core/widgets/custom_button.dart';
+import '../../../../core/entities/field.dart';
+import '../../../../core/entities/form.dart';
 import '../../../../core/utils/enums/string_enums.dart';
+import '../../../../core/widgets/global_form_builder/custom_form_builder.dart';
 import '../../domain/entities/payment_type.dart';
 
 class PaymentScreen extends StatelessWidget {
   const PaymentScreen({super.key});
-
+  static GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
   @override
   Widget build(BuildContext context) {
     final List<PaymentType> paymentTypes =
         ModalRoute.of(context)!.settings.arguments as List<PaymentType>;
     return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        leading: Icon(
-          Icons.payment_outlined,
-          size: context.AppResponsiveValue(25,
-              mobile: 25, tablet: 35, desktop: 40),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "  ${DateTime.now().minute} :${DateTime.now().hour}  - ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}",
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    fontSize: context.AppResponsiveValue(16,
-                        mobile: 12, tablet: 24, desktop: 30),
-                  ),
-            ),
-          ),
-        ],
-        title: Text(
-          StringEnums.pay_by.name.tr(),
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                fontSize: context.AppResponsiveValue(16,
-                    mobile: 12, tablet: 24, desktop: 30),
+      appBar: context.isMobile
+          ? null
+          : AppBar(
+              leading: Icon(
+                Icons.payment_outlined,
+                size: context.AppResponsiveValue(25,
+                    mobile: 25, tablet: 35, desktop: 40),
               ),
-        ),
-      ),
+              actions: [
+                SizedBox(
+                  width: 25,
+                ),
+                Text(
+                  "  ${DateTime.now().minute} :${DateTime.now().hour}  - ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}",
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        fontSize: context.AppResponsiveValue(16,
+                            mobile: 12, tablet: 24, desktop: 30),
+                      ),
+                ),
+                SizedBox(
+                  width: 25,
+                ),
+              ],
+              title: Text(
+                StringEnums.pay_by.name.tr(),
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      fontSize: context.AppResponsiveValue(16,
+                          mobile: 12, tablet: 24, desktop: 30),
+                    ),
+              ),
+            ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(5),
         child: Row(
@@ -70,64 +78,56 @@ class PaymentScreen extends StatelessWidget {
           ],
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(5),
-              child: Row(
-                spacing: 10,
-                children: [
-                  Flexible(
+      body: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Card(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
                       spacing: 5,
                       children: [
-                        Column(
-                          children: [
-                            _buildAmountRow(context,
-                                StringEnums.totalAmount.name.tr(), '100 JOD'),
-                            _buildAmountRow(context,
-                                StringEnums.discountAmount.name.tr(), '10 JOD'),
-                          ],
-                        ),
-                        Wrap(
-                            alignment: WrapAlignment.spaceAround,
-                            spacing: 2,
-                            runSpacing: 2,
-                            children: List.generate(
-                              paymentTypes.length,
-                              (index) => Card(
-                                  child: TextField(
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  hintText: context.trValue(
-                                    paymentTypes[index].paymentArDesc,
-                                    paymentTypes[index].paymentEnDesc,
-                                  ),
-                                  hintStyle: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .copyWith(
-                                        fontSize: context.AppResponsiveValue(12,
-                                            mobile: 10,
-                                            tablet: 20,
-                                            desktop: 24),
-                                      ),
-                                ),
-                              )),
-                            )),
+                        _buildAmountRow(context,
+                            StringEnums.totalAmount.name.tr(), '100 JOD'),
+                        _buildAmountRow(context,
+                            StringEnums.discountAmount.name.tr(), '10 JOD'),
+                        _buildAmountRow(context,
+                            StringEnums.returned_amount.name.tr(), '10 JOD'),
                       ],
                     ),
                   ),
-                  Flexible(child: NumericKeypadInput()),
-                ],
-              ),
+                ),
+                Divider(),
+                Row(
+                  spacing: 10,
+                  children: [
+                    Flexible(
+                        flex: 3,
+                        child: CustomFormBuilder(FormParams(
+                            formKey: _formKey,
+                            fields: paymentTypes
+                                .map((e) => FieldParams(
+                                      label: context.trValue(
+                                          e.paymentArDesc, e.paymentEnDesc),
+                                      validators: [],
+                                      icon: Icons.payment_outlined,
+                                    ))
+                                .toList()))),
+                    VerticalDivider(),
+                    Flexible(
+                      flex: 2,
+                      child: NumericKeypadInput(),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -139,7 +139,7 @@ class PaymentScreen extends StatelessWidget {
         Text(
           label.tr(),
           style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                fontSize: context.AppResponsiveValue(16,
+                fontSize: context.AppResponsiveValue(14,
                     mobile: 14, tablet: 20, desktop: 24),
               ),
         ),
@@ -147,7 +147,7 @@ class PaymentScreen extends StatelessWidget {
         Text(
           amount,
           style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                fontSize: context.AppResponsiveValue(16,
+                fontSize: context.AppResponsiveValue(14,
                     mobile: 14, tablet: 20, desktop: 24),
               ),
         ),
@@ -168,7 +168,7 @@ class _NumericKeypadInputState extends State<NumericKeypadInput> {
 
   void _onKeyPressed(String value) {
     setState(() {
-      if (value == 'C') {
+      if (value == 'X') {
         _inputValue = '';
       } else if (value == '.') {
         if (!_inputValue.contains('.')) {
@@ -185,7 +185,7 @@ class _NumericKeypadInputState extends State<NumericKeypadInput> {
     return GridView.count(
       shrinkWrap: true,
       crossAxisCount: 3,
-      childAspectRatio: 2,
+      childAspectRatio: 2.5,
       mainAxisSpacing: 5,
       crossAxisSpacing: 5,
       children: [
@@ -200,22 +200,40 @@ class _NumericKeypadInputState extends State<NumericKeypadInput> {
         '9',
         '.',
         '0',
-        'C',
+        'X',
+        '10',
+        '50',
+        '100',
+        '150',
+        '200',
+        '250',
       ].map((key) {
         return InkWell(
           onTap: () => _onKeyPressed(key),
-          child: Container(
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              // color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Text(
-              key,
-              style: TextStyle(
+          child: Card(
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(2),
+                color: key == 'X'
+                    ? Colors.red
+                    : (key == '10' ||
+                            key == '50' ||
+                            key == '100' ||
+                            key == '150' ||
+                            key == '200' ||
+                            key == '250'
+                        ? Theme.of(context).primaryColor
+                        : null),
+              ),
+              child: Text(
+                key,
+                style: TextStyle(
                   fontSize: context.AppResponsiveValue(12,
-                      mobile: 8, tablet: 16, desktop: 22),
-                  fontWeight: FontWeight.bold),
+                      mobile: 8, tablet: 24, desktop: 30),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ),
         );

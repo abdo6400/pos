@@ -239,5 +239,7 @@
   "no_delivery": "No delivery",
   "settings": "Settings",
   "logout": "Logout",
-  "pay_by": "Pay By"
+  "pay_by": "Pay By",
+  "print": "Print",
+  "returned_amount": "Returned Amount"
 }
