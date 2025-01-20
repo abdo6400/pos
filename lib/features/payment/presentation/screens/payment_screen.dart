@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
 import 'package:retail/core/widgets/custom_button.dart';
 import '../../../../core/entities/field.dart';
@@ -16,115 +17,140 @@ class PaymentScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<PaymentType> paymentTypes =
         ModalRoute.of(context)!.settings.arguments as List<PaymentType>;
-    return Scaffold(
-      appBar: context.isMobile
-          ? null
-          : AppBar(
-              leading: Icon(
-                Icons.payment_outlined,
-                size: context.AppResponsiveValue(25,
-                    mobile: 25, tablet: 35, desktop: 40),
-              ),
-              actions: [
-                SizedBox(
-                  width: 25,
+    return Padding(
+      padding: EdgeInsets.symmetric(
+          horizontal:
+              context.AppResponsiveValue(1, mobile: 1, tablet: 20, desktop: 30),
+          vertical: context.AppResponsiveValue(1,
+              mobile: 1, tablet: 20, desktop: 30)),
+      child: Scaffold(
+        appBar: context.isMobile
+            ? null
+            : AppBar(
+                leading: Icon(
+                  Icons.payment_outlined,
+                  size: context.AppResponsiveValue(25,
+                      mobile: 25, tablet: 35, desktop: 40),
                 ),
-                Text(
-                  "  ${DateTime.now().minute} :${DateTime.now().hour}  - ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}",
+                actions: [
+                  SizedBox(
+                    width: 25,
+                  ),
+                  Text(
+                    "  ${DateTime.now().minute} :${DateTime.now().hour}  - ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}",
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          fontSize: context.AppResponsiveValue(16,
+                              mobile: 12, tablet: 24, desktop: 30),
+                        ),
+                  ),
+                  SizedBox(
+                    width: 25,
+                  ),
+                ],
+                title: Text(
+                  StringEnums.pay_by.name.tr(),
                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         fontSize: context.AppResponsiveValue(16,
                             mobile: 12, tablet: 24, desktop: 30),
                       ),
                 ),
-                SizedBox(
-                  width: 25,
+              ),
+        bottomNavigationBar: Padding(
+          padding: EdgeInsets.all(
+            context.AppResponsiveValue(5, mobile: 1, tablet: 30, desktop: 40),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: CustomButton(
+                  backgroundColor: Colors.red,
+                  buttonLabel: StringEnums.close.name,
+                  onSubmit: () => Navigator.pop(context),
                 ),
-              ],
-              title: Text(
-                StringEnums.pay_by.name.tr(),
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      fontSize: context.AppResponsiveValue(16,
-                          mobile: 12, tablet: 24, desktop: 30),
-                    ),
               ),
-            ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(5),
-        child: Row(
-          children: [
-            Expanded(
-              child: CustomButton(
-                backgroundColor: Colors.red,
-                buttonLabel: StringEnums.close.name,
-                onSubmit: () => Navigator.pop(context),
+              const SizedBox(width: 10),
+              Expanded(
+                child: CustomButton(
+                  backgroundColor: Colors.green,
+                  buttonLabel: StringEnums.save.name,
+                  onSubmit: () {
+                    if (_formKey.currentState!.saveAndValidate()) {
+                      _formKey.currentState!.fields.forEach((key, value) {
+                        print('$key: ${value.value}');
+                      });
+                    }
+                  },
+                ),
               ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: CustomButton(
-                backgroundColor: Colors.green,
-                buttonLabel: StringEnums.save.name,
-                onSubmit: () {},
+              const SizedBox(width: 10),
+              Expanded(
+                child: CustomButton(
+                  backgroundColor: Colors.blue,
+                  buttonLabel: StringEnums.print.name,
+                  onSubmit: () => Navigator.pop(context),
+                ),
               ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: CustomButton(
-                backgroundColor: Colors.blue,
-                buttonLabel: StringEnums.print.name,
-                onSubmit: () => Navigator.pop(context),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Card(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    child: Column(
-                      spacing: 5,
-                      children: [
-                        _buildAmountRow(context,
-                            StringEnums.totalAmount.name.tr(), '100 JOD'),
-                        _buildAmountRow(context,
-                            StringEnums.discountAmount.name.tr(), '10 JOD'),
-                        _buildAmountRow(context,
-                            StringEnums.returned_amount.name.tr(), '10 JOD'),
-                      ],
+        body: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Card(
+                    child: Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      child: Column(
+                        spacing: 5,
+                        children: [
+                          _buildAmountRow(context,
+                              StringEnums.totalAmount.name.tr(), '100 JOD'),
+                          _buildAmountRow(context,
+                              StringEnums.discountAmount.name.tr(), '10 JOD'),
+                          _buildAmountRow(context,
+                              StringEnums.returned_amount.name.tr(), '10 JOD'),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                Divider(),
-                Row(
-                  spacing: 10,
-                  children: [
-                    Flexible(
-                        flex: 3,
-                        child: CustomFormBuilder(FormParams(
-                            formKey: _formKey,
-                            fields: paymentTypes
-                                .map((e) => FieldParams(
-                                      label: context.trValue(
-                                          e.paymentArDesc, e.paymentEnDesc),
-                                      validators: [],
-                                      icon: Icons.payment_outlined,
-                                    ))
-                                .toList()))),
-                    VerticalDivider(),
-                    Flexible(
-                      flex: 2,
-                      child: NumericKeypadInput(),
-                    ),
-                  ],
-                ),
-              ],
+                  Divider(),
+                  Row(
+                    spacing: 10,
+                    children: [
+                      Flexible(
+                          flex: 3,
+                          child: CustomFormBuilder(FormParams(
+                              formKey: _formKey,
+                              fields: paymentTypes
+                                  .map((e) => FieldParams(
+                                        //initialValue: '0',
+                                        label: context.trValue(
+                                            e.paymentArDesc, e.paymentEnDesc),
+                                        validators: [
+                                          if (!e.paymentEnDesc
+                                              .toUpperCase()
+                                              .contains('Cash'.toUpperCase()))
+                                            FormBuilderValidators.range(0, 300,
+                                                checkNullOrEmpty: false),
+                                          FormBuilderValidators.positiveNumber(
+                                              checkNullOrEmpty: false)
+                                        ],
+                                        icon: Icons.payment_outlined,
+                                      ))
+                                  .toList()))),
+                      VerticalDivider(),
+                      Flexible(
+                        flex: 2,
+                        child: NumericKeypadInput(),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
