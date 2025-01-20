@@ -7,9 +7,11 @@ import '../../entities/field.dart';
 
 class CustomFormBuilderTextField extends StatelessWidget {
   final FieldParams fieldModel;
+  final Function(String)? onFocus;
   const CustomFormBuilderTextField({
     super.key,
     required this.fieldModel,
+    required this.onFocus,
   });
   static bool obscureText = true;
   @override
@@ -27,7 +29,7 @@ class CustomFormBuilderTextField extends StatelessWidget {
       child: StatefulBuilder(
         builder: (BuildContext context, setState) {
           return FormBuilderTextField(
-            // onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
+            onTap: onFocus != null ? () => onFocus!(fieldModel.label) : null,
             name: fieldModel.label,
             obscureText: fieldModel.isPassword ? obscureText : false,
             maxLines: fieldModel.isPassword ? 1 : fieldModel.maxLines,

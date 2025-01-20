@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 class FieldParams {
   String label;
   String? hint;
-  String?initialValue;
+  String? initialValue;
   int? maxLines;
   IconData icon;
   List<String? Function(String?)> validators;
+
   bool isPassword = false;
   FieldParams({
     required this.label,

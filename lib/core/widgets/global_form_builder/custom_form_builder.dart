@@ -16,6 +16,7 @@ class CustomFormBuilder extends StatelessWidget {
               .map(
                 (e) => (CustomFormBuilderTextField(
                   fieldModel: e,
+                  onFocus: formModel.onFocus,
                 )),
               )
               .toList()),
