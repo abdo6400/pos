@@ -5,6 +5,9 @@ import 'package:dartz/dartz.dart';
 import '../../../../config/database/api/api_keys.dart';
 import '../../../../config/database/error/failures.dart';
 import '../../../../core/usecases/use_case.dart';
+import '../entities/cash.dart';
+import '../entities/invoice_id.dart';
+import '../entities/sale_date.dart';
 import '../repositories/payment_repository.dart';
 
 class PayUsecase extends UseCase<Either<Failure, void>, InvoiceParams> {
@@ -14,9 +17,12 @@ class PayUsecase extends UseCase<Either<Failure, void>, InvoiceParams> {
   @override
   Future<Either<Failure, void>> call(params) async {
     return _paymentRepository.pay(params.toJson(
-        invoiceNo: (await _paymentRepository.getLastInvoiceId(params.branchId))
-            .fold((l) => "0", (r) => r)
-            .toString()));
+        saleDate: (await _paymentRepository.getSaleDate(params.branchId))
+            .fold((l) => null, (r) => r),
+        cash: (await _paymentRepository.getCash(params.invoices.empTaker))
+            .fold((l) => null, (r) => r),
+        invoiceId: (await _paymentRepository.getLastInvoiceId(params.branchId))
+            .fold((l) => null, (r) => r)));
   }
 }
 
@@ -33,14 +39,22 @@ class InvoiceParams {
     required this.invoicePayment,
   });
 
-  Map<String, dynamic> toJson({String invoiceNo = "0"}) {
+  Map<String, dynamic> toJson(
+      {InvoiceId? invoiceId, Cash? cash, SaleDate? saleDate}) {
     return {
-      ApiKeys.invoices: invoices.toJson(invoiceNo),
+      ApiKeys.invoices: invoices.toJson(
+          invoiceId?.invoiceNo ?? "0",
+          invoiceId?.queue ?? 0,
+          cash?.cashNo ?? 0,
+          saleDate?.lineDate.toUtc().toIso8601String() ?? "0"),
       ApiKeys.invoiceDtl: List<dynamic>.from(
-        invoiceDtl.map((x) => x.toJson(invoiceNo)),
+        invoiceDtl.map((x) => x.toJson(
+            invoiceId?.invoiceNo ?? "0",
+            saleDate?.lineDate.toUtc().toIso8601String() ?? "0",
+            saleDate?.id ?? 0)),
       ),
       ApiKeys.invoicePayment: List<dynamic>.from(
-        invoicePayment.map((x) => x.toJson(invoiceNo)),
+        invoicePayment.map((x) => x.toJson(invoiceId?.invoiceNo ?? "0")),
       ),
     };
   }
@@ -49,19 +63,17 @@ class InvoiceParams {
 class InvoiceDtl {
   final String item;
   final int qty;
-  final int price;
-  final int subtotal;
-  final int discountV;
-  final int discountP;
-  final int taxP;
-  final int taxV;
-  final int grandTotal;
+  final double price;
+  final double subtotal;
+  final double discountV;
+  final double discountP;
+  final double taxP;
+  final double taxV;
+  final double grandTotal;
   final int taker;
   final String flavors;
   final int warehouse;
-  final DateTime salesDate;
   final int offerNo;
-  final int lineId;
 
   InvoiceDtl({
     required this.item,
@@ -76,12 +88,10 @@ class InvoiceDtl {
     required this.taker,
     required this.flavors,
     required this.warehouse,
-    required this.salesDate,
     required this.offerNo,
-    required this.lineId,
   });
 
-  Map<String, dynamic> toJson(String invoiceNo) {
+  Map<String, dynamic> toJson(String invoiceNo, String saleDate, int lineId) {
     return {
       ApiKeys.invoiceNo: invoiceNo,
       ApiKeys.item: item,
@@ -96,7 +106,7 @@ class InvoiceDtl {
       ApiKeys.taker: taker,
       ApiKeys.flavors: flavors,
       ApiKeys.warehouse: warehouse,
-      ApiKeys.salesDate: salesDate.toIso8601String(),
+      ApiKeys.salesDate: saleDate,
       ApiKeys.offerNo: offerNo,
       ApiKeys.lineId: lineId,
     };
@@ -107,7 +117,7 @@ class InvoicePayment {
   final int payType;
   final double payment;
   final DateTime creditExpireDate;
-  final String warehouse;
+  final int warehouse;
 
   InvoicePayment({
     required this.payType,
@@ -128,30 +138,24 @@ class InvoicePayment {
 }
 
 class Invoices {
-  final int invoiceCashNo;
-  final int invoiceSubTotal;
-  final int invoiceDiscountTotal;
-  final int invoiceServiceTotal;
-  final int invoiceTaxTotal;
-  final int invoiceGrandTotal;
+  final double invoiceSubTotal;
+  final double invoiceDiscountTotal;
+  final double invoiceServiceTotal;
+  final double invoiceTaxTotal;
+  final double invoiceGrandTotal;
   final bool isPrinted;
   final int customer;
   final DateTime realTime;
   final int tableNo;
   final int empTaker;
   final String takerName;
-  final int queue;
-  final int cashPayment;
+  final double cashPayment;
   final int warehouse;
-  final DateTime salesDate;
   final int deliveryCompany;
-  final String encryptionSeal;
-  final String guid;
   final String qrcode;
   final String stationId;
 
   Invoices({
-    required this.invoiceCashNo,
     required this.invoiceSubTotal,
     required this.invoiceDiscountTotal,
     required this.invoiceServiceTotal,
@@ -163,21 +167,18 @@ class Invoices {
     required this.tableNo,
     required this.empTaker,
     required this.takerName,
-    required this.queue,
     required this.cashPayment,
     required this.warehouse,
-    required this.salesDate,
     required this.deliveryCompany,
-    required this.encryptionSeal,
-    required this.guid,
     required this.qrcode,
     required this.stationId,
   });
 
-  Map<String, dynamic> toJson(String invoiceNo) {
+  Map<String, dynamic> toJson(
+      String invoiceNo, int queue, double cashNo, String saleDate) {
     return {
       ApiKeys.invoiceNo: invoiceNo,
-      ApiKeys.invoiceCashNo: invoiceCashNo,
+      ApiKeys.invoiceCashNo: cashNo,
       ApiKeys.invoiceSubTotal: invoiceSubTotal,
       ApiKeys.invoiceDiscountTotal: invoiceDiscountTotal,
       ApiKeys.invoiceServiceTotal: invoiceServiceTotal,
@@ -192,10 +193,8 @@ class Invoices {
       ApiKeys.queue: queue,
       ApiKeys.cashPayment: cashPayment,
       ApiKeys.warehouse: warehouse,
-      ApiKeys.salesDate: salesDate.toIso8601String(),
+      ApiKeys.salesDate: saleDate,
       ApiKeys.deliveryCompany: deliveryCompany,
-      ApiKeys.encryptionSeal: encryptionSeal,
-      ApiKeys.guid: guid,
       ApiKeys.qrcode: qrcode,
       ApiKeys.stationId: stationId,
     };

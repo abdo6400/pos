@@ -1,10 +1,13 @@
 import 'package:dartz/dartz.dart';
 
 import 'package:retail/config/database/error/failures.dart';
+import 'package:retail/features/payment/domain/entities/cash.dart';
 
 import 'package:retail/features/payment/domain/entities/payment_type.dart';
+import 'package:retail/features/payment/domain/entities/sale_date.dart';
 
 import '../../../../config/database/network/netwok_info.dart';
+import '../../domain/entities/invoice_id.dart';
 import '../../domain/repositories/payment_repository.dart';
 import '../datasources/payment_local_data_source.dart';
 import '../datasources/payment_remote_data_source.dart';
@@ -38,10 +41,30 @@ class PaymentRepositoryImpl extends PaymentRepository {
   }
 
   @override
-  Future<Either<Failure, String>> getLastInvoiceId(int branchId) async {
+  Future<Either<Failure, InvoiceId>> getLastInvoiceId(int branchId) async {
     try {
       final response =
           await _paymentRemoteDataSource.getLastInvoiceId(branchId);
+      return Right(response);
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Cash>> getCash(int userNo) async {
+    try {
+      final response = await _paymentRemoteDataSource.getCash(userNo);
+      return Right(response);
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, SaleDate>> getSaleDate(int branchId) async {
+    try {
+      final response = await _paymentRemoteDataSource.getSaleDate(branchId);
       return Right(response);
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));

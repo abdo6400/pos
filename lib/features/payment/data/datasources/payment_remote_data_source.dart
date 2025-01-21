@@ -1,12 +1,17 @@
 import '../../../../config/database/api/api_consumer.dart';
 import '../../../../config/database/api/api_keys.dart';
 import '../../../../config/database/api/end_points.dart';
+import '../models/cash_model.dart';
+import '../models/invoice_id_model.dart';
 import '../models/payment_type_model.dart';
+import '../models/sale_date_model.dart';
 
 abstract class PaymentRemoteDataSource {
   Future<List<PaymentTypeModel>> getPaymentTypes();
   Future<void> pay(Map<String, dynamic> data);
-  Future<String> getLastInvoiceId(int branchId);
+  Future<InvoiceIdModel> getLastInvoiceId(int branchId);
+  Future<CashModel> getCash(int userNo);
+  Future<SaleDateModel> getSaleDate(int branchId);
 }
 
 class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
@@ -23,14 +28,30 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
 
   @override
   Future<void> pay(Map<String, dynamic> data) async {
-    return await _apiConsumer.post(EndPoints.insertInvoice,
-        body: data, formDataIsEnabled: false);
+    print(data);
+    return;
+    // return await _apiConsumer.post(EndPoints.insertInvoice,
+    //     body: data, formDataIsEnabled: false);
   }
 
   @override
-  Future<String> getLastInvoiceId(int branchId) async {
-    return (await _apiConsumer.get(EndPoints.getLastInvoiceNo,
-            queryParameters: {ApiKeys.warehouse: branchId}))[EndPoints.response]
-        [ApiKeys.invoiceNo];
+  Future<InvoiceIdModel> getLastInvoiceId(int branchId) async {
+    final result = await _apiConsumer.get(EndPoints.getLastInvoiceNo,
+        queryParameters: {ApiKeys.warehouse: branchId});
+    return InvoiceIdModel.fromJson(result[EndPoints.response]);
+  }
+
+  @override
+  Future<CashModel> getCash(int userNo) async {
+    final result = await _apiConsumer.get(EndPoints.getSalesByUser,
+        queryParameters: {ApiKeys.userNo: userNo});
+    return CashModel.fromJson(result[EndPoints.response]);
+  }
+
+  @override
+  Future<SaleDateModel> getSaleDate(int branchId) async {
+    final result = await _apiConsumer.get(EndPoints.getSalesByWarehouse,
+        queryParameters: {ApiKeys.warehouse: branchId});
+    return SaleDateModel.fromJson(result[EndPoints.response]);
   }
 }

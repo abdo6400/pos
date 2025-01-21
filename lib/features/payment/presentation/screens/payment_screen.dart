@@ -20,8 +20,12 @@ class PaymentScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<PaymentType> paymentTypes =
         ModalRoute.of(context)!.settings.arguments as List<PaymentType>;
-    return BlocProvider(
-      create: (context) => PaymentTypeSelectionCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => PaymentTypeSelectionCubit(),
+        )
+      ],
       child: Padding(
         padding: EdgeInsets.symmetric(
           horizontal:
@@ -235,6 +239,7 @@ class NumericKeypadInput extends StatelessWidget {
       if (newValue.isNotEmpty) {
         newValue = newValue.substring(0, newValue.length - 1);
       }
+    } else if (value == 'exact') {
     } else if (value == 'C') {
       // Handle clear (delete all text)
       newValue = '';
@@ -243,14 +248,10 @@ class NumericKeypadInput extends StatelessWidget {
       if (!newValue.contains('.')) {
         newValue += value;
       }
-    } else if (value == '10' ||
+    } else if (value == '20' ||
         value == '50' ||
         value == '100' ||
-        value == '150' ||
-        value == '200' ||
-        value == '250' ||
-        value == '300' ||
-        value == '350') {
+        value == '200') {
       // Handle predefined amounts
       newValue = value;
     } else {
@@ -285,15 +286,12 @@ class NumericKeypadInput extends StatelessWidget {
         '.',
         '0',
         'X',
-        '10',
+        '20',
         '50',
         'C',
         '100',
-        '150',
         '200',
-        '250',
-        '300',
-        '350'
+        'exact'
       ].map((key) {
         return InkWell(
           onTap: () => _onKeyPressed(key, context),
@@ -301,24 +299,21 @@ class NumericKeypadInput extends StatelessWidget {
             child: Container(
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(2),
-                color: key == 'X'
-                    ? Colors.red
-                    : (key == 'C'
-                        ? Colors.blue // Color for the "C" button
-                        : (key == '10' ||
-                                key == '50' ||
-                                key == '100' ||
-                                key == '150' ||
-                                key == '200' ||
-                                key == '250' ||
-                                key == '300' ||
-                                key == '350'
-                            ? Theme.of(context).primaryColor
-                            : null)),
-              ),
+                  borderRadius: BorderRadius.circular(2),
+                  color: (key == 'X')
+                      ? Colors.red
+                      : (key == 'C')
+                          ? Colors.blue
+                          : (key == '20' ||
+                                  key == '50' ||
+                                  key == '100' ||
+                                  key == '200')
+                              ? Theme.of(context).primaryColor
+                              : (key == 'exact')
+                                  ? Colors.green
+                                  : null),
               child: Text(
-                key,
+                key.trExists() ? key.tr() : key,
                 style: TextStyle(
                   fontSize: context.AppResponsiveValue(12,
                       mobile: 8, tablet: 24, desktop: 30),

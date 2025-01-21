@@ -241,5 +241,6 @@
   "logout": "Logout",
   "pay_by": "Pay By",
   "print": "Print",
-  "returned_amount": "Returned Amount"
+  "returned_amount": "Returned Amount",
+  "exact": "Exact"
 }

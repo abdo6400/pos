@@ -169,5 +169,6 @@ enum StringEnums {
   logout,
   pay_by,
   print,
-  returned_amount
+  returned_amount,
+  exact
 }

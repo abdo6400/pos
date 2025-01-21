@@ -205,4 +205,36 @@ class ApiKeys {
   static const String guid = "Guid";
   static const String qrcode = "Qrcode";
   static const String stationId = "StationId";
+
+  static const String cashNo = "CashNo";
+  static const String cashUser = "CashUser";
+  static const String cashStartDate = "CashStartDate";
+  static const String cashCustody = "CashCustody";
+  static const String cashWithDrawals = "CashWithDrawals";
+  static const String cashSubTotal = "CashSubTotal";
+  static const String cashDiscountTotal = "CashDiscountTotal";
+  static const String cashTaxTotal = "CashTaxTotal";
+  static const String cashGrandTotal = "CashGrandTotal";
+  static const String cashStation = "CashStation";
+  static const String cashStatus = "CashStatus";
+  static const String cashRealTime = "CashRealTime";
+  static const String requiredCash = "RequiredCash";
+  static const String availableCash = "AvailableCash";
+  static const String cashRealEndTime = "CashRealEndTime";
+  static const String cashCustomerPayment = "CashCustomerPayment";
+  static const String voidAfter = "VoidAfter";
+  static const String voidBefore = "VoidBefore";
+  static const String illegalOpenCashDrawer = "IllegalOpenCashDrawer";
+
+  static const String lineDate = "LineDate";
+  static const String openTime = "OpenTime";
+  static const String closeTime = "CloseTime";
+  static const String closed = "Closed";
+  static const String id = "Id";
+  static const String weatherCond = "WeatherCond";
+  static const String processed = "Processed";
+  static const String rowId = "RowId";
+  static const String rowguid = "Rowguid";
+  static const String wareHouse = "WareHouse";
+  static const String transfer = "Transfer";
 }
