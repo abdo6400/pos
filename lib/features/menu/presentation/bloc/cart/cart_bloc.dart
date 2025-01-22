@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import '../../../../payment/domain/entities/payment_type.dart';
 import '../../../../payment/domain/usecases/pay_usecase.dart';
 import '../../../domain/entities/offer.dart';
 import '../../../domain/entities/product.dart';

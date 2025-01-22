@@ -38,6 +38,34 @@ class Amount extends StatelessWidget {
     );
   }
 
+  void pay(BuildContext context,
+      {required CartState cart,
+      required Map<int, double> payments,
+      required double taxPercentage,
+      required bool priceIncludesTax,
+      required bool taxIncludesDiscount,
+      required Discount? discount,
+      required DeliveryWithDiscount? delivery}) async {
+    final user = await storage.getUser();
+    if (user != null && cart.cart.isNotEmpty) {
+      context.read<PayBloc>().add(Pay(
+              invoiceParams: cart.createInvoice(
+            payments: payments,
+            branchId: int.parse(user.defaultBranch),
+            userNo: user.userNo,
+            isPrinted: false,
+            taxPercentage: taxPercentage,
+            priceIncludesTax: priceIncludesTax,
+            taxIncludesDiscount: taxIncludesDiscount,
+            discount: discount?.discountPercentage ?? 0.0,
+            deliveryCategory: delivery?.deliveryPriceCategory ?? 1,
+            deliveryDiscount: delivery?.deliveryPriceDiscount ?? 0.0,
+          )));
+    } else {
+      context.showMessageToast(msg: StringEnums.empty_cart.name.tr());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SettingsBloc, SettingsState>(
@@ -60,7 +88,7 @@ class Amount extends StatelessWidget {
               child: BlocConsumer<CartBloc, CartState>(
                 listener: (context, state) {},
                 builder: (context, cart) {
-                  final data = cart.calculateTotalPrice(
+                  final receipt = cart.calculateTotalPrice(
                     taxPercentage: taxPercentage,
                     priceIncludesTax: priceIncludesTax,
                     taxIncludesDiscount: taxIncludesDiscount,
@@ -82,17 +110,17 @@ class Amount extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               _customListTile(StringEnums.subTotalAmount.name,
-                                  data.price.toStringAsFixed(3), context),
+                                  receipt.price.toStringAsFixed(3), context),
                               _customListTile(StringEnums.taxAmount.name,
-                                  data.tax.toStringAsFixed(3), context),
+                                  receipt.tax.toStringAsFixed(3), context),
                               _customListTile(StringEnums.discountAmount.name,
-                                  data.discount.toStringAsFixed(3), context),
+                                  receipt.discount.toStringAsFixed(3), context),
                               Divider(
                                 color: Theme.of(context).primaryColor,
                               ),
                               _customListTile(
                                   StringEnums.totalAmount.name,
-                                  ((data.grandTotal)).toStringAsFixed(3),
+                                  ((receipt.grandTotal)).toStringAsFixed(3),
                                   context),
                             ],
                           ),
@@ -110,39 +138,23 @@ class Amount extends StatelessWidget {
                                     buttonLabel:
                                         StringEnums.checkoutCash.name.tr(),
                                     iconData: Icons.money_outlined,
+                                    backgroundColor: Colors.green,
                                     onSubmit: () async {
-                                      final user = await storage.getUser();
-                                      if (user != null &&
-                                          cart.cart.isNotEmpty) {
-                                        context.read<PayBloc>().add(Pay(
-                                                invoiceParams:
-                                                    cart.createInvoice(
-                                              branchId:
-                                                  int.parse(user.defaultBranch),
-                                              userNo: user.userNo,
-                                              isPrinted: false,
-                                              taxPercentage: taxPercentage,
-                                              priceIncludesTax:
-                                                  priceIncludesTax,
-                                              taxIncludesDiscount:
-                                                  taxIncludesDiscount,
-                                              discount: discount
-                                                      ?.discountPercentage ??
-                                                  0.0,
-                                              deliveryCategory: delivery
-                                                      ?.deliveryPriceCategory ??
-                                                  1,
-                                              deliveryDiscount: delivery
-                                                      ?.deliveryPriceDiscount ??
-                                                  0.0,
-                                            )));
-                                      } else {
-                                        context.showMessageToast(
-                                            msg: StringEnums.empty_cart.name
-                                                .tr());
+                                      if (state is PaymentTypesSuccess) {
+                                        pay(context,
+                                            cart: cart,
+                                            payments: {
+                                              state.paymentTypes.first.ptype:
+                                                  receipt.grandTotal
+                                            },
+                                            taxPercentage: taxPercentage,
+                                            priceIncludesTax: priceIncludesTax,
+                                            taxIncludesDiscount:
+                                                taxIncludesDiscount,
+                                            discount: discount,
+                                            delivery: delivery);
                                       }
                                     },
-                                    backgroundColor: Colors.green,
                                   ),
                                   CustomButton(
                                     buttonLabel: StringEnums.pay_by.name.tr(),
@@ -150,7 +162,22 @@ class Amount extends StatelessWidget {
                                     onSubmit: state is PaymentTypesSuccess
                                         ? () {
                                             context.push(AppRoutes.payment,
-                                                extra: state.paymentTypes);
+                                                extra: [
+                                                  state.paymentTypes,
+                                                  (payments) {
+                                                    pay(context,
+                                                        cart: cart,
+                                                        payments: payments,
+                                                        taxPercentage:
+                                                            taxPercentage,
+                                                        priceIncludesTax:
+                                                            priceIncludesTax,
+                                                        taxIncludesDiscount:
+                                                            taxIncludesDiscount,
+                                                        discount: discount,
+                                                        delivery: delivery);
+                                                  }
+                                                ]);
                                           }
                                         : () {},
                                     backgroundColor: Colors.blue,

@@ -18,8 +18,10 @@ class PaymentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<PaymentType> paymentTypes =
-        ModalRoute.of(context)!.settings.arguments as List<PaymentType>;
+    final param = ModalRoute.of(context)!.settings.arguments as List;
+    final List<PaymentType> paymentTypes = param[0] as List<PaymentType>;
+    final pay = param[1] as Function(Map<int, double>);
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -87,6 +89,7 @@ class PaymentScreen extends StatelessWidget {
                           if (_formKey.currentState!.saveAndValidate()) {
                             _formKey.currentState!.fields.forEach((key, value) {
                               print('$key: ${value.value}');
+                              pay({});
                             });
                           }
                         },

@@ -100,6 +100,7 @@ class FlavorsList extends StatelessWidget {
                                     "${flavors[index].price}",
                                     style: style,
                                   ),
+                                  leadingCheckBox: false,
                                   textStyles: MultiSelectItemTextStyles(
                                       selectedTextStyle: style,
                                       disabledTextStyle: style,

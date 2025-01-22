@@ -11,16 +11,18 @@ class CartState extends Equatable {
     );
   }
 
-  InvoiceParams createInvoice(
-      {double taxPercentage = 16.0,
-      bool priceIncludesTax = true,
-      double discount = 0.0,
-      bool taxIncludesDiscount = true,
-      int deliveryCategory = 1,
-      double deliveryDiscount = 0.0,
-      int branchId = 1,
-      int userNo = 1,
-      bool isPrinted = false}) {
+  InvoiceParams createInvoice({
+    double taxPercentage = 16.0,
+    bool priceIncludesTax = true,
+    double discount = 0.0,
+    bool taxIncludesDiscount = true,
+    int deliveryCategory = 1,
+    double deliveryDiscount = 0.0,
+    int branchId = 1,
+    int userNo = 1,
+    bool isPrinted = false,
+    required Map<int, double> payments,
+  }) {
     final total = calculateTotalPrice(
         deliveryCategory: deliveryCategory,
         deliveryDiscount: deliveryDiscount,
@@ -48,13 +50,15 @@ class CartState extends Equatable {
             takerName: "",
             qrcode: "",
             stationId: ""),
-        invoicePayment: [
-          InvoicePayment(
-            payType: 0,
-            payment: total.grandTotal,
+        invoicePayment: payments.entries.map((entry) {
+          final int payType = entry.key;
+          final double amount = entry.value;
+          return InvoicePayment(
+            payType: payType,
+            payment: amount,
             warehouse: branchId,
-          )
-        ],
+          );
+        }).toList(),
         invoiceDtl: cart.map((cartItem) {
           final details = cartItem.calculateTotalPriceAndTax(
               taxPercentage: taxPercentage,

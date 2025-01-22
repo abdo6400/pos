@@ -118,8 +118,19 @@ class QuestionsList extends StatelessWidget {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(5),
                                   ),
+                                  checkBoxBorderSide: BorderSide.none,
                                   disabledColor: Colors.transparent,
+                                  checkColor: Colors.transparent,
+                                  enabledColor: Colors.transparent,
+                                  selectedColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
                                   decorations: MultiSelectItemDecorations(
+                                      disabledDecoration: BoxDecoration(
+                                        color: Colors.transparent,
+                                      ),
+                                      selectedDecoration: BoxDecoration(
+                                        color: Colors.transparent,
+                                      ),
                                       decoration: BoxDecoration(
                                           color: Colors.transparent)),
                                   leadingCheckBox: false,
@@ -145,6 +156,7 @@ class QuestionsList extends StatelessWidget {
                                     "${product.price}",
                                     style: style,
                                   ),
+                                  leadingCheckBox: false,
                                   textStyles: MultiSelectItemTextStyles(
                                     selectedTextStyle: style,
                                     disabledTextStyle: style,
