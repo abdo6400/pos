@@ -11,6 +11,45 @@ class CartState extends Equatable {
     );
   }
 
+  String GeneratQr(
+      {required String seller,
+      required String tax,
+      required String amount,
+      required String trn}) {
+    String date = DateTime.now().toString();
+    BytesBuilder bytesBuilder = BytesBuilder();
+    // Seller Name
+    bytesBuilder.addByte(1);
+    List<int> sellerBytes = utf8.encode(seller);
+    bytesBuilder.addByte(sellerBytes.length);
+    bytesBuilder.add(sellerBytes);
+    // TRN
+    bytesBuilder.addByte(2);
+    List<int> trnBytes = utf8.encode(trn);
+    bytesBuilder.addByte(trnBytes.length);
+    bytesBuilder.add(trnBytes);
+    // Date
+    bytesBuilder.addByte(3);
+    List<int> dateBytes = utf8.encode(date);
+    bytesBuilder.addByte(dateBytes.length);
+    bytesBuilder.add(dateBytes);
+    // Total Amount
+    bytesBuilder.addByte(4);
+    List<int> totalBytes = utf8.encode(tax);
+    bytesBuilder.addByte(totalBytes.length);
+    bytesBuilder.add(totalBytes);
+    // Net Amount
+    bytesBuilder.addByte(5);
+    List<int> netBytes = utf8.encode(amount);
+    bytesBuilder.addByte(netBytes.length);
+    bytesBuilder.add(netBytes);
+    Uint8List qrBytesGenerator = bytesBuilder.toBytes();
+    Base64Encoder encoder = Base64Encoder();
+    String result = encoder.convert(qrBytesGenerator);
+
+    return result;
+  }
+
   InvoiceParams createInvoice({
     double taxPercentage = 16.0,
     bool priceIncludesTax = true,
@@ -21,6 +60,7 @@ class CartState extends Equatable {
     int branchId = 1,
     int userNo = 1,
     bool isPrinted = false,
+    bool addQrCode = false,
     required Map<int, double> payments,
   }) {
     final total = calculateTotalPrice(
@@ -48,7 +88,13 @@ class CartState extends Equatable {
             tableNo: -1,
             empTaker: userNo,
             takerName: "",
-            qrcode: "",
+            qrcode: addQrCode
+                ? GeneratQr(
+                    seller: branchId.toString(),
+                    tax: total.tax.toString(),
+                    amount: total.grandTotal.toString(),
+                    trn: '10000000000001101')
+                : "",
             stationId: ""),
         invoicePayment: payments.entries.map((entry) {
           final int payType = entry.key;

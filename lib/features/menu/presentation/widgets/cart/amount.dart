@@ -45,13 +45,15 @@ class Amount extends StatelessWidget {
       required bool priceIncludesTax,
       required bool taxIncludesDiscount,
       required Discount? discount,
-      required DeliveryWithDiscount? delivery}) async {
+      required DeliveryWithDiscount? delivery,
+      bool addQrCode = false}) async {
     final user = await storage.getUser();
     if (user != null && cart.cart.isNotEmpty) {
       context.read<PayBloc>().add(Pay(
               invoiceParams: cart.createInvoice(
             payments: payments,
             branchId: int.parse(user.defaultBranch),
+            addQrCode: addQrCode,
             userNo: user.userNo,
             isPrinted: false,
             taxPercentage: taxPercentage,
