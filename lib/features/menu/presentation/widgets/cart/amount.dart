@@ -75,10 +75,12 @@ class Amount extends StatelessWidget {
       double taxPercentage = 16.0;
       bool priceIncludesTax = true;
       bool taxIncludesDiscount = true;
+      bool addQrCode = false;
       if (setting is SettingsSuccess) {
         taxPercentage = setting.getSetting(9).value2;
         priceIncludesTax = setting.getSetting(3).value4;
         taxIncludesDiscount = setting.getSetting(5).value4;
+        addQrCode = setting.getSetting(2).value4;
       }
       return BlocBuilder<DeliverySelectionCubit, DeliveryWithDiscount?>(
         builder: (context, delivery) {
@@ -141,6 +143,7 @@ class Amount extends StatelessWidget {
                                   if (paymentTypes is PaymentTypesSuccess) {
                                     payReceipt(context,
                                         cart: cart,
+                                        addQrCode: addQrCode,
                                         payments: {
                                           paymentTypes.paymentTypes.first.ptype:
                                               receipt.grandTotal
@@ -151,6 +154,9 @@ class Amount extends StatelessWidget {
                                             taxIncludesDiscount,
                                         discount: discount,
                                         delivery: delivery);
+                                  } else {
+                                    context.showMessageToast(
+                                        msg: StringEnums.empty_cart.name.tr());
                                   }
                                 },
                               ),
@@ -165,6 +171,7 @@ class Amount extends StatelessWidget {
                                           (payments) {
                                             payReceipt(context,
                                                 cart: cart,
+                                                addQrCode: addQrCode,
                                                 payments: payments,
                                                 taxPercentage: taxPercentage,
                                                 priceIncludesTax:
