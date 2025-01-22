@@ -14,7 +14,7 @@ import '../bloc/question/question_bloc.dart';
 
 class QuestionsList extends StatelessWidget {
   final String productId;
-  final MultiSelectController<Product> controller;
+  final MultiSelectController<dynamic> controller;
   final List<Product> selectedQuestions;
   const QuestionsList(
       {super.key,
@@ -47,17 +47,19 @@ class QuestionsList extends StatelessWidget {
                   .filterQuestionsByProduct(productId)
                   .groupListsBy((x) => x.productQuestionId)
                   .map((key, value) {
-                  // For each question, find matching products and collect them
                   final validProducts = value
                       .expand((question) => products
                           .where((x) => x.proId == question.questionElements1)
                           .toList())
                       .toList();
-
-                  // Return the valid products (or an empty list if none are found)
                   return MapEntry(value.first.questionAr, validProducts);
                 })
               : Map();
+          final List<dynamic> allItems = [];
+          questions.forEach((question, productList) {
+            allItems.add(question);
+            allItems.addAll(productList);
+          });
           if (state is QuestionSuccess && questions.isEmpty) {
             return Center(
               child: EmptyMessage(
@@ -100,66 +102,60 @@ class QuestionsList extends StatelessWidget {
                   ),
                   Expanded(
                     child: state is QuestionSuccess
-                        ? ListView.builder(
-                            itemCount: questions.keys.toList().length,
-                            shrinkWrap: true,
-                            itemBuilder: (context, key) {
-                              return Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Row(
-                                    spacing: 10,
-                                    children: [
-                                      Text("${key + 1}".toString(),
-                                          style: style),
-                                      Text(questions.keys.toList()[key],
-                                          style: style),
-                                    ],
-                                  ),
+                        ? MultiSelectCheckList<dynamic>(
+                            maxSelectableCount:
+                                allItems.whereType<Product>().length,
+                            listViewSettings: ListViewSettings(
+                              separatorBuilder: (context, index) =>
                                   const Divider(),
-                                  MultiSelectCheckList<Product>(
-                                    maxSelectableCount:
-                                        questions[questions.keys.toList()[key]]!
-                                            .length,
-                                    listViewSettings: ListViewSettings(
-                                        separatorBuilder: (context, index) =>
-                                            const Divider(
-                                              height: 0,
-                                            )),
-                                    controller: controller,
-                                    items: List.generate(
-                                        questions[questions.keys.toList()[key]]!
-                                            .length, (index) {
-                                      final product = questions[
-                                          questions.keys.toList()[key]]![index];
-                                      return CheckListCard(
-                                        value: product,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                        ),
-                                        selected:
-                                            selectedQuestions.contains(product),
-                                        title: Text(
-                                          "${context.trValue(product.proArName, product.proEnName)}",
-                                        ),
-                                        subtitle: Text(
-                                          "${product.price}",
-                                          style: style,
-                                        ),
-                                        textStyles: MultiSelectItemTextStyles(
-                                            selectedTextStyle: style,
-                                            disabledTextStyle: style,
-                                            textStyle: style),
-                                      );
-                                    }),
-                                    onChange:
-                                        (allSelectedItems, selectedItem) {},
+                            ),
+                            controller: controller,
+                            items: List.generate(allItems.length, (index) {
+                              final item = allItems[index];
+                              if (item is String) {
+                                return CheckListCard(
+                                  value: item,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5),
                                   ),
-                                ],
-                              );
-                            })
-                        : Card(),
+                                  disabledColor: Colors.transparent,
+                                  decorations: MultiSelectItemDecorations(
+                                      decoration: BoxDecoration(
+                                          color: Colors.transparent)),
+                                  leadingCheckBox: false,
+                                  selected: false,
+                                  title: Text(
+                                    item,
+                                    style: style,
+                                  ),
+                                  enabled: false,
+                                );
+                              } else {
+                                final product = item;
+                                return CheckListCard(
+                                  value: product,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  selected: selectedQuestions.contains(product),
+                                  title: Text(
+                                    "${context.trValue(product.proArName, product.proEnName)}",
+                                  ),
+                                  subtitle: Text(
+                                    "${product.price}",
+                                    style: style,
+                                  ),
+                                  textStyles: MultiSelectItemTextStyles(
+                                    selectedTextStyle: style,
+                                    disabledTextStyle: style,
+                                    textStyle: style,
+                                  ),
+                                );
+                              }
+                            }),
+                            onChange: (allSelectedItems, selectedItem) {},
+                          )
+                        : Container(),
                   )
                 ],
               ));

@@ -50,14 +50,13 @@ class CartState extends Equatable {
             stationId: ""),
         invoicePayment: [
           InvoicePayment(
-            payType: 1,
+            payType: 0,
             payment: total.grandTotal,
-            creditExpireDate: DateTime.now(),
             warehouse: branchId,
           )
         ],
-        invoiceDtl: cart.map((x) {
-          final details = x.calculateTotalPriceAndTax(
+        invoiceDtl: cart.map((cartItem) {
+          final details = cartItem.calculateTotalPriceAndTax(
               taxPercentage: taxPercentage,
               priceIncludesTax: priceIncludesTax,
               deliveryCategory: deliveryCategory,
@@ -65,17 +64,23 @@ class CartState extends Equatable {
               discount: discount,
               taxIncludesDiscount: taxIncludesDiscount);
           return InvoiceDtl(
-            item: x.product.proId,
-            qty: x.quantity,
-            price: details.price,
-            subtotal: details.price * x.quantity,
+            item: cartItem.product.proId,
+            qty: cartItem.quantity,
+            price: cartItem.getPrice(
+                cartItem.product.price,
+                cartItem.product.price2,
+                cartItem.product.price3,
+                cartItem.product.price4,
+                deliveryCategory,
+                deliveryDiscount),
+            subtotal: details.price,
             discountV: details.discount,
-            discountP: (details.discount / details.price) * 100,
-            taxP: (details.tax / details.price) * 100,
+            discountP: discount,
+            taxP: taxPercentage / 100,
             taxV: details.tax,
             grandTotal: details.grandTotal,
             taker: userNo,
-            flavors: x.flavors.map((f) => f.flavorEn).toList().join(","),
+            flavors: cartItem.flavors.map((f) => f.flavorEn).toList().join(","),
             warehouse: branchId,
             offerNo: 0,
           );

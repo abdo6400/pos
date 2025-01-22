@@ -41,20 +41,18 @@ class InvoiceParams {
 
   Map<String, dynamic> toJson(
       {InvoiceId? invoiceId, Cash? cash, SaleDate? saleDate}) {
+    final saleDateTime =
+        "${saleDate?.lineDate.year}-${saleDate?.lineDate.month}-${saleDate?.lineDate.day}";
     return {
-      ApiKeys.invoices: invoices.toJson(
-          invoiceId?.invoiceNo ?? "0",
-          invoiceId?.queue ?? 0,
-          cash?.cashNo ?? 0,
-          saleDate?.lineDate.toUtc().toIso8601String() ?? "0"),
+      ApiKeys.invoices: invoices.toJson(invoiceId?.invoiceNo ?? "0",
+          invoiceId?.queue ?? 0, cash?.cashNo ?? 0, saleDateTime),
       ApiKeys.invoiceDtl: List<dynamic>.from(
         invoiceDtl.map((x) => x.toJson(
-            invoiceId?.invoiceNo ?? "0",
-            saleDate?.lineDate.toUtc().toIso8601String() ?? "0",
-            saleDate?.id ?? 0)),
+            invoiceId?.invoiceNo ?? "0", saleDateTime, saleDate?.id ?? 0)),
       ),
       ApiKeys.invoicePayment: List<dynamic>.from(
-        invoicePayment.map((x) => x.toJson(invoiceId?.invoiceNo ?? "0")),
+        invoicePayment
+            .map((x) => x.toJson(invoiceId?.invoiceNo ?? "0", saleDateTime)),
       ),
     };
   }
@@ -116,22 +114,20 @@ class InvoiceDtl {
 class InvoicePayment {
   final int payType;
   final double payment;
-  final DateTime creditExpireDate;
   final int warehouse;
 
   InvoicePayment({
     required this.payType,
     required this.payment,
-    required this.creditExpireDate,
     required this.warehouse,
   });
 
-  Map<String, dynamic> toJson(String invoiceNo) {
+  Map<String, dynamic> toJson(String invoiceNo, String creditExpireDate) {
     return {
       ApiKeys.invoiceId: invoiceNo,
       ApiKeys.payType: payType,
       ApiKeys.payment: payment,
-      ApiKeys.creditExpireDate: creditExpireDate.toIso8601String(),
+      ApiKeys.creditExpireDate: creditExpireDate,
       ApiKeys.warehouse: warehouse,
     };
   }

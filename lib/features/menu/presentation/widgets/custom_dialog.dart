@@ -10,7 +10,7 @@ import 'questions_list.dart';
 
 class CustomDialog extends StatelessWidget {
   final MultiSelectController<Flavor> flavorsController;
-  final MultiSelectController<Product> questionController;
+  final MultiSelectController<dynamic> questionController;
   final TextEditingController noteController;
   final TextEditingController quantityController;
   final Product? product;

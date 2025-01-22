@@ -112,7 +112,8 @@ class Amount extends StatelessWidget {
                                     iconData: Icons.money_outlined,
                                     onSubmit: () async {
                                       final user = await storage.getUser();
-                                      if (user != null) {
+                                      if (user != null &&
+                                          cart.cart.isNotEmpty) {
                                         context.read<PayBloc>().add(Pay(
                                                 invoiceParams:
                                                     cart.createInvoice(
@@ -135,6 +136,10 @@ class Amount extends StatelessWidget {
                                                       ?.deliveryPriceDiscount ??
                                                   0.0,
                                             )));
+                                      } else {
+                                        context.showMessageToast(
+                                            msg: StringEnums.empty_cart.name
+                                                .tr());
                                       }
                                     },
                                     backgroundColor: Colors.green,
@@ -143,8 +148,10 @@ class Amount extends StatelessWidget {
                                     buttonLabel: StringEnums.pay_by.name.tr(),
                                     iconData: Icons.payment_outlined,
                                     onSubmit: state is PaymentTypesSuccess
-                                        ? () => context.push(AppRoutes.payment,
-                                            extra: state.paymentTypes)
+                                        ? () {
+                                            context.push(AppRoutes.payment,
+                                                extra: state.paymentTypes);
+                                          }
                                         : () {},
                                     backgroundColor: Colors.blue,
                                   ),

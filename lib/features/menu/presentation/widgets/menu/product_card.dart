@@ -23,7 +23,7 @@ class ProductCard extends StatelessWidget {
       {List<Offer> offers = const []}) {
     final MultiSelectController<Flavor> _flavorsController =
         MultiSelectController();
-    final MultiSelectController<Product> _questionController =
+    final MultiSelectController<dynamic> _questionController =
         MultiSelectController();
     final TextEditingController _quantityController =
         TextEditingController(text: "1");
@@ -41,7 +41,7 @@ class ProductCard extends StatelessWidget {
             debugPrint(e.toString());
           }
           try {
-            questions = _questionController.getSelectedItems();
+            questions = _questionController.getSelectedItems().cast<Product>();
           } catch (e) {
             debugPrint(e.toString());
           }
