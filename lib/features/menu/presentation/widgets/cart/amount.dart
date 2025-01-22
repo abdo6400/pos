@@ -38,7 +38,7 @@ class Amount extends StatelessWidget {
     );
   }
 
-  void pay(BuildContext context,
+  void payReceipt(BuildContext context,
       {required CartState cart,
       required Map<int, double> payments,
       required double taxPercentage,
@@ -110,82 +110,80 @@ class Amount extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               _customListTile(StringEnums.subTotalAmount.name,
-                                  receipt.price.toStringAsFixed(3), context),
+                                  receipt.price.toStringAsFixed(2), context),
                               _customListTile(StringEnums.taxAmount.name,
-                                  receipt.tax.toStringAsFixed(3), context),
+                                  receipt.tax.toStringAsFixed(2), context),
                               _customListTile(StringEnums.discountAmount.name,
-                                  receipt.discount.toStringAsFixed(3), context),
+                                  receipt.discount.toStringAsFixed(2), context),
                               Divider(
                                 color: Theme.of(context).primaryColor,
                               ),
                               _customListTile(
                                   StringEnums.totalAmount.name,
-                                  ((receipt.grandTotal)).toStringAsFixed(3),
+                                  ((receipt.grandTotal)).toStringAsFixed(2),
                                   context),
                             ],
                           ),
                         ),
-                        BlocBuilder<PayBloc, PayState>(
-                          builder: (context, state) {
-                            return BlocBuilder<PaymentTypesBloc,
-                                PaymentTypesState>(
-                              builder: (context, state) => Column(
-                                spacing: context.AppResponsiveValue(5,
-                                    mobile: 5, tablet: 10, desktop: 10),
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  CustomButton(
-                                    buttonLabel:
-                                        StringEnums.checkoutCash.name.tr(),
-                                    iconData: Icons.money_outlined,
-                                    backgroundColor: Colors.green,
-                                    onSubmit: () async {
-                                      if (state is PaymentTypesSuccess) {
-                                        pay(context,
-                                            cart: cart,
-                                            payments: {
-                                              state.paymentTypes.first.ptype:
-                                                  receipt.grandTotal
-                                            },
-                                            taxPercentage: taxPercentage,
-                                            priceIncludesTax: priceIncludesTax,
-                                            taxIncludesDiscount:
-                                                taxIncludesDiscount,
-                                            discount: discount,
-                                            delivery: delivery);
-                                      }
-                                    },
-                                  ),
-                                  CustomButton(
-                                    buttonLabel: StringEnums.pay_by.name.tr(),
-                                    iconData: Icons.payment_outlined,
-                                    onSubmit: state is PaymentTypesSuccess
-                                        ? () {
-                                            context.push(AppRoutes.payment,
-                                                extra: [
-                                                  state.paymentTypes,
-                                                  (payments) {
-                                                    pay(context,
-                                                        cart: cart,
-                                                        payments: payments,
-                                                        taxPercentage:
-                                                            taxPercentage,
-                                                        priceIncludesTax:
-                                                            priceIncludesTax,
-                                                        taxIncludesDiscount:
-                                                            taxIncludesDiscount,
-                                                        discount: discount,
-                                                        delivery: delivery);
-                                                  }
-                                                ]);
-                                          }
-                                        : () {},
-                                    backgroundColor: Colors.blue,
-                                  ),
-                                ],
+                        BlocBuilder<PaymentTypesBloc, PaymentTypesState>(
+                          builder: (context, paymentTypes) => Column(
+                            spacing: context.AppResponsiveValue(5,
+                                mobile: 5, tablet: 10, desktop: 10),
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              CustomButton(
+                                buttonLabel: StringEnums.checkoutCash.name.tr(),
+                                iconData: Icons.money_outlined,
+                                backgroundColor: Colors.green,
+                                onSubmit: () async {
+                                  if (paymentTypes is PaymentTypesSuccess) {
+                                    payReceipt(context,
+                                        cart: cart,
+                                        payments: {
+                                          paymentTypes.paymentTypes.first.ptype:
+                                              receipt.grandTotal
+                                        },
+                                        taxPercentage: taxPercentage,
+                                        priceIncludesTax: priceIncludesTax,
+                                        taxIncludesDiscount:
+                                            taxIncludesDiscount,
+                                        discount: discount,
+                                        delivery: delivery);
+                                  }
+                                },
                               ),
-                            );
-                          },
+                              CustomButton(
+                                buttonLabel: StringEnums.pay_by.name.tr(),
+                                iconData: Icons.payment_outlined,
+                                onSubmit: paymentTypes is PaymentTypesSuccess &&
+                                        cart.cart.isNotEmpty
+                                    ? () {
+                                        context.push(AppRoutes.payment, extra: [
+                                          paymentTypes.paymentTypes,
+                                          (payments) {
+                                            payReceipt(context,
+                                                cart: cart,
+                                                payments: payments,
+                                                taxPercentage: taxPercentage,
+                                                priceIncludesTax:
+                                                    priceIncludesTax,
+                                                taxIncludesDiscount:
+                                                    taxIncludesDiscount,
+                                                discount: discount,
+                                                delivery: delivery);
+                                          },
+                                          receipt.grandTotal,
+                                        ]);
+                                      }
+                                    : () {
+                                        context.showMessageToast(
+                                            msg: StringEnums.empty_cart.name
+                                                .tr());
+                                      },
+                                backgroundColor: Colors.blue,
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),

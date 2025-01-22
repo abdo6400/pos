@@ -242,5 +242,7 @@
   "pay_by": "Pay By",
   "print": "Print",
   "returned_amount": "Returned Amount",
-  "exact": "Exact"
+  "exact": "Exact",
+  "clear_all": "Clear All",
+  "amount_less_than_grand_total": "Amount less than grand total"
 }

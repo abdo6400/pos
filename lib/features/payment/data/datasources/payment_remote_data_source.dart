@@ -28,7 +28,7 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
 
   @override
   Future<void> pay(Map<String, dynamic> data) async {
-    print(data);
+    data.forEach((key, value) => print('$key: $value'));
     return;
     // return await _apiConsumer.post(EndPoints.insertInvoice,
     //     body: data, formDataIsEnabled: false);

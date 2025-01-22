@@ -15,12 +15,14 @@ import '../bloc/cubit/payment_type_selection_cubit.dart';
 class PaymentScreen extends StatelessWidget {
   const PaymentScreen({super.key});
   static GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
-
+  static TextEditingController returnedAmount =
+      TextEditingController(text: '0.0');
   @override
   Widget build(BuildContext context) {
     final param = ModalRoute.of(context)!.settings.arguments as List;
     final List<PaymentType> paymentTypes = param[0] as List<PaymentType>;
     final pay = param[1] as Function(Map<int, double>);
+    final grandTotal = param[2] as double;
 
     return MultiBlocProvider(
       providers: [
@@ -87,10 +89,37 @@ class PaymentScreen extends StatelessWidget {
                         buttonLabel: StringEnums.save.name,
                         onSubmit: () {
                           if (_formKey.currentState!.saveAndValidate()) {
+                            final paymentTypeLookup = <String, int>{};
+                            for (final paymentType in paymentTypes) {
+                              paymentTypeLookup[paymentType.paymentEnDesc] =
+                                  paymentType.ptype;
+                              paymentTypeLookup[paymentType.paymentArDesc] =
+                                  paymentType.ptype;
+                            }
+                            final payments = <int, double>{};
                             _formKey.currentState!.fields.forEach((key, value) {
-                              print('$key: ${value.value}');
-                              pay({});
+                              if (value.value != null &&
+                                  value.value!.isNotEmpty) {
+                                final amount = double.parse(value.value!);
+                                if (amount > 0) {
+                                  final ptype = paymentTypeLookup[key];
+                                  if (ptype != null) {
+                                    payments.putIfAbsent(ptype, () => amount);
+                                  }
+                                }
+                              }
                             });
+                            double totalPayments = payments.values
+                                .fold(0, (sum, amount) => sum + amount);
+                            if (totalPayments >= grandTotal) {
+                              Navigator.pop(context);
+                              pay(payments);
+                            } else {
+                              context.showMessageToast(
+                                  msg: StringEnums
+                                      .amount_less_than_grand_total.name
+                                      .tr());
+                            }
                           }
                         },
                       ),
@@ -123,20 +152,15 @@ class PaymentScreen extends StatelessWidget {
                                 _buildAmountRow(
                                     context,
                                     StringEnums.totalAmount.name.tr(),
-                                    '100 JOD'),
-                                _buildAmountRow(
-                                    context,
-                                    StringEnums.discountAmount.name.tr(),
-                                    '10 JOD'),
+                                    grandTotal.toStringAsFixed(2)),
                                 _buildAmountRow(
                                     context,
                                     StringEnums.returned_amount.name.tr(),
-                                    '10 JOD'),
+                                    returnedAmount.text),
                               ],
                             ),
                           ),
                         ),
-                        Divider(),
                         Row(
                           spacing: 10,
                           children: [
@@ -156,13 +180,6 @@ class PaymentScreen extends StatelessWidget {
                                                 e.paymentArDesc,
                                                 e.paymentEnDesc),
                                             validators: [
-                                              if (!e.paymentEnDesc
-                                                  .toUpperCase()
-                                                  .contains(
-                                                      'Cash'.toUpperCase()))
-                                                FormBuilderValidators.range(
-                                                    0, 300,
-                                                    checkNullOrEmpty: false),
                                               FormBuilderValidators.numeric(
                                                   checkNullOrEmpty: false),
                                               FormBuilderValidators
@@ -180,6 +197,8 @@ class PaymentScreen extends StatelessWidget {
                               flex: 2,
                               child: NumericKeypadInput(
                                 formKey: _formKey,
+                                grandTotal: grandTotal,
+                                returnedAmount: returnedAmount,
                                 paymentTypes: paymentTypes,
                               ),
                             ),
@@ -197,7 +216,6 @@ class PaymentScreen extends StatelessWidget {
     );
   }
 
-  // Helper method to build amount rows
   Widget _buildAmountRow(BuildContext context, String label, String amount) {
     return Row(
       children: [
@@ -223,19 +241,29 @@ class PaymentScreen extends StatelessWidget {
 
 class NumericKeypadInput extends StatelessWidget {
   final GlobalKey<FormBuilderState> formKey;
+  final double grandTotal;
+  final TextEditingController returnedAmount;
   final List<PaymentType> paymentTypes;
 
   const NumericKeypadInput({
     super.key,
     required this.formKey,
+    required this.grandTotal,
+    required this.returnedAmount,
     required this.paymentTypes,
   });
 
   void _onKeyPressed(String value, BuildContext context) {
     final activeField = context.read<PaymentTypeSelectionCubit>().state;
     final currentValue = formKey.currentState?.fields[activeField]?.value ?? '';
-
     String newValue = currentValue;
+
+    // Get the active payment type
+    final activePaymentType = paymentTypes.firstWhere(
+      (element) =>
+          element.paymentEnDesc == activeField ||
+          element.paymentArDesc == activeField,
+    );
 
     if (value == 'X') {
       // Handle backspace (remove last character)
@@ -243,6 +271,27 @@ class NumericKeypadInput extends StatelessWidget {
         newValue = newValue.substring(0, newValue.length - 1);
       }
     } else if (value == 'exact') {
+      // Handle exact (set value to the remaining amount)
+      double totalPayments = 0;
+
+      // Sum up all payment values except the active field
+      formKey.currentState?.fields.forEach((key, value) {
+        if (key != activeField) {
+          final paymentValue = double.tryParse(value.value ?? '0') ?? 0;
+          totalPayments += paymentValue;
+        }
+      });
+
+      // Calculate the remaining amount
+      double remainingAmount = grandTotal - totalPayments;
+
+      // Ensure the remaining amount is not negative
+      if (remainingAmount < 0) {
+        remainingAmount = 0;
+      }
+
+      // Set the active field's value to the remaining amount
+      newValue = remainingAmount.toStringAsFixed(2);
     } else if (value == 'C') {
       // Handle clear (delete all text)
       newValue = '';
@@ -262,71 +311,121 @@ class NumericKeypadInput extends StatelessWidget {
       newValue += value;
     }
 
+    // Validate non-cash payments
+    if (activePaymentType.ptype != 0) {
+      // Non-cash payment type (e.g., Visa, MasterCard)
+      final newAmount = double.tryParse(newValue) ?? 0;
+      if (newAmount > grandTotal) {
+        // Show an error or limit the value to the grandTotal
+        newValue = grandTotal.toStringAsFixed(2);
+      }
+    }
+
     // Update the form field with the new value
     if (formKey.currentState != null) {
       formKey.currentState!.fields[activeField]?.didChange(newValue);
+    }
+
+    // Calculate the returned amount if the total exceeds grandTotal
+    _calculateReturnedAmount();
+  }
+
+  void _calculateReturnedAmount() {
+    double totalPayments = 0;
+    formKey.currentState?.fields.forEach((key, value) {
+      final paymentValue = double.tryParse(value.value ?? '0') ?? 0;
+      totalPayments += paymentValue;
+    });
+    if (totalPayments > grandTotal) {
+      final returned = totalPayments - grandTotal;
+      returnedAmount.text = returned.toStringAsFixed(2);
+    } else {
+      returnedAmount.text = '0.00';
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
-      shrinkWrap: true,
-      crossAxisCount: 3,
-      childAspectRatio: 2.5,
-      mainAxisSpacing: 5,
-      crossAxisSpacing: 5,
+    return Column(
       children: [
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '7',
-        '8',
-        '9',
-        '.',
-        '0',
-        'X',
-        '20',
-        '50',
-        'C',
-        '100',
-        '200',
-        'exact'
-      ].map((key) {
-        return InkWell(
-          onTap: () => _onKeyPressed(key, context),
-          child: Card(
-            child: Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(2),
-                  color: (key == 'X')
-                      ? Colors.red
-                      : (key == 'C')
-                          ? Colors.blue
-                          : (key == '20' ||
+        GridView.count(
+          shrinkWrap: true,
+          crossAxisCount: 3,
+          childAspectRatio: 2.5,
+          mainAxisSpacing: 5,
+          crossAxisSpacing: 5,
+          children: [
+            '1',
+            '2',
+            '3',
+            '4',
+            '5',
+            '6',
+            '7',
+            '8',
+            '9',
+            '.',
+            '0',
+            'X',
+            '20',
+            '50',
+            'C',
+            '100',
+            '200',
+            'exact'
+          ].map((key) {
+            return InkWell(
+              onTap: () => _onKeyPressed(key, context),
+              child: Card(
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(2),
+                      color: (key == 'X')
+                          ? Colors.red
+                          : (key == 'C')
+                              ? Colors.blue
+                              : (key == '20' ||
+                                      key == '50' ||
+                                      key == '100' ||
+                                      key == '200')
+                                  ? Theme.of(context).primaryColor
+                                  : (key == 'exact')
+                                      ? Colors.green
+                                      : null),
+                  child: Text(
+                    key.trExists() ? key.tr() : key,
+                    style: TextStyle(
+                      color: (key == 'X') ||
+                              (key == 'C') ||
+                              (key == '20' ||
                                   key == '50' ||
                                   key == '100' ||
-                                  key == '200')
-                              ? Theme.of(context).primaryColor
-                              : (key == 'exact')
-                                  ? Colors.green
-                                  : null),
-              child: Text(
-                key.trExists() ? key.tr() : key,
-                style: TextStyle(
-                  fontSize: context.AppResponsiveValue(12,
-                      mobile: 8, tablet: 24, desktop: 30),
-                  fontWeight: FontWeight.bold,
+                                  key == '200') ||
+                              (key == 'exact')
+                          ? Colors.white
+                          : null,
+                      fontSize: context.AppResponsiveValue(12,
+                          mobile: 8, tablet: 24, desktop: 30),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-        );
-      }).toList(),
+            );
+          }).toList(),
+        ),
+        CustomButton(
+          backgroundColor: Colors.red,
+          buttonLabel: StringEnums.clear_all.name,
+          onSubmit: () {
+            formKey.currentState?.fields.forEach((key, value) {
+              value.didChange('');
+            });
+            returnedAmount.text = '0.00';
+          },
+        ),
+      ],
     );
   }
 }

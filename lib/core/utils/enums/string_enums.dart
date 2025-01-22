@@ -170,5 +170,7 @@ enum StringEnums {
   pay_by,
   print,
   returned_amount,
-  exact
+  exact,
+  clear_all,
+  amount_less_than_grand_total
 }

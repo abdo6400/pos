@@ -242,5 +242,7 @@
   "pay_by": "الدفع بواسطة",
   "print": "طباعة",
   "returned_amount": "المبلغ الذي عليك ارجاعه",
-  "exact": "مطابق"
+  "exact": "مطابق",
+  "clear_all": "مسح الكل",
+  "amount_less_than_grand_total": "المبلغ اقل من المجموع الكلي"
 }
