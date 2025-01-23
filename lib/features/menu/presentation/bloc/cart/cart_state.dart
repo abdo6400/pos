@@ -118,26 +118,27 @@ class CartState extends Equatable {
               discount: discount,
               taxIncludesDiscount: taxIncludesDiscount);
           return InvoiceDtl(
-            item: cartItem.product.proId,
-            qty: cartItem.quantity,
-            price: cartItem.getPrice(
-                cartItem.product.price,
-                cartItem.product.price2,
-                cartItem.product.price3,
-                cartItem.product.price4,
-                deliveryCategory,
-                deliveryDiscount),
-            subtotal: double.parse(details.price.toStringAsFixed(5)),
-            discountV: double.parse(details.discount.toStringAsFixed(5)),
-            discountP: discount,
-            taxP: taxPercentage / 100,
-            taxV: double.parse(details.tax.toStringAsFixed(5)),
-            grandTotal: double.parse(details.grandTotal.toStringAsFixed(5)),
-            taker: userNo,
-            flavors: cartItem.flavors.map((f) => f.flavorEn).toList().join(","),
-            warehouse: branchId,
-            offerNo: 0,
-          );
+              item: cartItem.product.proId,
+              qty: cartItem.quantity,
+              price: cartItem.getPrice(
+                  cartItem.product.price,
+                  cartItem.product.price2,
+                  cartItem.product.price3,
+                  cartItem.product.price4,
+                  deliveryCategory,
+                  deliveryDiscount),
+              subtotal: double.parse(details.price.toStringAsFixed(5)),
+              discountV: double.parse(details.discount.toStringAsFixed(5)),
+              discountP: discount,
+              taxP: taxPercentage / 100,
+              taxV: double.parse(details.tax.toStringAsFixed(5)),
+              grandTotal: double.parse(details.grandTotal.toStringAsFixed(5)),
+              taker: userNo,
+              flavors:
+                  cartItem.flavors.map((f) => f.flavorEn).toList().join(","),
+              warehouse: branchId,
+              offerNo: 0,
+              lineId: cart.indexOf(cartItem));
         }).toList());
   }
 

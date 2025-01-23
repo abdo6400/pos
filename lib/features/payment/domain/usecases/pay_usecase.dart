@@ -47,8 +47,8 @@ class InvoiceParams {
       ApiKeys.invoices: invoices.toJson(invoiceId?.invoiceNo ?? "0",
           invoiceId?.queue ?? 0, cash?.cashNo ?? 0, saleDateTime),
       ApiKeys.invoiceDtl: List<dynamic>.from(
-        invoiceDtl.map((x) => x.toJson(
-            invoiceId?.invoiceNo ?? "0", saleDateTime, saleDate?.id ?? 0)),
+        invoiceDtl
+            .map((x) => x.toJson(invoiceId?.invoiceNo ?? "0", saleDateTime)),
       ),
       ApiKeys.invoicePayment: List<dynamic>.from(
         invoicePayment
@@ -72,6 +72,7 @@ class InvoiceDtl {
   final String flavors;
   final int warehouse;
   final int offerNo;
+  final int lineId;
 
   InvoiceDtl({
     required this.item,
@@ -87,9 +88,10 @@ class InvoiceDtl {
     required this.flavors,
     required this.warehouse,
     required this.offerNo,
+    required this.lineId,
   });
 
-  Map<String, dynamic> toJson(String invoiceNo, String saleDate, int lineId) {
+  Map<String, dynamic> toJson(String invoiceNo, String saleDate) {
     return {
       ApiKeys.invoiceNo: invoiceNo,
       ApiKeys.item: item,
