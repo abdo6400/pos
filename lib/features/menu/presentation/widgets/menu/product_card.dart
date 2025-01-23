@@ -88,6 +88,12 @@ class ProductCard extends StatelessWidget {
         final offer = product != null
             ? offers.where((x) => x.productId == product!.proId).toList()
             : null;
+        final List<Offer> productOffers = offers
+            .where(
+              (x) => x.productId == product!.proId,
+            )
+            .toList();
+
         return Banner(
           color: offer != null && offer.isNotEmpty
               ? Colors.red
@@ -123,7 +129,7 @@ class ProductCard extends StatelessWidget {
                         quantity: 1,
                         flavors: [],
                         questions: [],
-                        offers: [],
+                        offers: productOffers,
                         orignialPrice: product!.price)))
                 : null,
             child: Card(

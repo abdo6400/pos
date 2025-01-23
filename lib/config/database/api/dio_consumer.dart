@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
@@ -100,13 +101,18 @@ class DioConsumer extends ApiConsumer {
     String path, {
     Map<String, dynamic>? body,
     bool formDataIsEnabled = true,
+    bool bodyEncoded = false,
     Map<String, String>? headers,
     Map<String, dynamic>? queryParameters,
   }) async {
     return await _handleRequest(
       () => client.post(
         path,
-        data: formDataIsEnabled && body != null ? FormData.fromMap(body) : body,
+        data: formDataIsEnabled && body != null
+            ? FormData.fromMap(body)
+            : bodyEncoded
+                ? jsonEncode(body)
+                : body,
         options: Options(headers: headers),
         queryParameters: queryParameters,
       ),

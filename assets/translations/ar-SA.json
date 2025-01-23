@@ -244,5 +244,6 @@
   "returned_amount": "المبلغ الذي عليك ارجاعه",
   "exact": "مطابق",
   "clear_all": "مسح الكل",
-  "amount_less_than_grand_total": "المبلغ اقل من المجموع الكلي"
+  "amount_less_than_grand_total": "المبلغ اقل من المجموع الكلي",
+  "payment_success": "تم الدفع بنجاح"
 }

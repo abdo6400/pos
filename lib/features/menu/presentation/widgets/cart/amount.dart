@@ -51,6 +51,8 @@ class Amount extends StatelessWidget {
     if (user != null && cart.cart.isNotEmpty) {
       context.read<PayBloc>().add(Pay(
               invoiceParams: cart.createInvoice(
+            trn: user.taxNo,
+            remind: user.numbersOfDigits,
             payments: payments,
             branchId: int.parse(user.defaultBranch),
             addQrCode: addQrCode,
@@ -60,7 +62,7 @@ class Amount extends StatelessWidget {
             priceIncludesTax: priceIncludesTax,
             taxIncludesDiscount: taxIncludesDiscount,
             discount: discount?.discountPercentage ?? 0.0,
-            deliveryCategory: delivery?.deliveryPriceCategory ?? 1,
+            deliveryCategory: delivery?.deliveryPriceCategory ?? 0,
             deliveryDiscount: delivery?.deliveryPriceDiscount ?? 0.0,
           )));
     } else {
@@ -97,7 +99,7 @@ class Amount extends StatelessWidget {
                     priceIncludesTax: priceIncludesTax,
                     taxIncludesDiscount: taxIncludesDiscount,
                     discount: discount?.discountPercentage ?? 0.0,
-                    deliveryCategory: delivery?.deliveryPriceCategory ?? 1,
+                    deliveryCategory: delivery?.deliveryPriceCategory ?? 0,
                     deliveryDiscount: delivery?.deliveryPriceDiscount ?? 0.0,
                   );
                   return Padding(

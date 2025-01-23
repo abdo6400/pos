@@ -42,7 +42,7 @@ class InvoiceParams {
   Map<String, dynamic> toJson(
       {InvoiceId? invoiceId, Cash? cash, SaleDate? saleDate}) {
     final saleDateTime =
-        "${saleDate?.lineDate.year}-${saleDate?.lineDate.month}-${saleDate?.lineDate.day}";
+        "${saleDate?.lineDate.year}-0${saleDate?.lineDate.month}-${saleDate?.lineDate.day}";
     return {
       ApiKeys.invoices: invoices.toJson(invoiceId?.invoiceNo ?? "0",
           invoiceId?.queue ?? 0, cash?.cashNo ?? 0, saleDateTime),

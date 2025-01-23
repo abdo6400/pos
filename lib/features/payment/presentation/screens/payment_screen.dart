@@ -11,12 +11,12 @@ import '../../../../core/utils/enums/string_enums.dart';
 import '../../../../core/widgets/global_form_builder/custom_form_builder.dart';
 import '../../domain/entities/payment_type.dart';
 import '../bloc/cubit/payment_type_selection_cubit.dart';
+import '../bloc/cubit/returned_amount_cubit.dart';
 
 class PaymentScreen extends StatelessWidget {
   const PaymentScreen({super.key});
   static GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
-  static TextEditingController returnedAmount =
-      TextEditingController(text: '0.0');
+
   @override
   Widget build(BuildContext context) {
     final param = ModalRoute.of(context)!.settings.arguments as List;
@@ -28,7 +28,8 @@ class PaymentScreen extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => PaymentTypeSelectionCubit(),
-        )
+        ),
+        BlocProvider(create: (_) => ReturnedAmountCubit()),
       ],
       child: Padding(
         padding: EdgeInsets.symmetric(
@@ -96,6 +97,7 @@ class PaymentScreen extends StatelessWidget {
                               paymentTypeLookup[paymentType.paymentArDesc] =
                                   paymentType.ptype;
                             }
+
                             final payments = <int, double>{};
                             _formKey.currentState!.fields.forEach((key, value) {
                               if (value.value != null &&
@@ -109,16 +111,42 @@ class PaymentScreen extends StatelessWidget {
                                 }
                               }
                             });
+
+                            // Calculate the total of non-cash payments (PayType 1, PayType 2, etc.)
+                            double nonCashTotal = 0;
+                            payments.forEach((ptype, amount) {
+                              if (ptype != 0) {
+                                // Exclude cash payment (PayType 0)
+                                nonCashTotal += amount;
+                              }
+                            });
+
+                            // Calculate the required cash payment (PayType 0)
+                            double cashPayment = grandTotal - nonCashTotal;
+
+                            // Ensure cash payment is not negative
+                            if (cashPayment < 0) {
+                              cashPayment = 0;
+                            }
+
+                            // Add or update the cash payment in the payments map
+                            payments[0] =
+                                cashPayment; // Assuming PayType 0 is cash
+
+                            // Calculate the total payments
                             double totalPayments = payments.values
                                 .fold(0, (sum, amount) => sum + amount);
+
+                            // Check if total payments match the grandTotal
                             if (totalPayments >= grandTotal) {
                               Navigator.pop(context);
-                              pay(payments);
+                              pay(payments); // Send the payments
                             } else {
                               context.showMessageToast(
-                                  msg: StringEnums
-                                      .amount_less_than_grand_total.name
-                                      .tr());
+                                msg: StringEnums
+                                    .amount_less_than_grand_total.name
+                                    .tr(),
+                              );
                             }
                           }
                         },
@@ -153,10 +181,14 @@ class PaymentScreen extends StatelessWidget {
                                     context,
                                     StringEnums.totalAmount.name.tr(),
                                     grandTotal.toStringAsFixed(2)),
-                                _buildAmountRow(
-                                    context,
-                                    StringEnums.returned_amount.name.tr(),
-                                    returnedAmount.text),
+                                BlocBuilder<ReturnedAmountCubit, double>(
+                                  builder: (context, state) {
+                                    return _buildAmountRow(
+                                        context,
+                                        StringEnums.returned_amount.name.tr(),
+                                        state.toStringAsFixed(2));
+                                  },
+                                ),
                               ],
                             ),
                           ),
@@ -195,11 +227,14 @@ class PaymentScreen extends StatelessWidget {
                             VerticalDivider(),
                             Flexible(
                               flex: 2,
-                              child: NumericKeypadInput(
-                                formKey: _formKey,
-                                grandTotal: grandTotal,
-                                returnedAmount: returnedAmount,
-                                paymentTypes: paymentTypes,
+                              child: BlocBuilder<ReturnedAmountCubit, double>(
+                                builder: (context, state) {
+                                  return NumericKeypadInput(
+                                    formKey: _formKey,
+                                    grandTotal: grandTotal,
+                                    paymentTypes: paymentTypes,
+                                  );
+                                },
                               ),
                             ),
                           ],
@@ -242,14 +277,12 @@ class PaymentScreen extends StatelessWidget {
 class NumericKeypadInput extends StatelessWidget {
   final GlobalKey<FormBuilderState> formKey;
   final double grandTotal;
-  final TextEditingController returnedAmount;
   final List<PaymentType> paymentTypes;
 
   const NumericKeypadInput({
     super.key,
     required this.formKey,
     required this.grandTotal,
-    required this.returnedAmount,
     required this.paymentTypes,
   });
 
@@ -327,10 +360,10 @@ class NumericKeypadInput extends StatelessWidget {
     }
 
     // Calculate the returned amount if the total exceeds grandTotal
-    _calculateReturnedAmount();
+    _calculateReturnedAmount(context);
   }
 
-  void _calculateReturnedAmount() {
+  void _calculateReturnedAmount(BuildContext context) {
     double totalPayments = 0;
     formKey.currentState?.fields.forEach((key, value) {
       final paymentValue = double.tryParse(value.value ?? '0') ?? 0;
@@ -338,9 +371,11 @@ class NumericKeypadInput extends StatelessWidget {
     });
     if (totalPayments > grandTotal) {
       final returned = totalPayments - grandTotal;
-      returnedAmount.text = returned.toStringAsFixed(2);
+      context
+          .read<ReturnedAmountCubit>()
+          .setReturnedAmount(double.parse(returned.toStringAsFixed(2)));
     } else {
-      returnedAmount.text = '0.00';
+      context.read<ReturnedAmountCubit>().setReturnedAmount(0.0);
     }
   }
 
@@ -422,7 +457,7 @@ class NumericKeypadInput extends StatelessWidget {
             formKey.currentState?.fields.forEach((key, value) {
               value.didChange('');
             });
-            returnedAmount.text = '0.00';
+            context.read<ReturnedAmountCubit>().setReturnedAmount(0.0);
           },
         ),
       ],

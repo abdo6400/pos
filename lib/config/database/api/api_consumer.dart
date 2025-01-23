@@ -8,6 +8,7 @@ abstract class ApiConsumer {
   Future<dynamic> post(
     String path, {
     Map<String, dynamic>? body,
+    bool bodyEncoded = false,
     bool formDataIsEnabled = true,
     Map<String, dynamic>? queryParameters,
     Map<String, String>? headers,

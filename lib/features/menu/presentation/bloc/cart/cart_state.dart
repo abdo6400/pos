@@ -58,6 +58,8 @@ class CartState extends Equatable {
     int deliveryCategory = 1,
     double deliveryDiscount = 0.0,
     int branchId = 1,
+    required String trn,
+    required remind,
     int userNo = 1,
     bool isPrinted = false,
     bool addQrCode = false,
@@ -74,16 +76,18 @@ class CartState extends Equatable {
     return InvoiceParams(
         branchId: branchId,
         invoices: Invoices(
-            invoiceSubTotal: total.price,
-            invoiceDiscountTotal: total.discount,
-            invoiceTaxTotal: total.tax,
-            invoiceGrandTotal: total.grandTotal,
+            invoiceSubTotal: double.parse(total.price.toStringAsFixed(5)),
+            invoiceDiscountTotal:
+                double.parse(total.discount.toStringAsFixed(5)),
+            invoiceTaxTotal: double.parse(total.tax.toStringAsFixed(5)),
+            invoiceGrandTotal:
+                double.parse(total.grandTotal.toStringAsFixed(5)),
             warehouse: branchId,
             isPrinted: isPrinted,
             realTime: DateTime.now(),
             deliveryCompany: deliveryCategory,
             invoiceServiceTotal: 0,
-            cashPayment: total.grandTotal,
+            cashPayment: double.parse(total.grandTotal.toStringAsFixed(5)),
             customer: -1,
             tableNo: -1,
             empTaker: userNo,
@@ -91,9 +95,9 @@ class CartState extends Equatable {
             qrcode: addQrCode
                 ? GeneratQr(
                     seller: branchId.toString(),
-                    tax: total.tax.toString(),
-                    amount: total.grandTotal.toString(),
-                    trn: '10000000000001101')
+                    tax: total.tax.toStringAsFixed(remind),
+                    amount: total.grandTotal.toStringAsFixed(remind),
+                    trn: trn)
                 : "",
             stationId: ""),
         invoicePayment: payments.entries.map((entry) {
@@ -123,12 +127,12 @@ class CartState extends Equatable {
                 cartItem.product.price4,
                 deliveryCategory,
                 deliveryDiscount),
-            subtotal: details.price,
-            discountV: details.discount,
+            subtotal: double.parse(details.price.toStringAsFixed(5)),
+            discountV: double.parse(details.discount.toStringAsFixed(5)),
             discountP: discount,
             taxP: taxPercentage / 100,
-            taxV: details.tax,
-            grandTotal: details.grandTotal,
+            taxV: double.parse(details.tax.toStringAsFixed(5)),
+            grandTotal: double.parse(details.grandTotal.toStringAsFixed(5)),
             taker: userNo,
             flavors: cartItem.flavors.map((f) => f.flavorEn).toList().join(","),
             warehouse: branchId,

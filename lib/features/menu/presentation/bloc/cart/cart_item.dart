@@ -114,7 +114,7 @@ class CartItem {
       bool priceIncludesTax = true,
       bool taxIncludesDiscount = true,
       double discount = 0.0,
-      int deliveryCategory = 1,
+      int deliveryCategory = 0,
       double deliveryDiscount = 0.0}) {
     // Calculate price and tax for the product
     final productPriceAndTax = _calculatePriceAndTax(

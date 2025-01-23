@@ -172,5 +172,6 @@ enum StringEnums {
   returned_amount,
   exact,
   clear_all,
-  amount_less_than_grand_total
+  amount_less_than_grand_total,
+  payment_success
 }

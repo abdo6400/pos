@@ -4,21 +4,21 @@ abstract class Cash extends Equatable {
   final double cashNo;
   final int cashUser;
   final DateTime cashStartDate;
-  final int cashCustody;
-  final int cashWithDrawals;
-  final int cashSubTotal;
-  final int cashDiscountTotal;
-  final int cashTaxTotal;
-  final int cashGrandTotal;
+  final double cashCustody;
+  final double cashWithDrawals;
+  final double cashSubTotal;
+  final double cashDiscountTotal;
+  final double cashTaxTotal;
+  final double cashGrandTotal;
   final dynamic cashStation;
   final String cashStatus;
   final DateTime cashRealTime;
-  final int requiredCash;
-  final int availableCash;
+  final double requiredCash;
+  final double availableCash;
   final dynamic cashRealEndTime;
-  final int cashCustomerPayment;
-  final int voidAfter;
-  final int voidBefore;
+  final double cashCustomerPayment;
+  final double voidAfter;
+  final double voidBefore;
   final int illegalOpenCashDrawer;
 
   Cash({

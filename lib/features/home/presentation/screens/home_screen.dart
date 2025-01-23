@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
 import '../../../../core/utils/assets.dart';
 import '../../../../core/utils/enums/state_enums.dart';
+import '../../../../core/utils/enums/string_enums.dart';
 import '../../../menu/presentation/bloc/cart/cart_bloc.dart';
 import '../../../menu/presentation/screens/cart_screen.dart';
 import '../../../menu/presentation/screens/menu_screen.dart';
@@ -17,9 +18,9 @@ class HomeScreen extends StatelessWidget {
         listener: (context, state) {
           if (state is PaySuccess) {
             context.read<CartBloc>().add(ClearCartEvent());
-            context.hideOverlayLoader();
+            context.handleState(
+                StateEnum.success, StringEnums.payment_success.name);
           } else if (state is PayError) {
-            context.hideOverlayLoader();
             context.handleState(StateEnum.error, state.message);
           } else if (state is PayLoading) {
             context.showLottieOverlayLoader(Assets.loader);

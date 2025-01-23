@@ -65,6 +65,7 @@ class PaymentRepositoryImpl extends PaymentRepository {
   Future<Either<Failure, SaleDate>> getSaleDate(int branchId) async {
     try {
       final response = await _paymentRemoteDataSource.getSaleDate(branchId);
+
       return Right(response);
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));

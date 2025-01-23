@@ -244,5 +244,6 @@
   "returned_amount": "Returned Amount",
   "exact": "Exact",
   "clear_all": "Clear All",
-  "amount_less_than_grand_total": "Amount less than grand total"
+  "amount_less_than_grand_total": "Amount less than grand total",
+  "payment_success": "Payment Success"
 }
