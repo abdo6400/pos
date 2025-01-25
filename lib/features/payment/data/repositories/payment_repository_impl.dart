@@ -7,6 +7,7 @@ import 'package:retail/features/payment/domain/entities/payment_type.dart';
 import 'package:retail/features/payment/domain/entities/sale_date.dart';
 
 import '../../../../config/database/network/netwok_info.dart';
+import '../../domain/entities/invoice.dart';
 import '../../domain/entities/invoice_id.dart';
 import '../../domain/repositories/payment_repository.dart';
 import '../datasources/payment_local_data_source.dart';
@@ -36,7 +37,7 @@ class PaymentRepositoryImpl extends PaymentRepository {
   Future<Either<Failure, void>> pay(Map<String, dynamic> data) {
     return _networkInfo.handleNetworkPendingRequest(
       remoteRequest: () => _paymentRemoteDataSource.pay(data),
-      localRequest: () async => _paymentLocalDataSource.pay(data),
+      localRequest: () => _paymentLocalDataSource.pay(data),
     );
   }
 
@@ -65,7 +66,16 @@ class PaymentRepositoryImpl extends PaymentRepository {
   Future<Either<Failure, SaleDate>> getSaleDate(int branchId) async {
     try {
       final response = await _paymentRemoteDataSource.getSaleDate(branchId);
+      return Right(response);
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
 
+  @override
+  Future<Either<Failure, List<Invoice>>> getPendingInvoices() async {
+    try {
+      final response = await _paymentLocalDataSource.getPendingInvoices();
       return Right(response);
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));

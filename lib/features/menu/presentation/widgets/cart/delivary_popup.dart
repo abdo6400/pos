@@ -37,7 +37,9 @@ class DelivaryPopup extends StatelessWidget {
             padding: EdgeInsets.zero,
             offset: Offset(-50, -50),
             initialValue:
-                state is DeliverySuccess ? state.deliveries.first : null,
+                state is DeliverySuccess && state.deliveries.isNotEmpty
+                    ? state.deliveries.first
+                    : null,
             enabled: state is DeliverySuccess,
             itemBuilder: (BuildContext context) => state is DeliverySuccess
                 ? ([null, ...state.deliveries]

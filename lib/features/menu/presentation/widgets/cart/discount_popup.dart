@@ -36,8 +36,9 @@ class DiscountPopup extends StatelessWidget {
             ),
             padding: EdgeInsets.zero,
             offset: Offset(-50, -50),
-            initialValue:
-                state is DiscountSuccess ? state.discounts.first : null,
+            initialValue: state is DiscountSuccess && state.discounts.isNotEmpty
+                ? state.discounts.first
+                : null,
             itemBuilder: (BuildContext context) => state is DiscountSuccess
                 ? ([null, ...state.discounts]
                     .map(

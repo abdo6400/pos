@@ -64,7 +64,6 @@ class MenuLocalDataSourceImpl extends MenuLocalDataSource {
   @override
   Future<List<OfferModel>> getOffers() async {
     final response = await _localConsumer.queryAll(TablesKeys.offersTable);
-
     return List<OfferModel>.from(response.map((x) => OfferModel.fromJson(x)));
   }
 

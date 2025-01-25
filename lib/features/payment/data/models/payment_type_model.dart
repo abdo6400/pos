@@ -21,11 +21,14 @@ class PaymentTypeModel extends PaymentType {
         ptype: json[ApiKeys.ptype],
         paymentArDesc: json[ApiKeys.paymentArDesc],
         paymentEnDesc: json[ApiKeys.paymentEnDesc],
-        isActive: jsonDecode(jsonEncode(json[ApiKeys.isActive] ?? false)),
-        cashMoney: jsonDecode(jsonEncode(json[ApiKeys.cashMoney] ?? false)),
+        isActive:
+            json[ApiKeys.isActive] == true || json[ApiKeys.isActive] == "true",
+        cashMoney: json[ApiKeys.cashMoney] == true ||
+            json[ApiKeys.cashMoney] == "true",
         commissions: json[ApiKeys.commissions] ?? 0.0,
-        coupon: jsonDecode(jsonEncode(json[ApiKeys.coupon] ?? false)),
-        isCredit: jsonDecode(jsonEncode(json[ApiKeys.isCredit] ?? false)),
+        coupon: json[ApiKeys.coupon] == true || json[ApiKeys.coupon] == "true",
+        isCredit:
+            json[ApiKeys.isCredit] == true || json[ApiKeys.isCredit] == "true",
         companyId: json[ApiKeys.companyId],
       );
 

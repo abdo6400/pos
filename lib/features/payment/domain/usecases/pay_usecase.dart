@@ -43,16 +43,17 @@ class InvoiceParams {
       {InvoiceId? invoiceId, Cash? cash, SaleDate? saleDate}) {
     final saleDateTime =
         "${saleDate?.lineDate.year}-0${saleDate?.lineDate.month}-${saleDate?.lineDate.day}";
+    final randomId = DateTime.now().millisecondsSinceEpoch.toString();
     return {
-      ApiKeys.invoices: invoices.toJson(invoiceId?.invoiceNo ?? "0",
+      ApiKeys.invoices: invoices.toJson(invoiceId?.invoiceNo ?? randomId,
           invoiceId?.queue ?? 0, cash?.cashNo ?? 0, saleDateTime),
       ApiKeys.invoiceDtl: List<dynamic>.from(
-        invoiceDtl
-            .map((x) => x.toJson(invoiceId?.invoiceNo ?? "0", saleDateTime)),
+        invoiceDtl.map(
+            (x) => x.toJson(invoiceId?.invoiceNo ?? randomId, saleDateTime)),
       ),
       ApiKeys.invoicePayment: List<dynamic>.from(
-        invoicePayment
-            .map((x) => x.toJson(invoiceId?.invoiceNo ?? "0", saleDateTime)),
+        invoicePayment.map(
+            (x) => x.toJson(invoiceId?.invoiceNo ?? randomId, saleDateTime)),
       ),
     };
   }

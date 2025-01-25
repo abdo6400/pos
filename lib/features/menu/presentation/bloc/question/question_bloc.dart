@@ -14,6 +14,7 @@ class QuestionBloc extends Bloc<QuestionEvent, QuestionState> {
     on<GetQuestionsEvent>((event, emit) async {
       emit(QuestionLoading());
       final result = await _getQuestionsUsecase(NoParams());
+
       result.fold((failure) => emit(QuestionError(failure.message)),
           (questions) => emit(QuestionSuccess(questions)));
     });

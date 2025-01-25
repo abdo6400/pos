@@ -85,14 +85,17 @@ class ProductCard extends StatelessWidget {
       builder: (context, offerState) {
         final List<Offer> offers =
             offerState is OfferSuccess ? offerState.offers : [];
+
         final offer = product != null
             ? offers.where((x) => x.productId == product!.proId).toList()
             : null;
-        final List<Offer> productOffers = offers
-            .where(
-              (x) => x.productId == product!.proId,
-            )
-            .toList();
+        final List<Offer> productOffers = product != null
+            ? offers
+                .where(
+                  (x) => x.productId == product!.proId,
+                )
+                .toList()
+            : [];
 
         return Banner(
           color: offer != null && offer.isNotEmpty

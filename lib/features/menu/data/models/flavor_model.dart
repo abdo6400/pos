@@ -18,8 +18,10 @@ class FlavorModel extends Flavor {
         flavorEn: json[ApiKeys.flavorEn],
         price: double.parse(json[ApiKeys.price].toString()),
         warehouse: json[ApiKeys.warehouse],
-        category: List<String>.from(
-            jsonDecode(jsonEncode(json[ApiKeys.category])).map((x) => x)),
+        category: json[ApiKeys.category] is String
+            ? List<String>.from(
+                jsonDecode(json[ApiKeys.category]).map((x) => x))
+            : List<String>.from(json[ApiKeys.category]),
         isActive: bool.tryParse(json[ApiKeys.isActive].toString()) ?? false,
       );
 

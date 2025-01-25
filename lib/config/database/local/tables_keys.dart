@@ -90,11 +90,13 @@ class TablesKeys {
   static const String questionAr = "QuestionAr";
 
   // Column names for paymentTable
-  static const String ptype = "ptype";
-  static const String paymentArDesc = "paymentArDesc";
-  static const String paymentEnDesc = "paymentEnDesc";
-  static const String isActivePayment = "isActive";
-
+  static const String ptype = "Ptype";
+  static const String paymentArDesc = "PaymentArDesc";
+  static const String paymentEnDesc = "PaymentEnDesc";
+  static const String cashMoney = "CashMoney";
+  static const String commissions = "Commissions";
+  static const String coupon = "Coupon";
+  static const String isCredit = "IsCredit";
   // Column names for invoiceHeaderTable
   static const String invoiceNo = "InvoiceNo";
   static const String invoiceCashNo = "InvoiceCashNo";
@@ -154,7 +156,6 @@ class TablesKeys {
 
   // Column names for Offer table
   static const String offerId = "OfferId";
-  static const String offerProductId = "productId";
   static const String productNameAr = "ProductNameAr";
   static const String productNameEn = "ProductNameEn";
   static const String fromDate = "FromDate";
@@ -162,26 +163,20 @@ class TablesKeys {
   static const String priceOffer = "PriceOffer";
   static const String qtyOffer = "QtyOffer";
   static const String extraOffer = "ExtraOffer";
-  static const String offerPrice = "price";
-  static const String offerQty = "qty";
   static const String extraProduct = "ExtraProduct";
-  static const String offerIsActive = "isActive";
   static const String extraProductAr = "ExtraProductAr";
   static const String extraProductEn = "ExtraProductEn";
   static const String offerTypeAr = "OfferTypeAr";
   static const String offerTypeEn = "OfferTypeEn";
   static const String offerValueAr = "offerValueAr";
   static const String offerValueEn = "offerValueEn";
+  static const String offerProductId = "ProductId";
 
   static const String orderId = "orderId";
   static const String ordersTable = "orderTable";
   static const String orderDate = "orderDate";
   static const String orderStatus = "orderStatus";
 
-  static const String cashMoney = "CashMoney";
-  static const String commissions = "Commissions";
-  static const String coupon = "Coupon";
-  static const String isCredit = "IsCredit";
   static const String companyId = "CompanyId";
 
   // InvoiceParams keys
