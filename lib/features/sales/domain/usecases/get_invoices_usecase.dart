@@ -13,19 +13,19 @@ class GetInvoicesUsecase
   @override
   Future<Either<Failure, List<Invoice>>> call(InvoicesParams params) {
     return _repository.getInvoices(
-      branchId: params.branchId,
+      branchId: params.branchId.toString(),
       startDate: params.startDate,
       endDate: params.endDate,
-      userId: params.userId,
+      userId: params.userId.toString(),
     );
   }
 }
 
 class InvoicesParams {
-  final String branchId;
+  final int branchId;
   final String startDate;
   final String endDate;
-  final String userId;
+  final int userId;
 
   InvoicesParams(this.branchId, this.startDate, this.endDate, this.userId);
 }
