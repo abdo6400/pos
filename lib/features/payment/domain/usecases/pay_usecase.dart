@@ -42,7 +42,7 @@ class InvoiceParams {
   Map<String, dynamic> toJson(
       {InvoiceId? invoiceId, Cash? cash, SaleDate? saleDate}) {
     final saleDateTime =
-        "${saleDate?.lineDate.year}-0${saleDate?.lineDate.month}-${saleDate?.lineDate.day}";
+        "${saleDate?.lineDate.year}-${saleDate?.lineDate.month}-${saleDate?.lineDate.day}";
     final randomId = DateTime.now().millisecondsSinceEpoch.toString();
     return {
       ApiKeys.invoices: invoices.toJson(invoiceId?.invoiceNo ?? randomId,

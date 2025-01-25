@@ -24,11 +24,13 @@ class EndPoints {
   // Payment Endpoints
   static const String getAllPaymentTypes = 'PaymentsType/v1.0/AppGetAll';
   // Invoice Endpoints
-  static const String getInvoicesByIntervalDateAndUser =
-      'RestaurantInvoices/v1.0/GetByIntervalDateAndUser';
-  static const String insertInvoice = 'RestaurantInvoices/v1.0/Insert';
+  static const String getInvoicesByIntervalDate =
+      'RestaurantInvoices/v1.0/ByIntervalDate';
   static const String getLastInvoiceNo =
       'RestaurantInvoices/v1.0/AppGetLastInvoiceNo';
+  static const String insertInvoice = 'RestaurantInvoices/v1.0/Insert';
+  static const String getInvoiceDetail =
+      'RestaurantInvoices/v1.0/AppGetByInvoiceNo';
 
   // Sales Endpoints
   static const String getSalesByWarehouse =

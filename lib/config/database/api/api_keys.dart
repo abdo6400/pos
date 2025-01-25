@@ -237,4 +237,6 @@ class ApiKeys {
   static const String rowguid = "Rowguid";
   static const String wareHouse = "WareHouse";
   static const String transfer = "Transfer";
+
+  static const String freeTax = "FreeTax";
 }
