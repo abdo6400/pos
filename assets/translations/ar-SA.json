@@ -245,5 +245,12 @@
   "exact": "مطابق",
   "clear_all": "مسح الكل",
   "amount_less_than_grand_total": "المبلغ اقل من المجموع الكلي",
-  "payment_success": "تم الدفع بنجاح"
+  "payment_success": "تم الدفع بنجاح",
+  "sales_summary": "ملخص المبيعات",
+  "no_sales": "لا يوجد مبيعات",
+  "search": "بحث",
+  "from_date": " من تاريخ",
+  "to_date": " الى تاريخ",
+  "page": "صفحة",
+  "of": " من "
 }

@@ -7,6 +7,7 @@ import 'package:retail/core/utils/extensions/extensions.dart';
 import 'package:retail/core/widgets/custom_button.dart';
 import '../../../../core/entities/field.dart';
 import '../../../../core/entities/form.dart';
+import '../../../../core/utils/enums/field_type_enums.dart';
 import '../../../../core/utils/enums/string_enums.dart';
 import '../../../../core/widgets/global_form_builder/custom_form_builder.dart';
 import '../../domain/entities/payment_type.dart';
@@ -208,6 +209,7 @@ class PaymentScreen extends StatelessWidget {
                                   },
                                   fields: paymentTypes
                                       .map((e) => FieldParams(
+                                            type: FieldTypeEnums.text,
                                             label: context.trValue(
                                                 e.paymentArDesc,
                                                 e.paymentEnDesc),

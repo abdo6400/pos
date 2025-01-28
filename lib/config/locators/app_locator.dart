@@ -1,3 +1,8 @@
+import 'package:retail/features/sales/data/datasources/sales_remote_data_source.dart';
+import 'package:retail/features/sales/domain/repositories/sales_repository.dart';
+import 'package:retail/features/sales/domain/usecases/get_invoice_detail_usecase.dart';
+import 'package:retail/features/sales/domain/usecases/get_invoices_usecase.dart';
+
 import '../../core/utils/constants.dart';
 import '../../features/menu/data/datasources/menu_local_data_source.dart';
 import '../../features/menu/data/datasources/menu_remote_data_source.dart';
@@ -31,6 +36,9 @@ import '../../features/payment/domain/usecases/get_payment_types_usecase.dart';
 import '../../features/payment/domain/usecases/pay_usecase.dart';
 import '../../features/payment/presentation/bloc/pay/pay_bloc.dart';
 import '../../features/payment/presentation/bloc/payment_types/payment_types_bloc.dart';
+import '../../features/sales/data/repositories/sales_repository_impl.dart';
+import '../../features/sales/presentation/bloc/invoice/invoice_bloc.dart';
+import '../../features/sales/presentation/bloc/invoice_detail/invoice_detail_bloc.dart';
 import '../../features/settings/data/datasources/settings_remote_data_source.dart';
 import '../../features/settings/data/repositories/settings_repository_impl.dart';
 import '../../features/settings/domain/repositories/settings_repository.dart';
@@ -108,5 +116,20 @@ class AppLocator {
         () => PaymentRemoteDataSourceImpl(apiConsumer: locator()));
     locator.registerLazySingleton<PaymentLocalDataSource>(
         () => PaymentLocalDataSourceImpl(localConsumer: locator()));
+
+    //sales
+    locator.registerLazySingleton<InvoiceBloc>(() => InvoiceBloc(locator()));
+    locator.registerLazySingleton<InvoiceDetailBloc>(() => InvoiceDetailBloc(
+          locator(),
+        ));
+    locator.registerLazySingleton<GetInvoicesUsecase>(
+        () => GetInvoicesUsecase(locator()));
+    locator.registerLazySingleton<GetInvoiceDetailUsecase>(
+        () => GetInvoiceDetailUsecase(locator()));
+    locator.registerLazySingleton<SalesRepository>(() => SalesRepositoryImpl(
+          salesRemoteDataSource: locator(),
+        ));
+    locator.registerLazySingleton<SalesRemoteDataSource>(
+        () => SalesRemoteDataSourceImpl(apiConsumer: locator()));
   }
 }

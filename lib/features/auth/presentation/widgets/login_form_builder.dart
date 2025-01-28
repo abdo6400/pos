@@ -1,3 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
+
+import '../../../../core/utils/enums/field_type_enums.dart';
 import '../../../../core/widgets/app_logo.dart';
 import '../../../../core/widgets/global_form_builder/custom_form_builder.dart';
 import '../../../../core/utils/extensions/extensions.dart';
@@ -40,21 +44,31 @@ class LoginFormBuilder extends StatelessWidget {
               formKey: _formKey,
               fields: [
                 FieldParams(
+                  type: FieldTypeEnums.text,
                   label: StringEnums.email.name,
-                  validators: [],
+                  validators: [
+                    FormBuilderValidators.required(
+                        errorText:
+                            StringEnums.user_email_required_error.name.tr()),
+                  ],
                   icon: Icons.email_outlined,
                 ),
                 FieldParams(
+                    type: FieldTypeEnums.text,
                     label: StringEnums.password.name,
                     isPassword: true,
                     icon: Icons.lock_outline,
-                    validators: []),
+                    validators: [
+                      FormBuilderValidators.required(
+                          errorText:
+                              StringEnums.password_required_error.name.tr()),
+                    ]),
               ],
             )),
             CustomSignButton(
               buttonLabel: StringEnums.login.name,
               onSubmit: () {
-                if (_formKey.currentState!.saveAndValidate()) {
+                if (_formKey.currentState?.saveAndValidate() ?? false) {
                   onSubmit();
                 }
               },

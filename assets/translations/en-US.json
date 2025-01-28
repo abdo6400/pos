@@ -245,5 +245,12 @@
   "exact": "Exact",
   "clear_all": "Clear All",
   "amount_less_than_grand_total": "Amount less than grand total",
-  "payment_success": "Payment Success"
+  "payment_success": "Payment Success",
+  "sales_summary": "Sales Summary",
+  "no_sales": "No sales",
+  "search": "Search",
+  "from_date": "From Date",
+  "to_date": "To Date",
+  "page": "Page",
+  "of": "of"
 }

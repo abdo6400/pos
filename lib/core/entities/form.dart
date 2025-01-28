@@ -8,5 +8,14 @@ class FormParams {
   final List<FieldParams> fields;
   Function(String)? onFocus;
 
-  FormParams({required this.formKey, required this.fields, this.onFocus});
+  final double? spacing;
+
+  final double? runSpacing;
+
+  FormParams(
+      {required this.formKey,
+      required this.fields,
+      this.onFocus,
+      this.spacing,
+      this.runSpacing});
 }

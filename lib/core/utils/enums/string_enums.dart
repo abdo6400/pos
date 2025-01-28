@@ -173,5 +173,12 @@ enum StringEnums {
   exact,
   clear_all,
   amount_less_than_grand_total,
-  payment_success
+  payment_success,
+  sales_summary,
+  no_sales,
+  search,
+  from_date,
+  to_date,
+  page,
+  of
 }

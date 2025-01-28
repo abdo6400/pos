@@ -20,7 +20,9 @@ abstract class SalesRemoteDataSource {
 class SalesRemoteDataSourceImpl extends SalesRemoteDataSource {
   final ApiConsumer _apiConsumer;
 
-  SalesRemoteDataSourceImpl(this._apiConsumer);
+  SalesRemoteDataSourceImpl({required ApiConsumer apiConsumer})
+      : _apiConsumer = apiConsumer;
+
   @override
   Future<List<InvoiceModel>> getInvoices(
       {required String branchId,
@@ -35,7 +37,8 @@ class SalesRemoteDataSourceImpl extends SalesRemoteDataSource {
       ApiKeys.toDate: endDate,
     });
 
-    return List<InvoiceModel>.from(result.map((x) => InvoiceModel.fromJson(x)));
+    return List<InvoiceModel>.from(
+        result[EndPoints.response].map((x) => InvoiceModel.fromJson(x)));
   }
 
   @override

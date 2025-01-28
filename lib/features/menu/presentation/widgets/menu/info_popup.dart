@@ -1,11 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import '../../../../../config/routes/app_routes.dart';
 import '../../../../../core/bloc/cubit/user_cubit.dart';
 import '../../../../../core/entities/auth_tokens.dart';
 import '../../../../../core/utils/assets.dart';
+import '../../../../../core/utils/constants.dart';
 import '../../../../../core/utils/enums/string_enums.dart';
 
 class InfoPopup extends StatelessWidget {
@@ -25,6 +28,8 @@ class InfoPopup extends StatelessWidget {
           context.AppResponsiveValue(25, mobile: 25, tablet: 35, desktop: 40),
       onSelected: (value) {
         if (value == 'logout') {
+          storage.clearAuthTokenState();
+          context.pushReplacement(AppRoutes.login);
         } else if (value == 'settings') {}
       },
       itemBuilder: (BuildContext context) {

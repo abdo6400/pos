@@ -10,7 +10,9 @@ import '../datasources/sales_remote_data_source.dart';
 class SalesRepositoryImpl extends SalesRepository {
   final SalesRemoteDataSource _salesRemoteDataSource;
 
-  SalesRepositoryImpl(this._salesRemoteDataSource);
+  SalesRepositoryImpl({required SalesRemoteDataSource salesRemoteDataSource})
+      : _salesRemoteDataSource = salesRemoteDataSource;
+
   @override
   Future<Either<Failure, List<Invoice>>> getInvoices(
       {required String branchId,

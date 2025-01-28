@@ -15,12 +15,14 @@ import '../../../menu/presentation/bloc/product/product_bloc.dart';
 import '../../../menu/presentation/bloc/question/question_bloc.dart';
 import '../../../payment/presentation/bloc/pay/pay_bloc.dart';
 import '../../../payment/presentation/bloc/payment_types/payment_types_bloc.dart';
+import '../../../sales/presentation/screens/sales_summary_screen.dart';
 import '../../../settings/presentation/bloc/settings_bloc.dart';
 import '../bloc/cubit/screen_cubit.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
-
+  static final GlobalKey<AnimatedFloatingActionButtonState> menuKey =
+      GlobalKey<AnimatedFloatingActionButtonState>();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -72,6 +74,7 @@ class MainScreen extends StatelessWidget {
             return Scaffold(
               resizeToAvoidBottomInset: false,
               floatingActionButton: AnimatedFloatingActionButton(
+                key: menuKey,
                 fabButtons: <Widget>[
                   FloatingActionButton(
                       child: const Icon(Icons.home),
@@ -102,9 +105,9 @@ class MainScreen extends StatelessWidget {
                 index: index,
                 children: const [
                   HomeScreen(),
-                  Center(child: Text('Search')),
-                  Center(child: Text('Search')),
-                  Center(child: Text('Search')),
+                  SalesSummaryScreen(),
+                  Center(child: Text('close cash')),
+                  Center(child: Text('nodhia')),
                 ],
               ),
             );
