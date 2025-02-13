@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'custom_form_builder_field.dart';
 import '../../entities/form.dart';
 
@@ -11,15 +12,19 @@ class CustomFormBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return FormBuilder(
       key: formModel.formKey,
-      child: Wrap(
-          spacing: formModel.spacing ?? 0,
-          runSpacing: formModel.runSpacing ?? 0,
+      child: ResponsiveRowColumn(
+          layout: formModel.layout ?? ResponsiveRowColumnType.COLUMN,
+          rowSpacing: formModel.spacing ?? 0,
+          columnSpacing: formModel.spacing ?? 0,
           children: formModel.fields
               .map(
-                (e) => (CustomFormBuilderField(
-                  fieldModel: e,
-                  onFocus: formModel.onFocus,
-                )),
+                (e) => ResponsiveRowColumnItem(
+                  rowFlex: 1,
+                  child: (CustomFormBuilderField(
+                    fieldModel: e,
+                    onFocus: formModel.onFocus,
+                  )),
+                ),
               )
               .toList()),
     );

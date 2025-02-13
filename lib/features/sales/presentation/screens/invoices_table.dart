@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -29,17 +30,18 @@ class InvoicesTableState extends State<InvoicesTable> {
   @override
   Widget build(BuildContext context) {
     int _rowsPerPage =
-        context.AppResponsiveValue(5, mobile: 5, tablet: 15, desktop: 20)
+        context.AppResponsiveValue(5, mobile: 5, tablet: 10, desktop: 10)
             .toInt();
     return Card(
       margin: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadiusDirectional.only(
-        bottomEnd: Radius.circular(100),
+        bottomEnd: Radius.circular(20),
       )),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
+          spacing: 10,
           children: [
             Expanded(
               child: BlocBuilder<InvoiceBloc, InvoiceState>(
@@ -81,23 +83,26 @@ class InvoicesTableState extends State<InvoicesTable> {
       spacing: 30,
       children: [
         Expanded(
-          flex: 2,
-          child: CustomFormBuilder(FormParams(formKey: _formKey, fields: [
-            FieldParams(
-                label: StringEnums.from_date.name,
-                icon: Icons.calendar_month,
-                type: FieldTypeEnums.dateTimePicker,
-                validators: []),
-            FieldParams(
-                label: StringEnums.to_date.name,
-                icon: Icons.calendar_month,
-                type: FieldTypeEnums.dateTimePicker,
-                validators: []),
-          ])),
+          flex: 3,
+          child: CustomFormBuilder(FormParams(
+              formKey: _formKey,
+              layout: ResponsiveRowColumnType.ROW,
+              fields: [
+                FieldParams(
+                    label: StringEnums.from_date.name,
+                    icon: Icons.calendar_month,
+                    type: FieldTypeEnums.dateTimePicker,
+                    validators: []),
+                FieldParams(
+                    label: StringEnums.to_date.name,
+                    icon: Icons.calendar_month,
+                    type: FieldTypeEnums.dateTimePicker,
+                    validators: []),
+              ])),
         ),
         Expanded(
           child: CustomButton(
-              backgroundColor: Theme.of(context).colorScheme.secondary,
+              backgroundColor: Theme.of(context).colorScheme.primary,
               buttonLabel: StringEnums.search.name,
               onSubmit: () {
                 if (_formKey.currentState!.saveAndValidate()) {
@@ -121,6 +126,20 @@ class InvoicesTableState extends State<InvoicesTable> {
       columnWidthMode: ColumnWidthMode.fill,
       showCheckboxColumn: false,
       rowsPerPage: rowsPerPage,
+      gridLinesVisibility: GridLinesVisibility.both,
+      headerGridLinesVisibility: GridLinesVisibility.both,
+      tableSummaryRows: [
+        GridTableSummaryRow(
+            showSummaryInRow: true,
+            title: '${StringEnums.subTotalAmount.name.tr()}: {Sum}  ',
+            columns: [
+              GridSummaryColumn(
+                  name: 'Sum',
+                  columnName: StringEnums.subTotalAmount.name,
+                  summaryType: GridSummaryType.sum)
+            ],
+            position: GridTableSummaryRowPosition.bottom)
+      ],
       columns: [
         StringEnums.invoice_number,
         StringEnums.invoice_date,
@@ -131,7 +150,11 @@ class InvoicesTableState extends State<InvoicesTable> {
       ]
           .map((e) => GridColumn(
                 columnName: e.name,
-                label: Text(e.name.tr()),
+                label: Center(
+                  child: Text(e.name.tr(),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                ),
               ))
           .toList(),
       source: _InvoiceDataSource(invoices),
@@ -194,7 +217,8 @@ class _InvoiceDataSource extends DataGridSource {
         return Container(
           alignment: Alignment.center,
           padding: EdgeInsets.all(8.0),
-          child: Text(dataGridCell.value.toString()),
+          child: Text(dataGridCell.value.toString(),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
         );
       }).toList(),
     );

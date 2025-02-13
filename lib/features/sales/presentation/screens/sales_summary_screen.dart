@@ -12,8 +12,8 @@ class SalesSummaryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => locator<InvoiceBloc>()),
-        BlocProvider(create: (_) => locator<InvoiceDetailBloc>()),
+        BlocProvider.value(value: locator<InvoiceBloc>()),
+        BlocProvider.value(value: locator<InvoiceDetailBloc>()),
       ],
       child: Scaffold(
         body: InvoicesTable(),

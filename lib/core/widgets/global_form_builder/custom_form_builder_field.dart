@@ -137,6 +137,57 @@ class CustomFormBuilderField extends StatelessWidget {
         }));
   }
 
+  Widget _buildDateTimePicker(BuildContext context) {
+    final border = UnderlineInputBorder(
+      borderSide: BorderSide(color: Theme.of(context).hintColor.withAlpha(100)),
+    );
+    return FormBuilderDateTimePicker(
+      name: fieldModel.label,
+      initialValue: DateTime.now(),
+      inputType: InputType.date,
+      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+            fontSize: context.AppResponsiveValue(12,
+                mobile: 12, tablet: 20, desktop: 24),
+          ),
+      decoration: InputDecoration(
+        labelText: fieldModel.label.tr(),
+        floatingLabelStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
+              color: Theme.of(context).hintColor.withValues(alpha: 0.9),
+              fontSize: context.AppResponsiveValue(14,
+                  mobile: 13, tablet: 22, desktop: 25),
+            ),
+        labelStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
+              color: Theme.of(context).hintColor.withValues(alpha: 0.9),
+              fontSize: context.AppResponsiveValue(14,
+                  mobile: 13, tablet: 22, desktop: 25),
+            ),
+        hintStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
+              color: Theme.of(context).hintColor.withValues(alpha: 0.9),
+              fontSize: context.AppResponsiveValue(14,
+                  mobile: 13, tablet: 22, desktop: 25),
+            ),
+        hintFadeDuration: Duration(milliseconds: 1000),
+        errorStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
+              color: Theme.of(context).colorScheme.error,
+              fontSize: context.AppResponsiveValue(14,
+                  mobile: 13, tablet: 20, desktop: 24),
+            ),
+        contentPadding: EdgeInsetsDirectional.symmetric(horizontal: 20),
+        border: border,
+        enabledBorder: border,
+        prefixIcon:
+            Icon(fieldModel.icon, color: Theme.of(context).primaryColor),
+        prefixIconConstraints: BoxConstraints(
+          minWidth: context.AppResponsiveValue(60,
+              mobile: 40, tablet: 75, desktop: 80),
+          minHeight: context.AppResponsiveValue(45,
+              mobile: 40, tablet: 60, desktop: 65),
+        ),
+      ),
+      // validator: FormBuilderValidators.compose(fieldModel.validators),
+    );
+  }
+
   Widget _buildCheckbox(BuildContext context) {
     return FormBuilderCheckbox(
       name: fieldModel.label,
@@ -188,19 +239,10 @@ class CustomFormBuilderField extends StatelessWidget {
     );
   }
 
-  Widget _buildDateTimePicker(BuildContext context) {
-    return FormBuilderDateTimePicker(
-      name: fieldModel.label,
-      initialValue: DateTime.now(),
-      decoration: InputDecoration(
-        labelText: fieldModel.label,
-        prefixIcon: Icon(fieldModel.icon),
-      ),
-      // validator: FormBuilderValidators.compose(fieldModel.validators),
-    );
-  }
-
   Widget _buildDropdown(BuildContext context) {
+    final border = UnderlineInputBorder(
+      borderSide: BorderSide(color: Theme.of(context).hintColor.withAlpha(100)),
+    );
     return FormBuilderDropdown(
       name: fieldModel.label,
       items: fieldModel.options!
@@ -208,8 +250,11 @@ class CustomFormBuilderField extends StatelessWidget {
           .toList(),
       initialValue: fieldModel.initialValue,
       decoration: InputDecoration(
-        labelText: fieldModel.label,
-        prefixIcon: Icon(fieldModel.icon),
+        labelText: fieldModel.label.tr(),
+        border: border,
+        enabledBorder: border,
+        prefixIcon:
+            Icon(fieldModel.icon, color: Theme.of(context).primaryColor),
       ),
       validator: FormBuilderValidators.compose(fieldModel.validators),
     );
