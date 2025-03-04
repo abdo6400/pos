@@ -180,5 +180,7 @@ enum StringEnums {
   from_date,
   to_date,
   page,
-  of
+  of,
+  close_cash,
+  shift_end
 }

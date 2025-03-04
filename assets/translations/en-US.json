@@ -252,5 +252,7 @@
   "from_date": "From Date",
   "to_date": "To Date",
   "page": "Page",
-  "of": "of"
+  "of": "of",
+  "close_cash": "Close Cash",
+  "shift_end": "Shift End"
 }

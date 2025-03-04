@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/bloc/cubit/user_cubit.dart';
 import '../../../../core/utils/constants.dart';
+import '../../../close_cashbox/presentation/screens/close_cashbox_screen.dart';
 import '../../../home/presentation/screens/home_screen.dart';
 import '../../../menu/presentation/bloc/cart/cart_bloc.dart';
 import '../../../menu/presentation/bloc/category/category_bloc.dart';
@@ -16,6 +17,7 @@ import '../../../menu/presentation/bloc/question/question_bloc.dart';
 import '../../../payment/presentation/bloc/pay/pay_bloc.dart';
 import '../../../payment/presentation/bloc/payment_types/payment_types_bloc.dart';
 import '../../../sales/presentation/screens/sales_summary_screen.dart';
+import '../../../sales_report/presentation/screens/sales_report_screen.dart';
 import '../../../settings/presentation/bloc/settings_bloc.dart';
 import '../bloc/cubit/screen_cubit.dart';
 
@@ -106,8 +108,8 @@ class MainScreen extends StatelessWidget {
                 children: const [
                   HomeScreen(),
                   SalesSummaryScreen(),
-                  Center(child: Text('close cash')),
-                  Center(child: Text('nodhia')),
+                  CloseCashboxScreen(),
+                  SalesReportScreen()
                 ],
               ),
             );
