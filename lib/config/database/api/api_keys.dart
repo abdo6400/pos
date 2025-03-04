@@ -239,4 +239,15 @@ class ApiKeys {
   static const String transfer = "Transfer";
 
   static const String freeTax = "FreeTax";
+
+  static const String cashSales = "CashSales";
+  static const String orderReturn = "Return";
+  static const String discount = "Discount";
+  static const String service = "Service";
+  static const String tax = "Tax";
+  static const String cashno = "cashno";
+  static const String type = "type";
+  static const String desc = "Desc";
+  static const String isCashMoney = "IsCashMoney";
+  static const String sum = "sum";
 }

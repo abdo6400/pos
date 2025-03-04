@@ -44,7 +44,8 @@ class EndPoints {
   static const String getSalesSummary = 'RestaurantSales/v1.0/GetSalesSummary';
   static const String getSalesByCashNo =
       'RestaurantSales/v1.0/AppGetPaymentsByCashNo';
-
+  static const String getCashSalesSummary =
+      "RestaurantSales/v1.0/AppGetXInfoByCashNo";
   // Return Endpoints
   static const String getReturnByDate = 'Return/v1.0/AppGetByDate';
   static const String insertReturn = 'Return/v1.0/ReturnInsert';
