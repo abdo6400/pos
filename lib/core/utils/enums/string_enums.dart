@@ -182,5 +182,6 @@ enum StringEnums {
   page,
   of,
   close_cash,
-  shift_end
+  shift_end,
+  requiredAmount
 }

@@ -2,8 +2,8 @@ import 'package:equatable/equatable.dart';
 
 abstract class CashSale extends Equatable {
   final double cashSales;
-  final int orderReturn;
-  final int cashCustody;
+  final double orderReturn;
+  final double cashCustody;
 
   CashSale(
       {required this.cashSales,

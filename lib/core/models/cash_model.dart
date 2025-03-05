@@ -1,5 +1,5 @@
-import '../../../../config/database/api/api_keys.dart';
-import '../../domain/entities/cash.dart';
+import '../../config/database/api/api_keys.dart';
+import '../entities/cash.dart';
 
 class CashModel extends Cash {
   CashModel(

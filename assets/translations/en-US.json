@@ -254,5 +254,6 @@
   "page": "Page",
   "of": "of",
   "close_cash": "Close Cash",
-  "shift_end": "Shift End"
+  "shift_end": "Shift End",
+  "requiredAmount": "Required Amount"
 }

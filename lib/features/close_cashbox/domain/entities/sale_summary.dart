@@ -3,10 +3,10 @@ import 'package:equatable/equatable.dart';
 abstract class SaleSummary extends Equatable {
   final double cashNo;
   final double subTotal;
-  final int discount;
-  final int service;
+  final double discount;
+  final double service;
   final double grandTotal;
-  final int tax;
+  final double tax;
 
   SaleSummary(
       {required this.cashNo,

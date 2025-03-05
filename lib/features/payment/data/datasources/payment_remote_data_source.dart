@@ -1,7 +1,7 @@
 import '../../../../config/database/api/api_consumer.dart';
 import '../../../../config/database/api/api_keys.dart';
 import '../../../../config/database/api/end_points.dart';
-import '../models/cash_model.dart';
+import '../../../../core/models/cash_model.dart';
 import '../models/invoice_id_model.dart';
 import '../models/payment_type_model.dart';
 import '../models/sale_date_model.dart';

@@ -5,7 +5,7 @@ import 'package:dartz/dartz.dart';
 import '../../../../config/database/api/api_keys.dart';
 import '../../../../config/database/error/failures.dart';
 import '../../../../core/usecases/use_case.dart';
-import '../entities/cash.dart';
+import '../../../../core/entities/cash.dart';
 import '../entities/invoice_id.dart';
 import '../entities/sale_date.dart';
 import '../repositories/payment_repository.dart';

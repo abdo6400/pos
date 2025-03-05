@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import 'package:retail/config/database/error/failures.dart';
-import 'package:retail/features/payment/domain/entities/cash.dart';
+import 'package:retail/core/entities/cash.dart';
 
 import 'package:retail/features/payment/domain/entities/payment_type.dart';
 import 'package:retail/features/payment/domain/entities/sale_date.dart';

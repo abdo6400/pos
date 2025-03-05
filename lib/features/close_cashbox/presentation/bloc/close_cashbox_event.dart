@@ -6,3 +6,9 @@ abstract class CloseCashboxEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class ClosePointEvent extends CloseCashboxEvent {
+  final ClosePointParams closePointParams;
+
+  const ClosePointEvent({required this.closePointParams});
+}

@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../../config/database/error/failures.dart';
-import '../entities/cash.dart';
+import '../../../../core/entities/cash.dart';
 import '../entities/invoice.dart';
 import '../entities/invoice_id.dart';
 import '../entities/payment_type.dart';
