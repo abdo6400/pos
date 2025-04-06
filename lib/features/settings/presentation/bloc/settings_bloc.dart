@@ -10,6 +10,7 @@ part 'settings_state.dart';
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final GetSettingsUsecase _getSettingsUsecase;
+
   SettingsBloc(this._getSettingsUsecase) : super(SettingsInitial()) {
     on<GetSettingsEvent>((event, emit) async {
       emit(SettingsLoading());

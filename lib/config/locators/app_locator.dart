@@ -51,7 +51,11 @@ import '../../features/sales/presentation/bloc/invoice_detail/invoice_detail_blo
 import '../../features/settings/data/datasources/settings_remote_data_source.dart';
 import '../../features/settings/data/repositories/settings_repository_impl.dart';
 import '../../features/settings/domain/repositories/settings_repository.dart';
+import '../../features/settings/domain/usecases/end_day_usecase.dart';
+import '../../features/settings/domain/usecases/get_sales_by_user_usecase.dart';
+import '../../features/settings/domain/usecases/get_sales_by_warehouse_usecase.dart';
 import '../../features/settings/domain/usecases/get_settings_usecase.dart';
+import '../../features/settings/domain/usecases/open_point_by_parameters_usecase.dart';
 import '../../features/settings/presentation/bloc/settings_bloc.dart';
 
 class AppLocator {
@@ -104,6 +108,14 @@ class AppLocator {
     locator.registerLazySingleton<SettingsBloc>(() => SettingsBloc(locator()));
     locator.registerLazySingleton<GetSettingsUsecase>(
         () => GetSettingsUsecase(locator()));
+    locator.registerLazySingleton<GetSalesByWarehouseUsecase>(
+        () => GetSalesByWarehouseUsecase(locator()));
+    locator.registerLazySingleton<GetSalesByUserUsecase>(
+        () => GetSalesByUserUsecase(locator()));
+    locator.registerLazySingleton<OpenPointByParametersUsecase>(
+        () => OpenPointByParametersUsecase(locator()));
+    locator
+        .registerLazySingleton<EndDayUsecase>(() => EndDayUsecase(locator()));
     locator.registerLazySingleton<SettingsRepository>(
         () => SettingsRepositoryImpl(settingsRemoteDataSource: locator()));
     locator.registerLazySingleton<SettingsRemoteDataSource>(
