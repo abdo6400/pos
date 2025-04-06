@@ -98,11 +98,11 @@ class MainScreen extends StatelessWidget {
                       onPressed: () {
                         context.read<ScreenCubit>().changeScreen(2);
                       }),
-                  FloatingActionButton(
-                      child: const Icon(Icons.timeline_rounded),
-                      onPressed: () {
-                        context.read<ScreenCubit>().changeScreen(3);
-                      }),
+                  // FloatingActionButton(
+                  //     child: const Icon(Icons.timeline_rounded),
+                  //     onPressed: () {
+                  //       context.read<ScreenCubit>().changeScreen(3);
+                  //     }),
                 ],
                 animatedIconData: AnimatedIcons.menu_close,
                 colorStartAnimation: Theme.of(context).colorScheme.primary,
@@ -114,7 +114,7 @@ class MainScreen extends StatelessWidget {
                   HomeScreen(),
                   SalesSummaryScreen(),
                   CloseCashboxScreen(),
-                  SalesReportScreen()
+                  // SalesReportScreen()
                 ],
               ),
             );

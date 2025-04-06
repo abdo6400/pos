@@ -5,7 +5,7 @@ import '../../../../core/entities/cash.dart';
 import '../entities/invoice.dart';
 import '../entities/invoice_id.dart';
 import '../entities/payment_type.dart';
-import '../entities/sale_date.dart';
+import '../../../../core/entities/sale_date.dart';
 
 abstract class PaymentRepository {
   Future<Either<Failure, List<PaymentType>>> getPaymentType();

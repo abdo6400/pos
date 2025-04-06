@@ -97,7 +97,7 @@ class CloseCashboxScreen extends StatelessWidget {
           body: BlocBuilder<SummaryBloc, SummaryState>(
             builder: (context, state) {
               if (state is SummaryLoading) {
-                return CircularProgressIndicator();
+                return Center(child: CircularProgressIndicator());
               } else if (state is SummarySuccess) {
                 return Center(
                   child: SingleChildScrollView(

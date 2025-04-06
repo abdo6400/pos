@@ -4,7 +4,7 @@ import 'package:retail/config/database/error/failures.dart';
 import 'package:retail/core/entities/cash.dart';
 
 import 'package:retail/features/payment/domain/entities/payment_type.dart';
-import 'package:retail/features/payment/domain/entities/sale_date.dart';
+import 'package:retail/core/entities/sale_date.dart';
 
 import '../../../../config/database/network/netwok_info.dart';
 import '../../domain/entities/invoice.dart';

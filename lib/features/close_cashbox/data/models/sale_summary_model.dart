@@ -13,7 +13,7 @@ class SaleSummaryModel extends SaleSummary {
   factory SaleSummaryModel.fromJson(Map<String, dynamic> json) =>
       SaleSummaryModel(
           cashNo: json[ApiKeys.cashNo],
-          subTotal: json[ApiKeys.subtotal],
+          subTotal: json[ApiKeys.subTotal],
           discount: json[ApiKeys.discount],
           service: json[ApiKeys.service],
           grandTotal: json[ApiKeys.grandTotal],

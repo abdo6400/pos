@@ -33,9 +33,10 @@ class CashModel extends Cash {
         cashDiscountTotal: json[ApiKeys.cashDiscountTotal],
         cashTaxTotal: json[ApiKeys.cashTaxTotal],
         cashGrandTotal: json[ApiKeys.cashGrandTotal],
-        cashStation: json[ApiKeys.cashStation],
+        cashStation: json[ApiKeys.cashStation] ?? 0.0,
         cashStatus: json[ApiKeys.cashStatus],
-        cashRealTime: DateTime.parse(json[ApiKeys.cashRealTime]),
+        cashRealTime: DateTime.parse(
+            json[ApiKeys.cashRealTime] ?? DateTime.now().toIso8601String()),
         requiredCash: json[ApiKeys.requiredCash],
         availableCash: json[ApiKeys.availableCash],
         cashRealEndTime: json[ApiKeys.cashRealEndTime],

@@ -4,7 +4,7 @@ import '../../../../config/database/api/end_points.dart';
 import '../../../../core/models/cash_model.dart';
 import '../models/invoice_id_model.dart';
 import '../models/payment_type_model.dart';
-import '../models/sale_date_model.dart';
+import '../../../../core/models/sale_date_model.dart';
 
 abstract class PaymentRemoteDataSource {
   Future<List<PaymentTypeModel>> getPaymentTypes();

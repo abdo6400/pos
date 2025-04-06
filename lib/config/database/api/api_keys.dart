@@ -251,4 +251,5 @@ class ApiKeys {
   static const String isCashMoney = "IsCashMoney";
   static const String sum = "sum";
   static const String cashServiceTotal = "CashServiceTotal";
+  static const String subTotal = "SubTotal";
 }

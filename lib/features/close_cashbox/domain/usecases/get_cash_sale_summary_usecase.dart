@@ -14,6 +14,7 @@ class GetCashSaleSummaryUsecase
   Future<Either<Failure, CashSale>> call(int params) async {
     final Cash? cash =
         (await _repository.getCash(params)).fold((l) => null, (r) => r);
+
     return _repository.getCashSaleSummary(cash?.cashNo.toString() ?? "1");
   }
 }

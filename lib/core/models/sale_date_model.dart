@@ -1,5 +1,5 @@
-import '../../../../config/database/api/api_keys.dart';
-import '../../domain/entities/sale_date.dart';
+import '../../config/database/api/api_keys.dart';
+import '../entities/sale_date.dart';
 
 class SaleDateModel extends SaleDate {
   SaleDateModel(
