@@ -52,6 +52,7 @@ import '../../features/settings/data/datasources/settings_remote_data_source.dar
 import '../../features/settings/data/repositories/settings_repository_impl.dart';
 import '../../features/settings/domain/repositories/settings_repository.dart';
 import '../../features/settings/domain/usecases/end_day_usecase.dart';
+import '../../features/settings/domain/usecases/get_opened_points_usecase.dart';
 import '../../features/settings/domain/usecases/get_sales_by_user_usecase.dart';
 import '../../features/settings/domain/usecases/get_sales_by_warehouse_usecase.dart';
 import '../../features/settings/domain/usecases/get_settings_usecase.dart';
@@ -60,6 +61,7 @@ import '../../features/settings/presentation/bloc/end_day/end_day_bloc.dart';
 import '../../features/settings/presentation/bloc/get_sales_by_user/get_sales_by_user_bloc.dart';
 import '../../features/settings/presentation/bloc/get_sales_by_warehouse/get_sales_by_warehouse_bloc.dart';
 import '../../features/settings/presentation/bloc/open_point/open_point_bloc.dart';
+import '../../features/settings/presentation/bloc/opened_point/opened_points_bloc.dart';
 import '../../features/settings/presentation/bloc/settings_bloc.dart';
 
 class AppLocator {
@@ -111,11 +113,15 @@ class AppLocator {
     //settings
     locator.registerFactory<SettingsBloc>(() => SettingsBloc(locator()));
     locator.registerFactory<EndDayBloc>(() => EndDayBloc(locator()));
+    locator
+        .registerFactory<OpenedPointsBloc>(() => OpenedPointsBloc(locator()));
     locator.registerFactory<GetSalesByUserBloc>(
         () => GetSalesByUserBloc(locator()));
     locator.registerFactory<GetSalesByWarehouseBloc>(
         () => GetSalesByWarehouseBloc(locator()));
     locator.registerFactory<OpenPointBloc>(() => OpenPointBloc(locator()));
+    locator.registerLazySingleton<GetOpenedPointsUsecase>(
+        () => GetOpenedPointsUsecase(locator()));
     locator.registerLazySingleton<GetSettingsUsecase>(
         () => GetSettingsUsecase(locator()));
     locator.registerLazySingleton<GetSalesByWarehouseUsecase>(

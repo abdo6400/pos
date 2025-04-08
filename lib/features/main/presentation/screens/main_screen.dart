@@ -6,7 +6,7 @@ import 'package:retail/core/utils/extensions/extensions.dart';
 import '../../../../config/routes/app_routes.dart';
 import '../../../../core/utils/assets.dart';
 import '../../../../core/utils/constants.dart';
-import '../../../../core/utils/enums/state_enums.dart';
+import '../../../../core/utils/enums/string_enums.dart';
 import '../../../close_cashbox/presentation/bloc/close_cashbox_bloc.dart';
 import '../../../close_cashbox/presentation/bloc/summary/summary_bloc.dart';
 import '../../../close_cashbox/presentation/screens/close_cashbox_screen.dart';
@@ -79,6 +79,7 @@ class MainScreen extends StatelessWidget {
           BlocProvider(
               create: (_) => locator<SummaryBloc>()..add(GetSummaryEvent())),
           BlocProvider(create: (_) => locator<CloseCashboxBloc>()),
+          BlocProvider(create: (_) => locator<OpenPointBloc>()),
         ],
         child: BlocConsumer<ComparisonCubit, Map<String, dynamic>>(
           listener: (context, comparison) {
@@ -90,8 +91,11 @@ class MainScreen extends StatelessWidget {
               context.hideOverlayLoader();
               locator<OpenPointBloc>().add(OpenPointRequested());
             } else if (context.read<ComparisonCubit>().isSuccess) {
-              context.go(AppRoutes.openedPoints,
-                  extra: context.read<ComparisonCubit>().mustCloseDay);
+              context.go(AppRoutes.openedPoints, extra: {
+                'mustCloseDay': context.read<ComparisonCubit>().mustCloseDay,
+                StringEnums.from_date.name:
+                    context.read<ComparisonCubit>().startDate,
+              });
             }
           },
           builder: (context, state) {

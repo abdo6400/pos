@@ -9,6 +9,8 @@ abstract class SettingsRemoteDataSource {
   Future<List<SettingModel>> getSettings(String branchId);
   Future<SaleDateModel> getSalesByWarehouse(String branchId);
   Future<CashModel> getSalesByUser(int userId);
+  Future<List<CashModel>> getOpenedPointsByUser(
+      String startDate, String branchId);
   Future<void> openPointByParameters(Map<String, dynamic> data);
   Future<void> endDay(Map<String, dynamic> data);
 }
@@ -49,5 +51,17 @@ class SettingsRemoteDataSourceImpl implements SettingsRemoteDataSource {
   @override
   Future<void> endDay(Map<String, dynamic> data) async {
     await _apiConsumer.post(EndPoints.endDay, body: data);
+  }
+
+  @override
+  Future<List<CashModel>> getOpenedPointsByUser(
+      String startDate, String branchId) async {
+    final response = await _apiConsumer.get(EndPoints.getSalesByDate,
+        queryParameters: {
+          ApiKeys.cashStartDate: startDate,
+          ApiKeys.warehouse: branchId
+        });
+    return List<CashModel>.from(
+        response[EndPoints.response].map((x) => CashModel.fromJson(x)));
   }
 }

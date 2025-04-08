@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/entities/cash.dart';
+import '../../../../../core/utils/constants.dart';
 import '../../../domain/usecases/get_sales_by_user_usecase.dart';
 
 part 'get_sales_by_user_event.dart';
@@ -13,7 +14,8 @@ class GetSalesByUserBloc
       : super(GetSalesByUserInitial()) {
     on<GetSalesByUserRequested>((event, emit) async {
       emit(GetSalesByUserLoading());
-      final result = await _getSalesByUserUsecase(event.userId);
+      final userNo = (await storage.getUser())?.userNo ?? 1;
+      final result = await _getSalesByUserUsecase(userNo);
       result.fold(
         (failure) => emit(GetSalesByUserFailure(message: failure.message)),
         (cash) => emit(GetSalesByUserSuccess(cash: cash)),

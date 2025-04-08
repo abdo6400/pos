@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/utils/constants.dart';
+import '../../core/utils/enums/string_enums.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/intro/presentation/screens/splash_screen.dart';
 import 'package:page_transition/page_transition.dart';
-
 import '../../features/main/presentation/screens/main_screen.dart';
 import '../../features/payment/presentation/screens/payment_screen.dart';
+import '../../features/settings/presentation/bloc/end_day/end_day_bloc.dart';
+import '../../features/settings/presentation/bloc/open_point/open_point_bloc.dart';
+import '../../features/settings/presentation/bloc/opened_point/opened_points_bloc.dart';
 import '../../features/settings/presentation/screens/opened_points_screen.dart';
 import 'app_routes.dart';
 
@@ -80,7 +85,14 @@ class AppRouterConfig {
           return _buildPageWithTransition(
             context,
             state,
-            child: OpenedPointsScreen(),
+            child: MultiBlocProvider(providers: [
+              BlocProvider(create: (_) => locator<OpenPointBloc>()),
+              BlocProvider(create: (_) => locator<EndDayBloc>()),
+              BlocProvider(
+                  create: (_) => locator<OpenedPointsBloc>()
+                    ..add(OpenedPointsRequested((state.extra
+                        as Map<String, dynamic>)[StringEnums.from_date.name]))),
+            ], child: OpenedPointsScreen()),
           );
         },
       ),

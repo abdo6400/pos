@@ -78,4 +78,18 @@ class SettingsRepositoryImpl implements SettingsRepository {
       return Left(ServerFailure(message: e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, List<Cash>>> getOpenedPointsByUser(
+      String startDate, String branchId) async {
+    try {
+      final response = await _settingsRemoteDataSource.getOpenedPointsByUser(
+          startDate, branchId);
+      return Right(response);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
 }

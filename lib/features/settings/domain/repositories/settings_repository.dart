@@ -8,6 +8,8 @@ abstract class SettingsRepository {
   Future<Either<Failure, List<Setting>>> getSettings(String branchId);
   Future<Either<Failure, SaleDate>> getSalesByWarehouse(String branchId);
   Future<Either<Failure, Cash>> getSalesByUser(int userId);
+  Future<Either<Failure, List<Cash>>> getOpenedPointsByUser(
+      String startDate, String branchId);
   Future<Either<Failure, void>> openPointByParameters(
       Map<String, dynamic> data);
   Future<Either<Failure, void>> endDay(Map<String, dynamic> data);
