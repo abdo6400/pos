@@ -30,8 +30,7 @@ class SettingsRepositoryImpl implements SettingsRepository {
   }
 
   @override
-  Future<Either<Failure, List<SaleDate>>> getSalesByWarehouse(
-      String branchId) async {
+  Future<Either<Failure, SaleDate>> getSalesByWarehouse(String branchId) async {
     try {
       final response =
           await _settingsRemoteDataSource.getSalesByWarehouse(branchId);

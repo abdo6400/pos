@@ -7,7 +7,7 @@ class GetSalesByWarehouseInitial extends GetSalesByWarehouseState {}
 class GetSalesByWarehouseLoading extends GetSalesByWarehouseState {}
 
 class GetSalesByWarehouseSuccess extends GetSalesByWarehouseState {
-  final List<SaleDate> sales;
+  final SaleDate sales;
 
   GetSalesByWarehouseSuccess({required this.sales});
 }

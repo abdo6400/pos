@@ -13,7 +13,7 @@ part 'summary_event.dart';
 part 'summary_state.dart';
 
 class SummaryBloc extends Bloc<SummaryEvent, SummaryState> {
-  final GetPaymentsSummary _getPaymentsSummary;
+  final GetPaymentsSummaryUseCase _getPaymentsSummary;
   final GetCashSaleSummaryUsecase _cashSaleSummaryUsecase;
   final GetSalesSummaryUsecase _getSalesSummaryUsecase;
   SummaryBloc(this._getPaymentsSummary, this._cashSaleSummaryUsecase,

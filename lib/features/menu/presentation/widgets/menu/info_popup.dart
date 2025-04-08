@@ -28,8 +28,12 @@ class InfoPopup extends StatelessWidget {
           context.AppResponsiveValue(25, mobile: 25, tablet: 35, desktop: 40),
       onSelected: (value) {
         if (value == 'logout') {
-          storage.clearAuthTokenState();
-          context.pushReplacement(AppRoutes.login);
+          context.showConfirmDilog(
+              title: StringEnums.loggingOut.name,
+              onSubmit: () {
+                storage.clearAuthTokenState();
+                context.go(AppRoutes.login);
+              });
         } else if (value == 'settings') {}
       },
       itemBuilder: (BuildContext context) {

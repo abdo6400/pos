@@ -7,7 +7,7 @@ import '../models/setting_model.dart';
 
 abstract class SettingsRemoteDataSource {
   Future<List<SettingModel>> getSettings(String branchId);
-  Future<List<SaleDateModel>> getSalesByWarehouse(String branchId);
+  Future<SaleDateModel> getSalesByWarehouse(String branchId);
   Future<CashModel> getSalesByUser(int userId);
   Future<void> openPointByParameters(Map<String, dynamic> data);
   Future<void> endDay(Map<String, dynamic> data);
@@ -28,11 +28,10 @@ class SettingsRemoteDataSourceImpl implements SettingsRemoteDataSource {
   }
 
   @override
-  Future<List<SaleDateModel>> getSalesByWarehouse(String branchId) async {
+  Future<SaleDateModel> getSalesByWarehouse(String branchId) async {
     final response = await _apiConsumer.get(EndPoints.getSalesByWarehouse,
         queryParameters: {ApiKeys.warehouse: branchId});
-    return List<SaleDateModel>.from(
-        response[EndPoints.response].map((x) => SaleDateModel.fromJson(x)));
+    return SaleDateModel.fromJson(response[EndPoints.response]);
   }
 
   @override

@@ -5,13 +5,13 @@ import '../repositories/settings_repository.dart';
 import '../../../../core/entities/sale_date.dart';
 
 class GetSalesByWarehouseUsecase
-    extends UseCase<Either<Failure, List<SaleDate>>, String> {
+    extends UseCase<Either<Failure, SaleDate>, String> {
   final SettingsRepository repository;
 
   GetSalesByWarehouseUsecase(this.repository);
 
   @override
-  Future<Either<Failure, List<SaleDate>>> call(String branchId) {
+  Future<Either<Failure, SaleDate>> call(String branchId) {
     return repository.getSalesByWarehouse(branchId);
   }
 }

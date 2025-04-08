@@ -6,7 +6,7 @@ import '../entities/setting.dart';
 
 abstract class SettingsRepository {
   Future<Either<Failure, List<Setting>>> getSettings(String branchId);
-  Future<Either<Failure, List<SaleDate>>> getSalesByWarehouse(String branchId);
+  Future<Either<Failure, SaleDate>> getSalesByWarehouse(String branchId);
   Future<Either<Failure, Cash>> getSalesByUser(int userId);
   Future<Either<Failure, void>> openPointByParameters(
       Map<String, dynamic> data);

@@ -5,11 +5,11 @@ import '../../../../core/usecases/use_case.dart';
 import '../entities/payment_summary.dart';
 import '../repositories/close_point_repository.dart';
 
-class GetPaymentsSummary extends UseCase<Either<Failure, List<PaymentSummary>>,
-    GetPaymentsSummaryParams> {
+class GetPaymentsSummaryUseCase extends UseCase<
+    Either<Failure, List<PaymentSummary>>, GetPaymentsSummaryParams> {
   final ClosePointRepository _repository;
 
-  GetPaymentsSummary(this._repository);
+  GetPaymentsSummaryUseCase(this._repository);
   @override
   Future<Either<Failure, List<PaymentSummary>>> call(
       GetPaymentsSummaryParams params) async {

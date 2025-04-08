@@ -8,10 +8,8 @@ abstract class OpenPointEvent extends Equatable {
 }
 
 class OpenPointRequested extends OpenPointEvent {
-  final Map<String, dynamic> data;
-
-  const OpenPointRequested({required this.data});
+  const OpenPointRequested();
 
   @override
-  List<Object> get props => [data];
+  List<Object> get props => [];
 }

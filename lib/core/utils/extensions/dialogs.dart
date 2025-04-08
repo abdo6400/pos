@@ -73,9 +73,8 @@ extension Dialogs on BuildContext {
       context: this,
       useRootNavigator: true,
       btnCancelText: StringEnums.cancel.name.tr(),
-      animType: AnimType.topSlide,
       btnOkText: StringEnums.confirm.name.tr(),
-      dialogType: DialogType.warning,
+      dialogType: DialogType.noHeader,
       titleTextStyle: Theme.of(this).textTheme.headlineSmall!.copyWith(
             fontSize: this
                 .AppResponsiveValue(20, mobile: 15, tablet: 24, desktop: 32),

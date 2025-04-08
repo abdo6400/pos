@@ -56,20 +56,24 @@ import '../../features/settings/domain/usecases/get_sales_by_user_usecase.dart';
 import '../../features/settings/domain/usecases/get_sales_by_warehouse_usecase.dart';
 import '../../features/settings/domain/usecases/get_settings_usecase.dart';
 import '../../features/settings/domain/usecases/open_point_by_parameters_usecase.dart';
+import '../../features/settings/presentation/bloc/end_day/end_day_bloc.dart';
+import '../../features/settings/presentation/bloc/get_sales_by_user/get_sales_by_user_bloc.dart';
+import '../../features/settings/presentation/bloc/get_sales_by_warehouse/get_sales_by_warehouse_bloc.dart';
+import '../../features/settings/presentation/bloc/open_point/open_point_bloc.dart';
 import '../../features/settings/presentation/bloc/settings_bloc.dart';
 
 class AppLocator {
   static Future<void> init() async {
     //menu
-    locator.registerLazySingleton<CategoryBloc>(() => CategoryBloc(locator()));
-    locator.registerLazySingleton<ProductBloc>(() => ProductBloc(locator()));
-    locator.registerLazySingleton<FlavorBloc>(() => FlavorBloc(locator()));
-    locator.registerLazySingleton<QuestionBloc>(() => QuestionBloc(locator()));
-    locator.registerLazySingleton<DiscountBloc>(() => DiscountBloc(locator()));
-    locator.registerLazySingleton<OfferBloc>(() => OfferBloc(locator()));
-    locator.registerLazySingleton<OrderBloc>(
+    locator.registerFactory<CategoryBloc>(() => CategoryBloc(locator()));
+    locator.registerFactory<ProductBloc>(() => ProductBloc(locator()));
+    locator.registerFactory<FlavorBloc>(() => FlavorBloc(locator()));
+    locator.registerFactory<QuestionBloc>(() => QuestionBloc(locator()));
+    locator.registerFactory<DiscountBloc>(() => DiscountBloc(locator()));
+    locator.registerFactory<OfferBloc>(() => OfferBloc(locator()));
+    locator.registerFactory<OrderBloc>(
         () => OrderBloc(locator(), locator(), locator(), locator()));
-    locator.registerLazySingleton<DeliveryBloc>(
+    locator.registerFactory<DeliveryBloc>(
         () => DeliveryBloc(locator(), locator()));
     locator.registerLazySingleton<GetDeliveryDiscountsUsecase>(
         () => GetDeliveryDiscountsUsecase(locator()));
@@ -105,7 +109,13 @@ class AppLocator {
         () => MenuLocalDataSourceImpl(localConsumer: locator()));
 
     //settings
-    locator.registerLazySingleton<SettingsBloc>(() => SettingsBloc(locator()));
+    locator.registerFactory<SettingsBloc>(() => SettingsBloc(locator()));
+    locator.registerFactory<EndDayBloc>(() => EndDayBloc(locator()));
+    locator.registerFactory<GetSalesByUserBloc>(
+        () => GetSalesByUserBloc(locator()));
+    locator.registerFactory<GetSalesByWarehouseBloc>(
+        () => GetSalesByWarehouseBloc(locator()));
+    locator.registerFactory<OpenPointBloc>(() => OpenPointBloc(locator()));
     locator.registerLazySingleton<GetSettingsUsecase>(
         () => GetSettingsUsecase(locator()));
     locator.registerLazySingleton<GetSalesByWarehouseUsecase>(
@@ -122,9 +132,9 @@ class AppLocator {
         () => SettingsRemoteDataSourceImpl(apiConsumer: locator()));
 
     //payment
-    locator.registerLazySingleton<PayBloc>(() => PayBloc(locator()));
-    locator.registerLazySingleton<PaymentTypesBloc>(
-        () => PaymentTypesBloc(locator()));
+    locator.registerFactory<PayBloc>(() => PayBloc(locator()));
+    locator
+        .registerFactory<PaymentTypesBloc>(() => PaymentTypesBloc(locator()));
     locator.registerLazySingleton<PayUsecase>(() => PayUsecase(locator()));
     locator.registerLazySingleton<GetPaymentTypesUsecase>(
         () => GetPaymentTypesUsecase(locator()));
@@ -139,8 +149,8 @@ class AppLocator {
         () => PaymentLocalDataSourceImpl(localConsumer: locator()));
 
     //sales
-    locator.registerLazySingleton<InvoiceBloc>(() => InvoiceBloc(locator()));
-    locator.registerLazySingleton<InvoiceDetailBloc>(() => InvoiceDetailBloc(
+    locator.registerFactory<InvoiceBloc>(() => InvoiceBloc(locator()));
+    locator.registerFactory<InvoiceDetailBloc>(() => InvoiceDetailBloc(
           locator(),
         ));
     locator.registerLazySingleton<GetInvoicesUsecase>(
@@ -154,12 +164,12 @@ class AppLocator {
         () => SalesRemoteDataSourceImpl(apiConsumer: locator()));
 
     //close point
-    locator.registerLazySingleton<SummaryBloc>(
+    locator.registerFactory<SummaryBloc>(
         () => SummaryBloc(locator(), locator(), locator()));
-    locator.registerLazySingleton<CloseCashboxBloc>(
-        () => CloseCashboxBloc(locator()));
-    locator.registerLazySingleton<GetPaymentsSummary>(
-        () => GetPaymentsSummary(locator()));
+    locator
+        .registerFactory<CloseCashboxBloc>(() => CloseCashboxBloc(locator()));
+    locator.registerLazySingleton<GetPaymentsSummaryUseCase>(
+        () => GetPaymentsSummaryUseCase(locator()));
     locator.registerLazySingleton<GetCashSaleSummaryUsecase>(
         () => GetCashSaleSummaryUsecase(locator()));
     locator.registerLazySingleton<ClosePointUsecase>(

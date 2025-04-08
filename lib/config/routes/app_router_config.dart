@@ -75,7 +75,7 @@ class AppRouterConfig {
         },
       ),
       GoRoute(
-        path: AppRoutes.payment,
+        path: AppRoutes.openedPoints,
         pageBuilder: (context, state) {
           return _buildPageWithTransition(
             context,

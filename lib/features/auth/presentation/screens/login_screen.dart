@@ -17,8 +17,8 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: BlocProvider.value(
-        value: locator<LoginBloc>(),
+      child: BlocProvider(
+        create: (context) => locator<LoginBloc>(),
         child: Stack(
           children: [
             Container(
@@ -46,7 +46,7 @@ class LoginScreen extends StatelessWidget {
                               state.tokens.token, state.tokens.toJson());
                           _formKey.currentState?.reset();
                           context.hideOverlayLoader();
-                          context.pushReplacement(AppRoutes.main);
+                          context.go(AppRoutes.main);
                         } else if (state is LoginError) {
                           context.hideOverlayLoader();
                           context.showMessageToast(msg: state.message);
