@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AppColors {
   //* Main Colors (from CSS)
   static const Color primary =
-      Color.fromRGBO(252, 199, 55, 1); // Matches --primary-color
+      Color.fromRGBO(216, 166, 29, 1); // Matches --primary-color
   static const Color secondary =
       Color.fromRGBO(137, 168, 178, 1); // Matches --secondary-color
 

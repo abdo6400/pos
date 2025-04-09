@@ -255,5 +255,6 @@
   "of": " من ",
   "close_cash": "اغلاق الصندوق",
   "shift_end": "انهاء الشفت",
-  "requiredAmount": "المبلغ المطلوب"
+  "requiredAmount": "المبلغ المطلوب",
+  "openedPoints": "نقاط البيع المفتوحة"
 }

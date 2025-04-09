@@ -183,5 +183,6 @@ enum StringEnums {
   of,
   close_cash,
   shift_end,
-  requiredAmount
+  requiredAmount,
+  openedPoints
 }
