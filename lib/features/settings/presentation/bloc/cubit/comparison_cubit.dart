@@ -13,8 +13,10 @@ class ComparisonCubit extends Cubit<Map<String, dynamic>> {
   bool isLoading = true;
   bool mustCloseDay = false;
   String startDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
-
+  String closeTime = DateFormat('yyyy-MM-dd').format(DateTime.now());
   void init() {
+    isLoading = true;
+    isError = false;
     emit({});
   }
 
@@ -27,13 +29,21 @@ class ComparisonCubit extends Cubit<Map<String, dynamic>> {
   bool get isSuccess => !isError && !isLoading && _compareValues();
 
   void updateFirstValue(SaleDate value) {
-    isLoading = false;
-    emit({...state, 'firstValue': value});
+    if (state.isNotEmpty) {
+      isLoading = false;
+    }
+    if (!isError) {
+      emit({...state, 'firstValue': value});
+    }
   }
 
   void updateSecondValue(List<Setting> value) {
-    isLoading = false;
-    emit({...state, 'secondValue': value});
+    if (state.isNotEmpty) {
+      isLoading = false;
+    }
+    if (!isError) {
+      emit({...state, 'secondValue': value});
+    }
   }
 
   bool _compareValues() {
@@ -54,6 +64,7 @@ class ComparisonCubit extends Cubit<Map<String, dynamic>> {
       if (DateTime.now().isAfter(closingTime)) {
         mustCloseDay = true;
       }
+      closeTime = closingTime.toIso8601String();
       startDate = firstValue.lineDate.toIso8601String();
       isSuccess = true;
     }

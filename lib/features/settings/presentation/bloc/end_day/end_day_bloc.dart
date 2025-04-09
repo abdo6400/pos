@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../core/utils/constants.dart';
 import '../../../domain/usecases/end_day_usecase.dart';
 
 part 'end_day_event.dart';
@@ -12,12 +13,15 @@ class EndDayBloc extends Bloc<EndDayEvent, EndDayState> {
   EndDayBloc(this._endDayUsecase) : super(EndDayInitial()) {
     on<EndDayRequested>((event, emit) async {
       emit(EndDayLoading());
-      try {
-        await _endDayUsecase(event.data);
-        emit(EndDaySuccess());
-      } catch (e) {
-        emit(EndDayFailure(error: e.toString()));
-      }
+      final branchId = (await storage.getUser())?.defaultBranch ?? "1001";
+      final params = EndDayParams(
+        lineDate: event.lineDate,
+        closeTime: event.closeTime,
+        branchId: branchId,
+      );
+      final result = await _endDayUsecase(params);
+      result.fold((l) => emit(EndDayFailure(error: l.message)),
+          (r) => emit(EndDaySuccess()));
     });
   }
 }

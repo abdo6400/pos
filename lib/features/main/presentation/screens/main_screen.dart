@@ -81,95 +81,101 @@ class MainScreen extends StatelessWidget {
           BlocProvider(create: (_) => locator<CloseCashboxBloc>()),
           BlocProvider(create: (_) => locator<OpenPointBloc>()),
         ],
-        child: BlocConsumer<ComparisonCubit, Map<String, dynamic>>(
-          listener: (context, comparison) {
-            if (context.read<ComparisonCubit>().isLoading) {
-              context.showLottieOverlayLoader(
-                Assets.loader,
-              );
-            } else if (context.read<ComparisonCubit>().isError) {
-              context.hideOverlayLoader();
-              locator<OpenPointBloc>().add(OpenPointRequested());
-            } else if (context.read<ComparisonCubit>().isSuccess) {
-              context.go(AppRoutes.openedPoints, extra: {
-                'mustCloseDay': context.read<ComparisonCubit>().mustCloseDay,
-                StringEnums.from_date.name:
-                    context.read<ComparisonCubit>().startDate,
-              });
-            }
-          },
+        child: BlocBuilder<OpenPointBloc, OpenPointState>(
           builder: (context, state) {
-            return MultiBlocListener(
-              listeners: [
-                BlocListener<GetSalesByWarehouseBloc, GetSalesByWarehouseState>(
-                  listener: (context, state) {
-                    if (state is GetSalesByWarehouseFailure) {
-                      context.read<ComparisonCubit>().hasError();
-                    } else if (state is GetSalesByWarehouseSuccess) {
-                      context
-                          .read<ComparisonCubit>()
-                          .updateFirstValue(state.sales);
-                    }
-                  },
-                ),
-                BlocListener<SettingsBloc, SettingsState>(
-                  listener: (context, state) {
-                    if (state is SettingsError) {
-                      context.read<ComparisonCubit>().hasError();
-                    } else if (state is SettingsSuccess) {
-                      context
-                          .read<ComparisonCubit>()
-                          .updateSecondValue(state.settings);
-                    }
-                  },
-                ),
-              ],
-              child: BlocBuilder<ScreenCubit, int>(
-                builder: (context, index) {
-                  return Scaffold(
-                    resizeToAvoidBottomInset: false,
-                    floatingActionButton: AnimatedFloatingActionButton(
-                      key: menuKey,
-                      fabButtons: <Widget>[
-                        FloatingActionButton(
-                            child: const Icon(Icons.home),
-                            onPressed: () {
-                              context.read<ScreenCubit>().changeScreen(0);
-                            }),
-                        FloatingActionButton(
-                            child: const Icon(Icons.receipt_long),
-                            onPressed: () {
-                              context.read<ScreenCubit>().changeScreen(1);
-                            }),
-                        FloatingActionButton(
-                            child: const Icon(Icons.money),
-                            onPressed: () {
-                              context.read<ScreenCubit>().changeScreen(2);
-                            }),
-                        // FloatingActionButton(
-                        //     child: const Icon(Icons.timeline_rounded),
-                        //     onPressed: () {
-                        //       context.read<ScreenCubit>().changeScreen(3);
-                        //     }),
-                      ],
-                      animatedIconData: AnimatedIcons.menu_close,
-                      colorStartAnimation:
-                          Theme.of(context).colorScheme.primary,
-                      colorEndAnimation:
-                          Theme.of(context).colorScheme.secondary,
-                    ),
-                    body: IndexedStack(
-                      index: index,
-                      children: const [
-                        HomeScreen(),
-                        SalesSummaryScreen(),
-                        CloseCashboxScreen(),
-                        // SalesReportScreen()
-                      ],
-                    ),
+            return BlocConsumer<ComparisonCubit, Map<String, dynamic>>(
+              listener: (context, comparison) {
+                if (context.read<ComparisonCubit>().isLoading) {
+                  context.showLottieOverlayLoader(
+                    Assets.loader,
                   );
-                },
-              ),
+                } else if (context.read<ComparisonCubit>().isError) {
+                  context.hideOverlayLoader();
+                  context.read<OpenPointBloc>().add(OpenPointRequested());
+                } else if (context.read<ComparisonCubit>().isSuccess) {
+                  context.go(AppRoutes.openedPoints, extra: {
+                    'mustCloseDay':
+                        context.read<ComparisonCubit>().mustCloseDay,
+                    StringEnums.to_date.name:
+                        context.read<ComparisonCubit>().closeTime,
+                    StringEnums.from_date.name:
+                        context.read<ComparisonCubit>().startDate,
+                  });
+                }
+              },
+              builder: (context, state) {
+                return MultiBlocListener(
+                  listeners: [
+                    BlocListener<GetSalesByWarehouseBloc,
+                        GetSalesByWarehouseState>(
+                      listener: (context, state) {
+                        if (state is GetSalesByWarehouseFailure) {
+                          context.read<ComparisonCubit>().hasError();
+                        } else if (state is GetSalesByWarehouseSuccess) {
+                          context
+                              .read<ComparisonCubit>()
+                              .updateFirstValue(state.sales);
+                        }
+                      },
+                    ),
+                    BlocListener<SettingsBloc, SettingsState>(
+                      listener: (context, state) {
+                        if (state is SettingsSuccess) {
+                          context
+                              .read<ComparisonCubit>()
+                              .updateSecondValue(state.settings);
+                        }
+                      },
+                    ),
+                  ],
+                  child: BlocBuilder<ScreenCubit, int>(
+                    builder: (context, index) {
+                      return Scaffold(
+                        resizeToAvoidBottomInset: false,
+                        floatingActionButton: AnimatedFloatingActionButton(
+                          key: menuKey,
+                          fabButtons: <Widget>[
+                            FloatingActionButton(
+                                child: const Icon(Icons.home),
+                                onPressed: () {
+                                  context.read<ScreenCubit>().changeScreen(0);
+                                }),
+                            FloatingActionButton(
+                                child: const Icon(Icons.receipt_long),
+                                onPressed: () {
+                                  context.read<ScreenCubit>().changeScreen(1);
+                                }),
+                            FloatingActionButton(
+                                child: const Icon(Icons.money),
+                                onPressed: () {
+                                  context.read<ScreenCubit>().changeScreen(2);
+                                }),
+                            // FloatingActionButton(
+                            //     child: const Icon(Icons.timeline_rounded),
+                            //     onPressed: () {
+                            //       context.read<ScreenCubit>().changeScreen(3);
+                            //     }),
+                          ],
+                          animatedIconData: AnimatedIcons.menu_close,
+                          colorStartAnimation:
+                              Theme.of(context).colorScheme.primary,
+                          colorEndAnimation:
+                              Theme.of(context).colorScheme.secondary,
+                        ),
+                        body: IndexedStack(
+                          index: index,
+                          children: const [
+                            HomeScreen(),
+                            SalesSummaryScreen(),
+                            CloseCashboxScreen(),
+                            // SalesReportScreen()
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
             );
           },
         ),

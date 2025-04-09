@@ -23,7 +23,8 @@ class ClosePointRemoteDataSourceImpl extends ClosePointRemoteDataSource {
 
   @override
   Future<void> closePoint(Map<String, dynamic> data) async {
-    await _apiConsumer.post(EndPoints.closePoint, body: data);
+    await _apiConsumer.post(EndPoints.closePoint,
+        body: data, formDataIsEnabled: false);
   }
 
   @override

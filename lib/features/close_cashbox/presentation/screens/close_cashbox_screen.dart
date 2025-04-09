@@ -206,10 +206,9 @@ class CloseCashboxScreen extends StatelessWidget {
                                                   state.cashSaleSummary
                                                       .orderReturn ==
                                               (double.tryParse(_formKey
-                                                      .currentState!
-                                                      .value[StringEnums
-                                                          .amount.name]
-                                                      ?.value) ??
+                                                          .currentState!.value[
+                                                      StringEnums
+                                                          .amount.name]) ??
                                                   0)) {
                                             locator<CloseCashboxBloc>().add(
                                                 ClosePointEvent(
@@ -239,12 +238,13 @@ class CloseCashboxScreen extends StatelessWidget {
                                                             cashServiceTotal: 0,
                                                             voidBefore: 0,
                                                             availableCash:
-                                                                _formKey.currentState?.fields[StringEnums.amount.name]?.value ??
+                                                                double.tryParse(_formKey.currentState!.value[StringEnums.amount.name]) ??
                                                                     0,
-                                                            requiredCash: (state.cashSaleSummary.cashSales + state.cashSaleSummary.cashCustody) -
-                                                                state
-                                                                    .cashSaleSummary
-                                                                    .orderReturn,
+                                                            requiredCash: (state
+                                                                        .cashSaleSummary
+                                                                        .cashSales +
+                                                                    state.cashSaleSummary.cashCustody) -
+                                                                state.cashSaleSummary.orderReturn,
                                                             illegalOpenCashDrawer: 0,
                                                             cashSubTotal: state.salesSummary.isNotEmpty ? state.salesSummary.first.subTotal : 0,
                                                             cashGrandTotal: state.salesSummary.isNotEmpty ? state.salesSummary.first.grandTotal : 0,

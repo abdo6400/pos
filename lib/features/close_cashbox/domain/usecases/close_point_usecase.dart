@@ -31,7 +31,7 @@ class ClosePointParams {
   final double cashCustomerPayment;
   final double voidAfter;
   final double voidBefore;
-  final double illegalOpenCashDrawer;
+  final int illegalOpenCashDrawer;
 
   ClosePointParams(
       {required this.cashNo,

@@ -8,10 +8,11 @@ abstract class EndDayEvent extends Equatable {
 }
 
 class EndDayRequested extends EndDayEvent {
-  final Map<String, dynamic> data;
+  final String lineDate;
+  final String closeTime;
 
-  const EndDayRequested({required this.data});
+  const EndDayRequested({required this.lineDate, required this.closeTime});
 
   @override
-  List<Object> get props => [data];
+  List<Object> get props => [lineDate, closeTime];
 }

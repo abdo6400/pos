@@ -8,7 +8,7 @@ import '../../features/auth/presentation/bloc/login/login_bloc.dart';
 class AuthLocator {
   static Future<void> init() async {
     //login
-    locator.registerLazySingleton<LoginBloc>(() => LoginBloc(locator()));
+    locator.registerFactory<LoginBloc>(() => LoginBloc(locator()));
     locator.registerLazySingleton<LoginUseCase>(() => LoginUseCase(locator()));
     locator.registerLazySingleton<LoginRepository>(
         () => LoginRepositoryImpl(loginRempteDataSource: locator()));
@@ -19,4 +19,3 @@ class AuthLocator {
     //forget-password
   }
 }
-

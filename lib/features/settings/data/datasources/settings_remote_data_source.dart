@@ -50,7 +50,8 @@ class SettingsRemoteDataSourceImpl implements SettingsRemoteDataSource {
 
   @override
   Future<void> endDay(Map<String, dynamic> data) async {
-    await _apiConsumer.post(EndPoints.endDay, body: data);
+    await _apiConsumer.post(EndPoints.endDay,
+        body: data, formDataIsEnabled: false);
   }
 
   @override
