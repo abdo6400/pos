@@ -54,11 +54,17 @@ class CloseCashboxScreen extends StatelessWidget {
       );
   @override
   Widget build(BuildContext context) {
+    final bool isEndDay = ModalRoute.of(context)!.settings.arguments != null;
     return BlocListener<CloseCashboxBloc, CloseCashboxState>(
       listener: (context, state) {
         if (state is CloseCashboxSuccess) {
-          storage.clearAuthTokenState();
-          context.go(AppRoutes.login);
+          if (isEndDay) {
+            context.hideOverlayLoader();
+            context.pop();
+          } else {
+            storage.clearAuthTokenState();
+            context.go(AppRoutes.login);
+          }
         } else if (state is CloseCashboxError) {
           context.handleState(StateEnum.error, state.message);
         } else if (state is CloseCashboxLoading) {
@@ -69,12 +75,14 @@ class CloseCashboxScreen extends StatelessWidget {
         child: Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
-            leading: Icon(
-              Icons.money,
-              color: Theme.of(context).primaryColor,
-              size: context.AppResponsiveValue(25,
-                  mobile: 25, tablet: 35, desktop: 40),
-            ),
+            leading: isEndDay
+                ? null
+                : Icon(
+                    Icons.money,
+                    color: Theme.of(context).primaryColor,
+                    size: context.AppResponsiveValue(25,
+                        mobile: 25, tablet: 35, desktop: 40),
+                  ),
             actions: [
               SizedBox(width: 25),
               Text(

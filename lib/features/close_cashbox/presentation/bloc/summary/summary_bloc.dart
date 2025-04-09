@@ -23,14 +23,14 @@ class SummaryBloc extends Bloc<SummaryEvent, SummaryState> {
       final user = (await storage.getUser())!;
       emit(SummaryLoading());
       final paymentSummary = await _getPaymentsSummary(GetPaymentsSummaryParams(
-        user.userNo,
+        event.userNo ?? user.userNo,
         user.defaultBranch,
       ));
       final cashSaleSummary = await _cashSaleSummaryUsecase(
-        user.userNo,
+        event.userNo ?? user.userNo,
       );
       final salesSummary = await _getSalesSummaryUsecase(
-        user.userNo,
+        event.userNo ?? user.userNo,
       );
 
       paymentSummary.fold((l) => emit(SummaryError(l.message)),

@@ -4,6 +4,9 @@ import 'package:go_router/go_router.dart';
 import '../../core/utils/constants.dart';
 import '../../core/utils/enums/string_enums.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
+import '../../features/close_cashbox/presentation/bloc/close_cashbox_bloc.dart';
+import '../../features/close_cashbox/presentation/bloc/summary/summary_bloc.dart';
+import '../../features/close_cashbox/presentation/screens/close_cashbox_screen.dart';
 import '../../features/intro/presentation/screens/splash_screen.dart';
 import 'package:page_transition/page_transition.dart';
 import '../../features/main/presentation/screens/main_screen.dart';
@@ -76,6 +79,21 @@ class AppRouterConfig {
             context,
             state,
             child: PaymentScreen(),
+          );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.closeCashbox,
+        pageBuilder: (context, state) {
+          return _buildPageWithTransition(
+            context,
+            state,
+            child: MultiBlocProvider(providers: [
+              BlocProvider(create: (_) => locator<CloseCashboxBloc>()),
+              BlocProvider(
+                  create: (_) => locator<SummaryBloc>()
+                    ..add(GetSummaryEvent(userNo: state.extra as int))),
+            ], child: CloseCashboxScreen()),
           );
         },
       ),

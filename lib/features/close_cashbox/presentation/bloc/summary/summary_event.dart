@@ -7,4 +7,7 @@ sealed class SummaryEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetSummaryEvent extends SummaryEvent {}
+class GetSummaryEvent extends SummaryEvent {
+  final int? userNo;
+  const GetSummaryEvent({this.userNo});
+}

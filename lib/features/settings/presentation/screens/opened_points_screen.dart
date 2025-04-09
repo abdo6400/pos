@@ -82,7 +82,10 @@ class OpenedPointsScreen extends StatelessWidget {
                         ),
                         icon: Text(StringEnums.close_cash.name.tr(),
                             style: const TextStyle(color: Colors.white)),
-                        onPressed: () {},
+                        onPressed: () {
+                          context.push(AppRoutes.closeCashbox,
+                              extra: openedPoint.cashUser);
+                        },
                       ),
                     ),
                   );
