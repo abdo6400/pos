@@ -127,8 +127,8 @@ class AppRouterConfig {
           BlocProvider(create: (_) => locator<PayBloc>()),
           BlocProvider(
               create: (_) => locator<SummaryBloc>()..add(GetSummaryEvent())),
-          BlocProvider(create: (_) => locator<CloseCashboxBloc>()),
-           BlocProvider(
+          BlocProvider(create: (_) => locator<CloseCashboxBloc>()), 
+          BlocProvider(
             create: (_) => locator<SettingsBloc>()..add(GetSettingsEvent())),
         BlocProvider(create: (_) => locator<GetSalesByUserBloc>()..add(GetSalesByUserRequested())),
         BlocProvider(
@@ -159,7 +159,7 @@ class AppRouterConfig {
               BlocProvider(create: (_) => locator<CloseCashboxBloc>()),
               BlocProvider(
                   create: (_) => locator<SummaryBloc>()
-                    ..add(GetSummaryEvent(userNo: state.extra as int))),
+                    ..add(GetSummaryEvent(userNo: (state.extra as Map)[StringEnums.open_point.name]))),
             ], child: CloseCashboxScreen()),
           );
         },

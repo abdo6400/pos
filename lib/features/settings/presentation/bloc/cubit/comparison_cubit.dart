@@ -126,22 +126,22 @@ class ComparisonCubit extends Cubit<ComparisonState> {
   }
 
   ComparisonState _calculateDerivedValues(ComparisonState currentState) {
-    if (currentState.firstValue == null || 
-        currentState.secondValue == null || 
+    if (currentState.firstValue == null ||
+        currentState.secondValue == null ||
         currentState.secondValue!.isEmpty) {
       return currentState;
     }
 
-    final firstValue = currentState.firstValue!;
+    final firstValue = currentState.firstValue!; 
     final secondValue = currentState.secondValue!;
     final thirdValue = currentState.thirdValue;
-    
+
     bool hasPointValue = thirdValue != null;
-    
+
     final closingHour = int.parse(DateFormat.H().format(secondValue[1].value5));
     var closingTime = firstValue.lineDate;
     final hourDifference = 24 - closingHour;
-    
+
     if (hourDifference > 12) {
       closingTime = closingTime.add(Duration(days: 1, hours: closingHour));
     } else {
@@ -149,6 +149,7 @@ class ComparisonCubit extends Cubit<ComparisonState> {
     }
 
     final mustCloseDayValue = DateTime.now().isAfter(closingTime);
+
     final closeTimeValue = closingTime.toIso8601String();
     final startDateValue = firstValue.lineDate.toIso8601String();
 

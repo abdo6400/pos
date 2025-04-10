@@ -18,6 +18,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        
         BlocProvider(
           create: (context) => UserCubit()..setUser(),
         ),

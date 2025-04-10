@@ -40,7 +40,7 @@ class ClosePointRemoteDataSourceImpl extends ClosePointRemoteDataSource {
     final response = await _apiConsumer.get(EndPoints.getSalesByCashNo,
         queryParameters: {
           ApiKeys.warehouse: wareHouse,
-          ApiKeys.cashNo: cashNo
+          ApiKeys.invoiceCashNo : cashNo
         });
     return List<PaymentSummaryModel>.from(response[EndPoints.response]
         .map((x) => PaymentSummaryModel.fromJson(x)));

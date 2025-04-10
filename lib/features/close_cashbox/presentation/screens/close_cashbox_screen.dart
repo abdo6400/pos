@@ -55,6 +55,8 @@ class CloseCashboxScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isEndDay = ModalRoute.of(context)!.settings.arguments != null;
+    final cash = (ModalRoute.of(context)!.settings.arguments as Map?);
+
     return BlocListener<CloseCashboxBloc, CloseCashboxState>(
       listener: (context, state) {
         if (state is CloseCashboxSuccess) {
@@ -230,9 +232,10 @@ class CloseCashboxScreen extends StatelessWidget {
                                                                         .first
                                                                         .cashno
                                                                         .toString()
-                                                                    : "1",
+                                                                    :cash?[StringEnums.close_cash.name].toString()??"0"
+                                                           ,
                                                             cashUser: user?.userNo ??
-                                                                0,
+                                                                cash?[StringEnums.open_point.name]??0,
                                                             cashRealEndTime:
                                                                 DateTime.now(),
                                                             cashWithDrawals: 0,

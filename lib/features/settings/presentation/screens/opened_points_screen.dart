@@ -23,13 +23,13 @@ class OpenedPointsScreen extends StatelessWidget {
       canPop: !mustCloseDay,
       onPopInvokedWithResult: (value, _) {
         if (!mustCloseDay) {
-          Navigator.of(context).pop();
+          context.go(AppRoutes.main);
         }
       },
       child: BlocConsumer<EndDayBloc, EndDayState>(
         listener: (context, state) {
           if (state is EndDaySuccess) {
-            context.go(AppRoutes.openPoint);
+            context.go(AppRoutes.login);
           } else if (state is EndDayFailure) {
             context.handleState(StateEnum.error, state.error);
           } else if (state is EndDayLoading) {
@@ -49,7 +49,7 @@ class OpenedPointsScreen extends StatelessWidget {
                         color: Colors.red,
                       ),
                       onPressed: () {
-                          Navigator.of(context).pop();
+                        context.go(AppRoutes.main);
                       },
                     )
                   : null,
@@ -103,7 +103,10 @@ class OpenedPointsScreen extends StatelessWidget {
                                 style: const TextStyle(color: Colors.white)),
                             onPressed: () {
                               context.push(AppRoutes.closeCashbox,
-                                  extra: openedPoint.cashUser);
+                                  extra: {
+                                    StringEnums.open_point.name: openedPoint.cashUser,
+                                    StringEnums.close_cash.name: openedPoint.cashNo,
+                              });
                             },
                           ),
                         ),
