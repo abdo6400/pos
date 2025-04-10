@@ -13,6 +13,7 @@ abstract class SettingsRemoteDataSource {
       String startDate, String branchId);
   Future<void> openPointByParameters(Map<String, dynamic> data);
   Future<void> endDay(Map<String, dynamic> data);
+  Future<void> insertByParameters(Map<String, dynamic> data);
 }
 
 class SettingsRemoteDataSourceImpl implements SettingsRemoteDataSource {
@@ -39,13 +40,13 @@ class SettingsRemoteDataSourceImpl implements SettingsRemoteDataSource {
   @override
   Future<CashModel> getSalesByUser(int userId) async {
     final response = await _apiConsumer.get(EndPoints.getSalesByUser,
-        queryParameters: {ApiKeys.userNo: userId});
+        queryParameters: {ApiKeys.cashUser: userId});
     return CashModel.fromJson(response[EndPoints.response]);
   }
 
   @override
   Future<void> openPointByParameters(Map<String, dynamic> data) async {
-    await _apiConsumer.post(EndPoints.openPointByParameters, body: data);
+    await _apiConsumer.post(EndPoints.openPointByParameters, queryParameters: data);
   }
 
   @override
@@ -64,5 +65,10 @@ class SettingsRemoteDataSourceImpl implements SettingsRemoteDataSource {
         });
     return List<CashModel>.from(
         response[EndPoints.response].map((x) => CashModel.fromJson(x)));
+  }
+
+  @override
+  Future<void> insertByParameters(Map<String, dynamic> data) async{
+    await _apiConsumer.post(EndPoints.insertByParameters, queryParameters: data);
   }
 }

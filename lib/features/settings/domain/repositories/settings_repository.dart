@@ -12,5 +12,7 @@ abstract class SettingsRepository {
       String startDate, String branchId);
   Future<Either<Failure, void>> openPointByParameters(
       Map<String, dynamic> data);
+  Future<Either<Failure, void>> insertByParameters(
+      Map<String, dynamic> data);
   Future<Either<Failure, void>> endDay(Map<String, dynamic> data);
 }

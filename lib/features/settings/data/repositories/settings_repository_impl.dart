@@ -92,4 +92,16 @@ class SettingsRepositoryImpl implements SettingsRepository {
       return Left(ServerFailure(message: e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> insertByParameters(Map<String, dynamic> data) async{
+    try {
+      await _settingsRemoteDataSource.insertByParameters(data);
+      return Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
 }

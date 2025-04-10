@@ -57,7 +57,7 @@ class ClosePointRemoteDataSourceImpl extends ClosePointRemoteDataSource {
   @override
   Future<CashModel> getCash(int userNo) async {
     final result = await _apiConsumer.get(EndPoints.getSalesByUser,
-        queryParameters: {ApiKeys.userNo: userNo});
+        queryParameters: {ApiKeys.cashUser: userNo});
     return CashModel.fromJson(result[EndPoints.response]);
   }
 }

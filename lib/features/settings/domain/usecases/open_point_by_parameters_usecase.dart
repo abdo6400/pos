@@ -13,9 +13,18 @@ class OpenPointByParametersUsecase
 
   @override
   Future<Either<Failure, void>> call(OpenPointParams data) async {
+    Cash? cash =  (await repository.getSalesByUser(data.userNo))
+        .fold((l) => null, (r) => r);
+    if(cash ==null){
+      repository.insertByParameters({
+        ApiKeys.warehouse: data.branchId,
+        ApiKeys.lineDate: DateTime.now().toString().substring(0, 10),
+        ApiKeys.openTime:DateTime.now().toString(),
+      });
+    }
+
     return repository.openPointByParameters(data.toJson(
-        (await repository.getSalesByUser(data.userNo))
-            .fold((l) => null, (r) => r)));
+        cash));
   }
 }
 
@@ -26,10 +35,11 @@ class OpenPointParams {
 
   OpenPointParams({required this.userNo, required this.branchId,required this.cashCustody});
 
+  // what wrong with this?not use this // ok?yes
   toJson(Cash? cash) => {
         ApiKeys.cashUser:userNo,
         ApiKeys.warehouse: branchId,
-        ApiKeys.cashStartDate: cash?.cashStartDate??DateTime.now().toString(),
+        ApiKeys.cashStartDate: cash?.cashStartDate??DateTime.now().toString().substring(0, 10),
         ApiKeys.cashCustody:cashCustody.toString(),
         ApiKeys.cashRealTime: DateTime.now().toString(),
       };

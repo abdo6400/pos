@@ -33,7 +33,7 @@ class OpenPointScreen extends StatelessWidget {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      context.read<OpenPointBloc>().add(OpenPointRequested(cashCustody: 1.0));
+                      context.read<OpenPointBloc>().add(OpenPointRequested(cashCustody: 1.0));// call open point api
                     },
                     child: Text(StringEnums.open_point.name.tr()),
                   ),

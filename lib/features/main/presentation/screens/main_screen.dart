@@ -24,6 +24,7 @@ import '../../../payment/presentation/bloc/pay/pay_bloc.dart';
 import '../../../payment/presentation/bloc/payment_types/payment_types_bloc.dart';
 import '../../../sales/presentation/screens/sales_summary_screen.dart';
 import '../../../settings/presentation/bloc/cubit/comparison_cubit.dart';
+import '../../../settings/presentation/bloc/get_sales_by_user/get_sales_by_user_bloc.dart';
 import '../../../settings/presentation/bloc/get_sales_by_warehouse/get_sales_by_warehouse_bloc.dart';
 import '../../../settings/presentation/bloc/settings_bloc.dart';
 import '../bloc/cubit/screen_cubit.dart';
@@ -77,26 +78,33 @@ class MainScreen extends StatelessWidget {
           BlocProvider(create: (_) => locator<PayBloc>()),
           BlocProvider(
               create: (_) => locator<SummaryBloc>()..add(GetSummaryEvent())),
-          BlocProvider(create: (_) => locator<CloseCashboxBloc>()),
+          BlocProvider(create: (_) => locator<CloseCashboxBloc>()), 
+            
         ],
-        child:  BlocConsumer<ComparisonCubit, Map<String, dynamic>>(
-              listener: (context, comparison) {
-                if (context.read<ComparisonCubit>().isLoading) {
+        child: BlocConsumer<ComparisonCubit, ComparisonState>(
+              listener: (context, state) {
+                // Only show loader when we're actually loading and haven't shown it yet
+                if (state.isLoading) {
                   context.showLottieOverlayLoader(
                     Assets.loader,
                   );
-                } else if (context.read<ComparisonCubit>().isError) {
-                  context.hideOverlayLoader();
+                } else if (state.isError) {
                   context.go(AppRoutes.openPoint);
-                } else if (context.read<ComparisonCubit>().isSuccess) {
-                  context.go(AppRoutes.openedPoints, extra: {
-                    'mustCloseDay':
-                        context.read<ComparisonCubit>().mustCloseDay,
-                    StringEnums.to_date.name:
-                        context.read<ComparisonCubit>().closeTime,
-                    StringEnums.from_date.name:
-                        context.read<ComparisonCubit>().startDate,
-                  });
+                } 
+                else if (!state.isLoading && !state.isError && 
+                         state.firstValue != null && 
+                         state.secondValue != null && 
+                         state.secondValue!.isNotEmpty) {
+                  if (state.hasPoint) {
+                    context.hideOverlayLoader();
+                    context.hideOverlayLoader();
+                  } else {
+                    context.go(AppRoutes.openedPoints, extra: {
+                      'mustCloseDay': state.mustCloseDay,
+                      StringEnums.to_date.name: state.closeTime,
+                      StringEnums.from_date.name: state.startDate,
+                    });
+                  }
                 }
               },
               builder: (context, state) {
@@ -111,6 +119,16 @@ class MainScreen extends StatelessWidget {
                           context
                               .read<ComparisonCubit>()
                               .updateFirstValue(state.sales);
+                        }
+                      },
+                    ),
+                    BlocListener<GetSalesByUserBloc,
+                        GetSalesByUserState>(
+                      listener: (context, state) {
+                        if (state is GetSalesByUserSuccess) {
+                          context
+                              .read<ComparisonCubit>()
+                              .updateThirdValue(state.cash);
                         }
                       },
                     ),
