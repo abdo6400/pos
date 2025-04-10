@@ -14,6 +14,7 @@ import '../../features/payment/presentation/screens/payment_screen.dart';
 import '../../features/settings/presentation/bloc/end_day/end_day_bloc.dart';
 import '../../features/settings/presentation/bloc/open_point/open_point_bloc.dart';
 import '../../features/settings/presentation/bloc/opened_point/opened_points_bloc.dart';
+import '../../features/settings/presentation/screens/open_point_screen.dart';
 import '../../features/settings/presentation/screens/opened_points_screen.dart';
 import 'app_routes.dart';
 
@@ -97,6 +98,15 @@ class AppRouterConfig {
           );
         },
       ),
+      GoRoute(
+          path: AppRoutes.openPoint,
+          pageBuilder: (context, state) {
+            return _buildPageWithTransition(context, state,
+                child: BlocProvider(
+                  create: (context) =>    locator<OpenPointBloc>(),
+                  child: OpenPointScreen(),
+                ));
+          }),
       GoRoute(
         path: AppRoutes.openedPoints,
         pageBuilder: (context, state) {

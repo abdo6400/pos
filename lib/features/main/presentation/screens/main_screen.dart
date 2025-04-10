@@ -25,7 +25,6 @@ import '../../../payment/presentation/bloc/payment_types/payment_types_bloc.dart
 import '../../../sales/presentation/screens/sales_summary_screen.dart';
 import '../../../settings/presentation/bloc/cubit/comparison_cubit.dart';
 import '../../../settings/presentation/bloc/get_sales_by_warehouse/get_sales_by_warehouse_bloc.dart';
-import '../../../settings/presentation/bloc/open_point/open_point_bloc.dart';
 import '../../../settings/presentation/bloc/settings_bloc.dart';
 import '../bloc/cubit/screen_cubit.dart';
 
@@ -79,11 +78,8 @@ class MainScreen extends StatelessWidget {
           BlocProvider(
               create: (_) => locator<SummaryBloc>()..add(GetSummaryEvent())),
           BlocProvider(create: (_) => locator<CloseCashboxBloc>()),
-          BlocProvider(create: (_) => locator<OpenPointBloc>()),
         ],
-        child: BlocBuilder<OpenPointBloc, OpenPointState>(
-          builder: (context, state) {
-            return BlocConsumer<ComparisonCubit, Map<String, dynamic>>(
+        child:  BlocConsumer<ComparisonCubit, Map<String, dynamic>>(
               listener: (context, comparison) {
                 if (context.read<ComparisonCubit>().isLoading) {
                   context.showLottieOverlayLoader(
@@ -91,7 +87,7 @@ class MainScreen extends StatelessWidget {
                   );
                 } else if (context.read<ComparisonCubit>().isError) {
                   context.hideOverlayLoader();
-                  context.read<OpenPointBloc>().add(OpenPointRequested());
+                  context.go(AppRoutes.openPoint);
                 } else if (context.read<ComparisonCubit>().isSuccess) {
                   context.go(AppRoutes.openedPoints, extra: {
                     'mustCloseDay':
@@ -176,8 +172,7 @@ class MainScreen extends StatelessWidget {
                   ),
                 );
               },
-            );
-          },
+           
         ),
       ),
     );

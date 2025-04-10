@@ -1,14 +1,10 @@
-import 'dart:math';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:retail/core/utils/assets.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
-
 import '../../../../config/routes/app_routes.dart';
-import '../../../../core/utils/constants.dart';
 import '../../../../core/utils/enums/state_enums.dart';
 import '../../../../core/utils/enums/string_enums.dart';
 import '../../../../core/widgets/custom_button.dart';
@@ -33,8 +29,7 @@ class OpenedPointsScreen extends StatelessWidget {
       child: BlocConsumer<EndDayBloc, EndDayState>(
         listener: (context, state) {
           if (state is EndDaySuccess) {
-            storage.clearAuthTokenState();
-            context.go(AppRoutes.login);
+            context.go(AppRoutes.openPoint);
           } else if (state is EndDayFailure) {
             context.handleState(StateEnum.error, state.error);
           } else if (state is EndDayLoading) {

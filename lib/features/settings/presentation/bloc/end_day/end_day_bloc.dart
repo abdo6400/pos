@@ -16,7 +16,7 @@ class EndDayBloc extends Bloc<EndDayEvent, EndDayState> {
       final branchId = (await storage.getUser())?.defaultBranch ?? "1001";
       final params = EndDayParams(
         lineDate: event.lineDate,
-        closeTime: event.closeTime,
+        closeTime: DateTime.now().toIso8601String(),
         branchId: branchId,
       );
       final result = await _endDayUsecase(params);

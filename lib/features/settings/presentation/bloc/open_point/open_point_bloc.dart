@@ -18,6 +18,7 @@ class OpenPointBloc extends Bloc<OpenPointEvent, OpenPointState> {
       final result = await _openPointByParametersUsecase(OpenPointParams(
         userNo: user?.userNo ?? 1,
         branchId: user?.defaultBranch ?? "10010",
+        cashCustody: event.cashCustody,
       ));
       result.fold(
         (failure) {

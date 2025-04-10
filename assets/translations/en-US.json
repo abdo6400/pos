@@ -256,5 +256,6 @@
   "close_cash": "Close Cash",
   "shift_end": "Shift End",
   "requiredAmount": "Required Amount",
-  "openedPoints": "Opened Points"
+  "openedPoints": "Opened Points",
+  "open_point": "Open Point"
 }

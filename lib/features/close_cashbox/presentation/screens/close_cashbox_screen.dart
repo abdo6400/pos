@@ -63,7 +63,7 @@ class CloseCashboxScreen extends StatelessWidget {
             context.pop();
           } else {
             storage.clearAuthTokenState();
-            context.go(AppRoutes.login);
+            context.go(AppRoutes.login );
           }
         } else if (state is CloseCashboxError) {
           context.handleState(StateEnum.error, state.message);
@@ -200,16 +200,17 @@ class CloseCashboxScreen extends StatelessWidget {
                                         if (_formKey.currentState
                                                 ?.saveAndValidate() ??
                                             false) {
-                                          if ((state.cashSaleSummary.cashSales +
-                                                      state.cashSaleSummary
-                                                          .cashCustody) -
-                                                  state.cashSaleSummary
-                                                      .orderReturn ==
-                                              (double.tryParse(_formKey
-                                                          .currentState!.value[
-                                                      StringEnums
-                                                          .amount.name]) ??
-                                                  0)) {
+                                          // if ((state.cashSaleSummary.cashSales +
+                                          //             state.cashSaleSummary
+                                          //                 .cashCustody) -
+                                          //         state.cashSaleSummary
+                                          //             .orderReturn ==
+                                          //     (double.tryParse(_formKey
+                                          //                 .currentState!.value[
+                                          //             StringEnums
+                                          //                 .amount.name]) ??
+                                          //         0)) {
+
                                             locator<CloseCashboxBloc>().add(
                                                 ClosePointEvent(
                                                     closePointParams:
@@ -252,12 +253,12 @@ class CloseCashboxScreen extends StatelessWidget {
                                                             cashTaxTotal: state.salesSummary.isNotEmpty ? state.salesSummary.first.tax : 0,
                                                             cashCustomerPayment: state.cashSaleSummary.cashSales,
                                                             voidAfter: state.cashSaleSummary.orderReturn)));
-                                          } else {
-                                            context.showMessageToast(
-                                                msg:
-                                                    "${StringEnums.requiredAmount.name.tr()} ${(state.cashSaleSummary.cashSales + state.cashSaleSummary.cashCustody) - state.cashSaleSummary.orderReturn}",
-                                                backgroundColor: Colors.red);
-                                          }
+                                          // } else {
+                                          //   context.showMessageToast(
+                                          //       msg:
+                                          //           "${StringEnums.requiredAmount.name.tr()} ${(state.cashSaleSummary.cashSales + state.cashSaleSummary.cashCustody) - state.cashSaleSummary.orderReturn}",
+                                          //       backgroundColor: Colors.red);
+                                          // }
                                         }
                                       },
                                     );

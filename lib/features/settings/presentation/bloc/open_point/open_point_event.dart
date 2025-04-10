@@ -8,8 +8,9 @@ abstract class OpenPointEvent extends Equatable {
 }
 
 class OpenPointRequested extends OpenPointEvent {
-  const OpenPointRequested();
+  final double cashCustody;
+  const OpenPointRequested({ required this.cashCustody});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [cashCustody];
 }

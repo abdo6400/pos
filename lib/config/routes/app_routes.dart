@@ -7,4 +7,5 @@ class AppRoutes {
   static const String payment = '/payment';
   static const String openedPoints = '/opened-points';
   static const String closeCashbox = '/close-cashbox';
+  static const String openPoint = '/open-point';
 }

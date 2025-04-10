@@ -184,5 +184,5 @@ enum StringEnums {
   close_cash,
   shift_end,
   requiredAmount,
-  openedPoints
+  openedPoints, open_point
 }

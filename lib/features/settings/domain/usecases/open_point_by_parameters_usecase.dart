@@ -22,14 +22,15 @@ class OpenPointByParametersUsecase
 class OpenPointParams {
   final int userNo;
   final String branchId;
+  final double cashCustody;
 
-  OpenPointParams({required this.userNo, required this.branchId});
+  OpenPointParams({required this.userNo, required this.branchId,required this.cashCustody});
 
   toJson(Cash? cash) => {
-        ApiKeys.cashUser: cash?.cashUser,
+        ApiKeys.cashUser:userNo,
         ApiKeys.warehouse: branchId,
-        ApiKeys.cashStartDate: cash?.cashStartDate,
-        ApiKeys.cashCustody: cash?.cashCustody,
-        ApiKeys.cashRealTime: cash?.cashRealTime,
+        ApiKeys.cashStartDate: cash?.cashStartDate??DateTime.now().toString(),
+        ApiKeys.cashCustody:cashCustody.toString(),
+        ApiKeys.cashRealTime: DateTime.now().toString(),
       };
 }
