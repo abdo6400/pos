@@ -9,11 +9,27 @@ import '../../features/close_cashbox/presentation/bloc/summary/summary_bloc.dart
 import '../../features/close_cashbox/presentation/screens/close_cashbox_screen.dart';
 import '../../features/intro/presentation/screens/splash_screen.dart';
 import 'package:page_transition/page_transition.dart';
+import '../../features/main/presentation/bloc/cubit/screen_cubit.dart';
 import '../../features/main/presentation/screens/main_screen.dart';
+import '../../features/menu/presentation/bloc/cart/cart_bloc.dart';
+import '../../features/menu/presentation/bloc/category/category_bloc.dart';
+import '../../features/menu/presentation/bloc/delivery/delivery_bloc.dart';
+import '../../features/menu/presentation/bloc/discount/discount_bloc.dart';
+import '../../features/menu/presentation/bloc/flavor/flavor_bloc.dart';
+import '../../features/menu/presentation/bloc/offer/offer_bloc.dart';
+import '../../features/menu/presentation/bloc/order/order_bloc.dart';
+import '../../features/menu/presentation/bloc/product/product_bloc.dart';
+import '../../features/menu/presentation/bloc/question/question_bloc.dart';
+import '../../features/payment/presentation/bloc/pay/pay_bloc.dart';
+import '../../features/payment/presentation/bloc/payment_types/payment_types_bloc.dart';
 import '../../features/payment/presentation/screens/payment_screen.dart';
+import '../../features/settings/presentation/bloc/cubit/comparison_cubit.dart';
 import '../../features/settings/presentation/bloc/end_day/end_day_bloc.dart';
+import '../../features/settings/presentation/bloc/get_sales_by_user/get_sales_by_user_bloc.dart';
+import '../../features/settings/presentation/bloc/get_sales_by_warehouse/get_sales_by_warehouse_bloc.dart';
 import '../../features/settings/presentation/bloc/open_point/open_point_bloc.dart';
 import '../../features/settings/presentation/bloc/opened_point/opened_points_bloc.dart';
+import '../../features/settings/presentation/bloc/settings_bloc.dart';
 import '../../features/settings/presentation/screens/open_point_screen.dart';
 import '../../features/settings/presentation/screens/opened_points_screen.dart';
 import 'app_routes.dart';
@@ -69,7 +85,57 @@ class AppRouterConfig {
           return _buildPageWithTransition(
             context,
             state,
-            child: MainScreen(),
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider(
+            create: (context) => ScreenCubit(),
+          ),
+          BlocProvider(
+            create: (context) => ComparisonCubit(),
+          ),
+          BlocProvider(
+            create: (context) =>
+                locator<CategoryBloc>()..add(GetCategoriesEvent()),
+          ),
+          BlocProvider(
+            create: (context) =>
+                locator<ProductBloc>()..add(GetProductsEvent()),
+          ),
+          BlocProvider(create: (_) => CartBloc()),
+          BlocProvider(
+            create: (context) => locator<FlavorBloc>()..add(GetFlavorsEvent()),
+          ),
+          BlocProvider(
+            create: (context) =>
+                locator<QuestionBloc>()..add(GetQuestionsEvent()),
+          ),
+          BlocProvider(
+            create: (context) =>
+                locator<DiscountBloc>()..add(GetDiscountEvent()),
+          ),
+          BlocProvider(
+            create: (context) => locator<OfferBloc>()..add(GetOfferEvent()),
+          ),
+          BlocProvider(
+              create: (context) => locator<OrderBloc>()..add(GetOrdersEvent())),
+          BlocProvider(
+              create: (context) =>
+                  locator<DeliveryBloc>()..add(GetDeliveriesEvent())),
+          BlocProvider(
+              create: (context) =>
+                  locator<PaymentTypesBloc>()..add(GetPaymentTypesEvent())),
+          BlocProvider(create: (_) => locator<PayBloc>()),
+          BlocProvider(
+              create: (_) => locator<SummaryBloc>()..add(GetSummaryEvent())),
+          BlocProvider(create: (_) => locator<CloseCashboxBloc>()),
+           BlocProvider(
+            create: (_) => locator<SettingsBloc>()..add(GetSettingsEvent())),
+        BlocProvider(create: (_) => locator<GetSalesByUserBloc>()..add(GetSalesByUserRequested())),
+        BlocProvider(
+            create: (_) => locator<GetSalesByWarehouseBloc>()
+              ..add(GetSalesByWarehouseRequested())),
+              ],
+              child: MainScreen()),
           );
         },
       ),

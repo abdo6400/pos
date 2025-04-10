@@ -23,7 +23,7 @@ class OpenedPointsScreen extends StatelessWidget {
       canPop: !mustCloseDay,
       onPopInvokedWithResult: (value, _) {
         if (!mustCloseDay) {
-          context.go(AppRoutes.main);
+          Navigator.of(context).pop();
         }
       },
       child: BlocConsumer<EndDayBloc, EndDayState>(
@@ -49,7 +49,7 @@ class OpenedPointsScreen extends StatelessWidget {
                         color: Colors.red,
                       ),
                       onPressed: () {
-                        context.go(AppRoutes.main);
+                          Navigator.of(context).pop();
                       },
                     )
                   : null,
