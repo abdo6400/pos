@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-
 import '../../../../core/utils/constants.dart';
 import '../../domain/entities/setting.dart';
 import '../../domain/usecases/get_settings_usecase.dart';
@@ -20,4 +19,6 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
           (r) => emit(SettingsSuccess(settings: r)));
     });
   }
+
+ 
 }

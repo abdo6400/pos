@@ -32,6 +32,7 @@ import '../../features/settings/presentation/bloc/opened_point/opened_points_blo
 import '../../features/settings/presentation/bloc/settings_bloc.dart';
 import '../../features/settings/presentation/screens/open_point_screen.dart';
 import '../../features/settings/presentation/screens/opened_points_screen.dart';
+import '../../features/settings/presentation/screens/settings_screen.dart';
 import 'app_routes.dart';
 
 class AppRouterConfig {
@@ -85,57 +86,61 @@ class AppRouterConfig {
           return _buildPageWithTransition(
             context,
             state,
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider(
-            create: (context) => ScreenCubit(),
-          ),
-          BlocProvider(
-            create: (context) => ComparisonCubit(),
-          ),
-          BlocProvider(
-            create: (context) =>
-                locator<CategoryBloc>()..add(GetCategoriesEvent()),
-          ),
-          BlocProvider(
-            create: (context) =>
-                locator<ProductBloc>()..add(GetProductsEvent()),
-          ),
-          BlocProvider(create: (_) => CartBloc()),
-          BlocProvider(
-            create: (context) => locator<FlavorBloc>()..add(GetFlavorsEvent()),
-          ),
-          BlocProvider(
-            create: (context) =>
-                locator<QuestionBloc>()..add(GetQuestionsEvent()),
-          ),
-          BlocProvider(
-            create: (context) =>
-                locator<DiscountBloc>()..add(GetDiscountEvent()),
-          ),
-          BlocProvider(
-            create: (context) => locator<OfferBloc>()..add(GetOfferEvent()),
-          ),
-          BlocProvider(
-              create: (context) => locator<OrderBloc>()..add(GetOrdersEvent())),
-          BlocProvider(
-              create: (context) =>
-                  locator<DeliveryBloc>()..add(GetDeliveriesEvent())),
-          BlocProvider(
-              create: (context) =>
-                  locator<PaymentTypesBloc>()..add(GetPaymentTypesEvent())),
-          BlocProvider(create: (_) => locator<PayBloc>()),
-          BlocProvider(
-              create: (_) => locator<SummaryBloc>()..add(GetSummaryEvent())),
-          BlocProvider(create: (_) => locator<CloseCashboxBloc>()), 
-          BlocProvider(
-            create: (_) => locator<SettingsBloc>()..add(GetSettingsEvent())),
-        BlocProvider(create: (_) => locator<GetSalesByUserBloc>()..add(GetSalesByUserRequested())),
-        BlocProvider(
-            create: (_) => locator<GetSalesByWarehouseBloc>()
-              ..add(GetSalesByWarehouseRequested())),
-              ],
-              child: MainScreen()),
+            child: MultiBlocProvider(providers: [
+              BlocProvider(
+                create: (context) => ScreenCubit(),
+              ),
+              BlocProvider(
+                create: (context) => ComparisonCubit(),
+              ),
+              BlocProvider(
+                create: (context) =>
+                    locator<CategoryBloc>()..add(GetCategoriesEvent()),
+              ),
+              BlocProvider(
+                create: (context) =>
+                    locator<ProductBloc>()..add(GetProductsEvent()),
+              ),
+              BlocProvider(create: (_) => CartBloc()),
+              BlocProvider(
+                create: (context) =>
+                    locator<FlavorBloc>()..add(GetFlavorsEvent()),
+              ),
+              BlocProvider(
+                create: (context) =>
+                    locator<QuestionBloc>()..add(GetQuestionsEvent()),
+              ),
+              BlocProvider(
+                create: (context) =>
+                    locator<DiscountBloc>()..add(GetDiscountEvent()),
+              ),
+              BlocProvider(
+                create: (context) => locator<OfferBloc>()..add(GetOfferEvent()),
+              ),
+              BlocProvider(
+                  create: (context) =>
+                      locator<OrderBloc>()..add(GetOrdersEvent())),
+              BlocProvider(
+                  create: (context) =>
+                      locator<DeliveryBloc>()..add(GetDeliveriesEvent())),
+              BlocProvider(
+                  create: (context) =>
+                      locator<PaymentTypesBloc>()..add(GetPaymentTypesEvent())),
+              BlocProvider(create: (_) => locator<PayBloc>()),
+              BlocProvider(
+                  create: (_) =>
+                      locator<SummaryBloc>()..add(GetSummaryEvent())),
+              BlocProvider(create: (_) => locator<CloseCashboxBloc>()),
+              BlocProvider(
+                  create: (_) =>
+                      locator<SettingsBloc>()..add(GetSettingsEvent())),
+              BlocProvider(
+                  create: (_) => locator<GetSalesByUserBloc>()
+                    ..add(GetSalesByUserRequested())),
+              BlocProvider(
+                  create: (_) => locator<GetSalesByWarehouseBloc>()
+                    ..add(GetSalesByWarehouseRequested())),
+            ], child: MainScreen()),
           );
         },
       ),
@@ -150,6 +155,19 @@ class AppRouterConfig {
         },
       ),
       GoRoute(
+        path: AppRoutes.settings,
+        pageBuilder: (context, state) {
+          return _buildPageWithTransition(
+            context,
+            state,
+            child: BlocProvider(
+              create: (context) => locator<SettingsBloc>()..add(GetSettingsEvent()),
+              child: SettingsScreen(),
+            ),
+          );
+        },
+      ),
+      GoRoute(
         path: AppRoutes.closeCashbox,
         pageBuilder: (context, state) {
           return _buildPageWithTransition(
@@ -159,7 +177,9 @@ class AppRouterConfig {
               BlocProvider(create: (_) => locator<CloseCashboxBloc>()),
               BlocProvider(
                   create: (_) => locator<SummaryBloc>()
-                    ..add(GetSummaryEvent(userNo: (state.extra as Map)[StringEnums.open_point.name]))),
+                    ..add(GetSummaryEvent(
+                        userNo: (state.extra
+                            as Map)[StringEnums.open_point.name]))),
             ], child: CloseCashboxScreen()),
           );
         },
@@ -169,7 +189,7 @@ class AppRouterConfig {
           pageBuilder: (context, state) {
             return _buildPageWithTransition(context, state,
                 child: BlocProvider(
-                  create: (context) =>    locator<OpenPointBloc>(),
+                  create: (context) => locator<OpenPointBloc>(),
                   child: OpenPointScreen(),
                 ));
           }),

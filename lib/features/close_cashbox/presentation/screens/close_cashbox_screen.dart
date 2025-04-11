@@ -19,6 +19,7 @@ import '../../../../core/utils/enums/string_enums.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/errors/error_card.dart';
 import '../../../../core/widgets/global_form_builder/custom_form_builder.dart';
+import '../../../../core/widgets/numeric_keypad_input.dart';
 import '../../domain/usecases/close_point_usecase.dart';
 import '../bloc/close_cashbox_bloc.dart';
 import '../bloc/summary/summary_bloc.dart';
@@ -65,7 +66,7 @@ class CloseCashboxScreen extends StatelessWidget {
             context.pop();
           } else {
             storage.clearAuthTokenState();
-            context.go(AppRoutes.login );
+            context.go(AppRoutes.login);
           }
         } else if (state is CloseCashboxError) {
           context.handleState(StateEnum.error, state.message);
@@ -191,7 +192,6 @@ class CloseCashboxScreen extends StatelessWidget {
                                 ),
                                 NumericKeypadInput(
                                   formKey: _formKey,
-                                  grandTotal: 0,
                                 ),
                                 BlocBuilder<UserCubit, AuthTokens?>(
                                   builder: (context, user) {
@@ -213,49 +213,48 @@ class CloseCashboxScreen extends StatelessWidget {
                                           //                 .amount.name]) ??
                                           //         0)) {
 
-                                            locator<CloseCashboxBloc>().add(
-                                                ClosePointEvent(
-                                                    closePointParams:
-                                                        ClosePointParams(
-                                                            cashNo: state
-                                                                    .salesSummary
-                                                                    .isNotEmpty
-                                                                ? state
-                                                                    .salesSummary
-                                                                    .first
-                                                                    .cashNo
-                                                                    .toString()
-                                                                : state.paymentsSummary
-                                                                        .isNotEmpty
-                                                                    ? state
-                                                                        .paymentsSummary
-                                                                        .first
-                                                                        .cashno
-                                                                        .toString()
-                                                                    :cash?[StringEnums.close_cash.name].toString()??"0"
-                                                           ,
-                                                            cashUser: user?.userNo ??
-                                                                cash?[StringEnums.open_point.name]??0,
-                                                            cashRealEndTime:
-                                                                DateTime.now(),
-                                                            cashWithDrawals: 0,
-                                                            cashServiceTotal: 0,
-                                                            voidBefore: 0,
-                                                            availableCash:
-                                                                double.tryParse(_formKey.currentState!.value[StringEnums.amount.name]) ??
-                                                                    0,
-                                                            requiredCash: (state
-                                                                        .cashSaleSummary
-                                                                        .cashSales +
-                                                                    state.cashSaleSummary.cashCustody) -
-                                                                state.cashSaleSummary.orderReturn,
-                                                            illegalOpenCashDrawer: 0,
-                                                            cashSubTotal: state.salesSummary.isNotEmpty ? state.salesSummary.first.subTotal : 0,
-                                                            cashGrandTotal: state.salesSummary.isNotEmpty ? state.salesSummary.first.grandTotal : 0,
-                                                            cashDiscountTotal: state.salesSummary.isNotEmpty ? state.salesSummary.first.discount : 0,
-                                                            cashTaxTotal: state.salesSummary.isNotEmpty ? state.salesSummary.first.tax : 0,
-                                                            cashCustomerPayment: state.cashSaleSummary.cashSales,
-                                                            voidAfter: state.cashSaleSummary.orderReturn)));
+                                          locator<CloseCashboxBloc>().add(
+                                              ClosePointEvent(
+                                                  closePointParams:
+                                                      ClosePointParams(
+                                                          cashNo: state
+                                                                  .salesSummary
+                                                                  .isNotEmpty
+                                                              ? state
+                                                                  .salesSummary
+                                                                  .first
+                                                                  .cashNo
+                                                                  .toString()
+                                                              : state.paymentsSummary
+                                                                      .isNotEmpty
+                                                                  ? state
+                                                                      .paymentsSummary
+                                                                      .first
+                                                                      .cashno
+                                                                      .toString()
+                                                                  : cash?[StringEnums.close_cash.name]
+                                                                          .toString() ??
+                                                                      "0",
+                                                          cashUser: user?.userNo ??
+                                                              cash?[StringEnums
+                                                                  .open_point
+                                                                  .name] ??
+                                                              0,
+                                                          cashRealEndTime:
+                                                              DateTime.now(),
+                                                          cashWithDrawals: 0,
+                                                          cashServiceTotal: 0,
+                                                          voidBefore: 0,
+                                                          availableCash:
+                                                              double.tryParse(_formKey.currentState!.value[StringEnums.amount.name]) ?? 0,
+                                                          requiredCash: (state.cashSaleSummary.cashSales + state.cashSaleSummary.cashCustody) - state.cashSaleSummary.orderReturn,
+                                                          illegalOpenCashDrawer: 0,
+                                                          cashSubTotal: state.salesSummary.isNotEmpty ? state.salesSummary.first.subTotal : 0,
+                                                          cashGrandTotal: state.salesSummary.isNotEmpty ? state.salesSummary.first.grandTotal : 0,
+                                                          cashDiscountTotal: state.salesSummary.isNotEmpty ? state.salesSummary.first.discount : 0,
+                                                          cashTaxTotal: state.salesSummary.isNotEmpty ? state.salesSummary.first.tax : 0,
+                                                          cashCustomerPayment: state.cashSaleSummary.cashSales,
+                                                          voidAfter: state.cashSaleSummary.orderReturn)));
                                           // } else {
                                           //   context.showMessageToast(
                                           //       msg:
@@ -286,91 +285,6 @@ class CloseCashboxScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class NumericKeypadInput extends StatelessWidget {
-  final GlobalKey<FormBuilderState> formKey;
-  final double grandTotal;
-
-  const NumericKeypadInput(
-      {super.key, required this.formKey, required this.grandTotal});
-
-  void _onKeyPressed(String value, BuildContext context) {
-    final currentValue =
-        formKey.currentState?.fields[StringEnums.amount.name]?.value ?? '';
-    String newValue = currentValue;
-
-    if (value == 'X') {
-      // Handle backspace (remove last character)
-      if (newValue.isNotEmpty) {
-        newValue = newValue.substring(0, newValue.length - 1);
-      }
-    } else if (value == '.') {
-      // Handle decimal point (only allow one decimal point)
-      if (!newValue.contains('.')) {
-        newValue += value;
-      }
-    } else {
-      // Append the pressed number
-      newValue += value;
-    }
-
-    // Update the form field value
-    if (formKey.currentState != null) {
-      formKey.currentState!.fields[StringEnums.amount.name]
-          ?.didChange(newValue);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        GridView.count(
-          shrinkWrap: true,
-          crossAxisCount: 3,
-          childAspectRatio: 2.5,
-          mainAxisSpacing: 5,
-          crossAxisSpacing: 5,
-          children: [
-            '1',
-            '2',
-            '3',
-            '4',
-            '5',
-            '6',
-            '7',
-            '8',
-            '9',
-            '.',
-            '0',
-            'X',
-          ].map((key) {
-            return InkWell(
-              onTap: () => _onKeyPressed(key, context),
-              child: Card(
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(2),
-                      color: (key == 'X') ? Colors.red : null),
-                  child: Text(
-                    key,
-                    style: TextStyle(
-                      color: (key == 'X') ? Colors.white : null,
-                      fontSize: context.AppResponsiveValue(12,
-                          mobile: 8, tablet: 24, desktop: 30),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-      ],
     );
   }
 }

@@ -52,6 +52,7 @@ class MainScreen extends StatelessWidget {
                           state.secondValue!.isNotEmpty) {
                   if (state.hasPoint  && !state.mustCloseDay) {
                     context.hideOverlayLoader();
+                    context.hideOverlayLoader();
                   }
                   else {
                     if(state.mustCloseDay){

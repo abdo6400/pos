@@ -34,7 +34,12 @@ class InfoPopup extends StatelessWidget {
                 storage.clearAuthTokenState();
                 context.go(AppRoutes.login);
               });
-        } else if (value == 'settings') {}
+        } else if (value == 'settings') {
+            context.push(AppRoutes.settings);
+        }
+        // else if (value == 'endDay') {
+        //   context.push(AppRoutes.openedPoints);
+        // }
       },
       itemBuilder: (BuildContext context) {
         return [
@@ -90,6 +95,19 @@ class InfoPopup extends StatelessWidget {
             ),
           ),
           PopupMenuDivider(),
+          //  PopupMenuItem(
+          //   value: 'endDay',
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //     children: [
+          //       Icon(Icons.point_of_sale_outlined, color: Colors.green),
+          //       Text(
+          //         StringEnums.shift_end.name.tr(),
+          //         style: style,
+          //       ),
+          //     ],
+          //   ),
+          // ),
           PopupMenuItem(
             value: 'settings',
             child: Row(

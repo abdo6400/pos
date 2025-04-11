@@ -75,6 +75,7 @@ extension Dialogs on BuildContext {
       btnCancelText: StringEnums.cancel.name.tr(),
       btnOkText: StringEnums.confirm.name.tr(),
       dialogType: DialogType.noHeader,
+     
       titleTextStyle: Theme.of(this).textTheme.headlineSmall!.copyWith(
             fontSize: this
                 .AppResponsiveValue(20, mobile: 15, tablet: 24, desktop: 32),
