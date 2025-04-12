@@ -24,7 +24,15 @@ class SettingsCubit extends Cubit<Settings> {
   }
 
   void saveSettings() async {
-    final Settings settings = SettingsModel();
+    final Settings settings = SettingsModel(
+      stationName: state.stationName,
+      printerId: state.printerId,
+      printerCashIp: state.printerCashIp,
+      printerKitchenIp1: state.printerKitchenIp1,
+      printerKitchenIp2: state.printerKitchenIp2,
+      printerKitchenIp3: state.printerKitchenIp3,
+      printerKitchenIp4: state.printerKitchenIp4,
+    );
     await storage.saveSettings(settings);
     emit(settings);
   }

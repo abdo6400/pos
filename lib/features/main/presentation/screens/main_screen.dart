@@ -36,9 +36,53 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child:  BlocConsumer<ComparisonCubit, ComparisonState>(
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => ScreenCubit(),
+          ),
+          BlocProvider(
+            create: (context) => ComparisonCubit(),
+          ),
+          BlocProvider(
+            create: (context) =>
+                locator<CategoryBloc>()..add(GetCategoriesEvent()),
+          ),
+          BlocProvider(
+            create: (context) =>
+                locator<ProductBloc>()..add(GetProductsEvent()),
+          ),
+          BlocProvider(create: (_) => CartBloc()),
+          BlocProvider(
+            create: (context) => locator<FlavorBloc>()..add(GetFlavorsEvent()),
+          ),
+          BlocProvider(
+            create: (context) =>
+                locator<QuestionBloc>()..add(GetQuestionsEvent()),
+          ),
+          BlocProvider(
+            create: (context) =>
+                locator<DiscountBloc>()..add(GetDiscountEvent()),
+          ),
+          BlocProvider(
+            create: (context) => locator<OfferBloc>()..add(GetOfferEvent()),
+          ),
+          BlocProvider(
+              create: (context) => locator<OrderBloc>()..add(GetOrdersEvent())),
+          BlocProvider(
+              create: (context) =>
+                  locator<DeliveryBloc>()..add(GetDeliveriesEvent())),
+          BlocProvider(
+              create: (context) =>
+                  locator<PaymentTypesBloc>()..add(GetPaymentTypesEvent())),
+          BlocProvider(create: (_) => locator<PayBloc>()),
+          BlocProvider(
+              create: (_) => locator<SummaryBloc>()..add(GetSummaryEvent())),
+          BlocProvider(create: (_) => locator<CloseCashboxBloc>()),   
+        ],
+        child: BlocConsumer<ComparisonCubit, ComparisonState>(
               listener: (context, state) {
-                
+                // Only show loader when we're actually loading and haven't shown it yet
                 if (state.isLoading) {
                   context.showLottieOverlayLoader(
                     Assets.loader,
@@ -47,10 +91,10 @@ class MainScreen extends StatelessWidget {
                   context.go(AppRoutes.openPoint);
                 } 
                 else if (!state.isLoading && !state.isError && 
-                          state.firstValue != null && 
-                          state.secondValue != null && 
-                          state.secondValue!.isNotEmpty) {
-                  if (state.hasPoint  && !state.mustCloseDay) {
+                         state.firstValue != null && 
+                         state.secondValue != null && 
+                         state.secondValue!.isNotEmpty) {
+                 if (state.hasPoint  && !state.mustCloseDay) {
                     context.hideOverlayLoader();
                     context.hideOverlayLoader();
                   }
@@ -152,7 +196,7 @@ class MainScreen extends StatelessWidget {
               },
            
         ),
-     
+      ),
     );
   }
 }
