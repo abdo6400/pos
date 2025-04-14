@@ -23,6 +23,8 @@ import '../../features/menu/presentation/bloc/question/question_bloc.dart';
 import '../../features/payment/presentation/bloc/pay/pay_bloc.dart';
 import '../../features/payment/presentation/bloc/payment_types/payment_types_bloc.dart';
 import '../../features/payment/presentation/screens/payment_screen.dart';
+import '../../features/sales/presentation/bloc/invoice/invoice_bloc.dart';
+import '../../features/sales/presentation/bloc/invoice_detail/invoice_detail_bloc.dart';
 import '../../features/settings/presentation/bloc/cubit/comparison_cubit.dart';
 import '../../features/settings/presentation/bloc/end_day/end_day_bloc.dart';
 import '../../features/settings/presentation/bloc/get_sales_by_user/get_sales_by_user_bloc.dart';
@@ -127,6 +129,8 @@ class AppRouterConfig {
                   create: (context) =>
                       locator<PaymentTypesBloc>()..add(GetPaymentTypesEvent())),
               BlocProvider(create: (_) => locator<PayBloc>()),
+              BlocProvider(create: (_) => locator<InvoiceBloc>()),
+              BlocProvider(create: (_) => locator<InvoiceDetailBloc>()),
               BlocProvider(
                   create: (_) =>
                       locator<SummaryBloc>()..add(GetSummaryEvent())),
@@ -161,7 +165,8 @@ class AppRouterConfig {
             context,
             state,
             child: BlocProvider(
-              create: (context) => locator<SettingsBloc>()..add(GetSettingsEvent()),
+              create: (context) =>
+                  locator<SettingsBloc>()..add(GetSettingsEvent()),
               child: SettingsScreen(),
             ),
           );

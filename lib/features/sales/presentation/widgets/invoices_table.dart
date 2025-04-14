@@ -122,12 +122,14 @@ class InvoicesTableState extends State<InvoicesTable> {
   }
 
   Widget _buildDataGrid(List<Invoice> invoices, int rowsPerPage) {
+    final _invoiceDataSource = _InvoiceDataSource(invoices);
     return SfDataGrid(
       columnWidthMode: ColumnWidthMode.fill,
       showCheckboxColumn: false,
       rowsPerPage: rowsPerPage,
       gridLinesVisibility: GridLinesVisibility.both,
       headerGridLinesVisibility: GridLinesVisibility.both,
+     
       tableSummaryRows: [
         GridTableSummaryRow(
             showSummaryInRow: true,
@@ -147,6 +149,7 @@ class InvoicesTableState extends State<InvoicesTable> {
         StringEnums.discountAmount,
         StringEnums.taxAmount,
         StringEnums.totalAmount,
+        StringEnums.settings,
       ]
           .map((e) => GridColumn(
                 columnName: e.name,
@@ -157,7 +160,7 @@ class InvoicesTableState extends State<InvoicesTable> {
                 ),
               ))
           .toList(),
-      source: _InvoiceDataSource(invoices),
+      source: _invoiceDataSource,
     );
   }
 
@@ -166,16 +169,21 @@ class InvoicesTableState extends State<InvoicesTable> {
     final pageCount = (totalRows / rowsPerPage).ceil();
     return SfDataPager(
       delegate: source,
-      pageCount: pageCount.toDouble(),
+      pageCount: pageCount > 0 ? pageCount.toDouble() : 1.0,
       direction: Axis.horizontal,
-    );
+      onPageNavigationStart: (int pageIndex) {
+        // Optional: Add any logic needed when page navigation starts
+      },
+      onPageNavigationEnd: (int pageIndex) {
+        // Optional: Add any logic needed when page navigation completes
+      },);
   }
 }
 
 class _InvoiceDataSource extends DataGridSource {
   final List<Invoice> _invoices;
   @override
-  List<Invoice> get dataSource => [];
+  List<Invoice> get dataSource => _invoices;
   _InvoiceDataSource(this._invoices) {
     _buildDataGridRows();
   }
@@ -203,6 +211,9 @@ class _InvoiceDataSource extends DataGridSource {
         DataGridCell<double>(
             columnName: StringEnums.totalAmount.name,
             value: invoice.invoiceGrandTotal),
+        DataGridCell<String>(
+            columnName: StringEnums.settings.name,
+            value: StringEnums.settings.name),
       ]);
     }).toList();
   }
@@ -214,6 +225,16 @@ class _InvoiceDataSource extends DataGridSource {
   DataGridRowAdapter buildRow(DataGridRow row) {
     return DataGridRowAdapter(
       cells: row.getCells().map<Widget>((dataGridCell) {
+        if (dataGridCell.columnName == StringEnums.settings.name) {
+          return Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(8.0),
+            child: IconButton(
+              icon: Icon(Icons.visibility),
+              onPressed: () {},
+            ),
+          );
+        }
         return Container(
           alignment: Alignment.center,
           padding: EdgeInsets.all(8.0),
@@ -224,19 +245,48 @@ class _InvoiceDataSource extends DataGridSource {
     );
   }
 
+
+  void _showInvoiceDetails(BuildContext ctx, DataGridRow row) {
+    final invoice = _invoices.firstWhere((inv) => 
+      inv.invoiceNo == row.getCells()[0].value &&
+      inv.salesDate == row.getCells()[1].value
+    );
+  
+    
+    showDialog(
+      context: ctx,
+      builder: (context) => AlertDialog(
+        title: Text('Invoice Details'.tr()),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Invoice No: ${invoice.invoiceNo}', style: TextStyle(fontSize: 16)),
+            Text('Date: ${invoice.salesDate}', style: TextStyle(fontSize: 16)),
+            Text('Subtotal: ${invoice.invoiceSubTotal}', style: TextStyle(fontSize: 16)),
+            Text('Discount: ${invoice.invoiceDiscountTotal}', style: TextStyle(fontSize: 16)),
+            Text('Tax: ${invoice.invoiceTaxTotal}', style: TextStyle(fontSize: 16)),
+            Text('Total: ${invoice.invoiceGrandTotal}', style: TextStyle(fontSize: 16))
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Close'.tr()),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   int get rowCount => _invoices.length;
 
-  // @override
-  // Future<bool> handlePageChange(int oldPageIndex, int newPageIndex,
-  //     int startRowIndex, int rowsPerPage) async {
-  //   int endIndex = startRowIndex + rowsPerPage;
-  //   if (endIndex > _invoices.length) {
-  //     endIndex = _invoices.length - 1;
-  //   }
-  //   paginatedDataSource = List.from(
-  //       _invoices.getRange(startRowIndex, endIndex).toList(growable: false));
-  //   notifyListeners();
-  //   return true;
-  // }
+  @override
+  Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
+    // This method is called when the user navigates to a different page
+    // We don't need to manually filter the data as SfDataGrid handles this internally
+    // Just return true to allow the page change
+    return true;
+  }
 }
