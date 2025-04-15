@@ -258,9 +258,12 @@
   "requiredAmount": "Required Amount",
   "openedPoints": "Opened Points",
   "open_point": "Open Point",
-  "invoice_details":"Invoice Details",
-  "name":"Name",
-   "price":"Price",
-   "items":"Items",
-   "returnItems":"Return Items"
+  "invoice_details": "Invoice Details",
+  "name": "Name",
+  "price": "Price",
+  "items": "Items",
+  "returnItems": "Return Items",
+  "returnAll": "Return All",
+  "returnedItems": "Returned Items",
+  "restoreAll":"Restore All"
 }
