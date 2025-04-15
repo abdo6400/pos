@@ -26,6 +26,7 @@ import '../../features/payment/presentation/screens/payment_screen.dart';
 import '../../features/sales/domain/entities/invoice.dart';
 import '../../features/sales/presentation/bloc/invoice/invoice_bloc.dart';
 import '../../features/sales/presentation/bloc/invoice_detail/invoice_detail_bloc.dart';
+import '../../features/sales/presentation/bloc/return_invoice/return_invoice_bloc.dart';
 import '../../features/sales/presentation/screens/invoice_details_screen.dart';
 import '../../features/settings/presentation/bloc/cubit/comparison_cubit.dart';
 import '../../features/settings/presentation/bloc/end_day/end_day_bloc.dart';
@@ -155,12 +156,20 @@ class AppRouterConfig {
           return _buildPageWithTransition(
             context,
             state,
-            child: BlocProvider(
-              create: (context) => locator<InvoiceDetailBloc>()
-                ..add(
-                  GetInvoiceDetailEvent(
-                      invoiceId: (state.extra as Invoice).invoiceNo.toString()),
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => locator<InvoiceDetailBloc>()
+                    ..add(
+                      GetInvoiceDetailEvent(
+                          invoiceId:
+                              (state.extra as Invoice).invoiceNo.toString()),
+                    ),
                 ),
+                BlocProvider(
+                  create: (context) => locator<ReturnInvoiceBloc>(),
+                ),
+              ],
               child: InvoiceDetailsScreen(),
             ),
           );

@@ -15,6 +15,7 @@ abstract class SalesRemoteDataSource {
   Future<InvoiceDetailModel> getInvoicesDetail({
     required String invoiceNo,
   });
+  Future<void> returnInvoice(Map<String, dynamic> data);
 }
 
 class SalesRemoteDataSourceImpl extends SalesRemoteDataSource {
@@ -49,5 +50,10 @@ class SalesRemoteDataSourceImpl extends SalesRemoteDataSource {
       ApiKeys.invoiceNo: invoiceNo,
     });
     return InvoiceDetailModel.fromJson(result[EndPoints.response]);
+  }
+  
+  @override
+  Future<void> returnInvoice(Map<String, dynamic> data) async{
+    await _apiConsumer.post(EndPoints.insertReturn, body: data,formDataIsEnabled: false);
   }
 }

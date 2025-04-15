@@ -13,4 +13,7 @@ abstract class SalesRepository {
 
   Future<Either<Failure, InvoiceDetail>> getInvoiceDetail(
       {required String invoiceNo});
+
+   Future<Either<Failure, void>> returnInvoice(
+      Map<String,dynamic> data);
 }

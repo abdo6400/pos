@@ -46,4 +46,17 @@ class SalesRepositoryImpl extends SalesRepository {
       return Left(ServerFailure(message: e.toString()));
     }
   }
+  
+  @override
+  Future<Either<Failure, void>> returnInvoice(Map<String, dynamic> data)async {
+     try {
+      final result =
+          await _salesRemoteDataSource.returnInvoice(data);
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
 }

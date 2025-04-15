@@ -1,14 +1,19 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:retail/core/utils/enums/state_enums.dart';
+import 'package:retail/core/utils/extensions/extensions.dart';
 import 'package:retail/core/utils/extensions/responsive.dart';
 
+import '../../../../core/utils/constants.dart';
 import '../../../../core/utils/enums/string_enums.dart';
 import '../../../../core/widgets/errors/error_card.dart';
 import '../../domain/entities/invoice.dart';
 import '../../domain/entities/invoice_detail.dart';
+import '../../domain/usecases/return_invoice_usecase.dart';
 import '../bloc/cubit/return_items_cubit.dart';
 import '../bloc/invoice_detail/invoice_detail_bloc.dart';
+import '../bloc/return_invoice/return_invoice_bloc.dart';
 
 class InvoiceDetailsScreen extends StatelessWidget {
   const InvoiceDetailsScreen({super.key});
@@ -18,89 +23,111 @@ class InvoiceDetailsScreen extends StatelessWidget {
     final invoice = ModalRoute.of(context)?.settings.arguments as Invoice;
     return BlocProvider(
       create: (context) => ReturnItemsCubit(),
-      child: Scaffold(
-          appBar: PreferredSize(
-            preferredSize: Size.fromHeight(context.AppResponsiveValue(60,
-                mobile: 60, tablet: 80, desktop: 80)),
-            child: AppBar(
-              centerTitle: true,
-              elevation: 2,
-              title: Text(
-                  "${StringEnums.invoice_details.name.tr()} : " +
-                      invoice.invoiceNo.toString(),
-                  style: TextStyle(
-                      fontSize: context.AppResponsiveValue(20,
-                          mobile: 18, tablet: 24, desktop: 30),
-                      fontWeight: FontWeight.bold)),
-              actions: [
-                BlocBuilder<InvoiceDetailBloc, InvoiceDetailState>(
-                  builder: (context, state) {
-                    if (state is InvoiceDetailSuccess) {
-                      return Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: BlocBuilder<ReturnItemsCubit, ReturnItemsState>(
-                          builder: (context, _) {
-                            return ElevatedButton(
-                              onPressed: () {
-                                _showReturnItemsDialog(
-                                    context, state.invoiceDetail.invoiceDtl);
+      child: BlocConsumer<ReturnInvoiceBloc, ReturnInvoiceState>(
+        listener: (context, state) {
+          if (state is ReturnInvoiceLoading) {
+            context.handleState(StateEnum.loading, null);
+          } else if (state is ReturnInvoiceLoaded) {
+            context.handleState(
+                StateEnum.success, StringEnums.returnedItems.name.tr());
+            Future.delayed(Duration(seconds: 1), () {
+              Navigator.pop(context);
+            });
+          } else if (state is ReturnInvoiceError) {
+            context.handleState(StateEnum.error, state.message);
+          }
+        },
+        builder: (context, state) {
+          return Scaffold(
+              appBar: PreferredSize(
+                preferredSize: Size.fromHeight(context.AppResponsiveValue(60,
+                    mobile: 60, tablet: 80, desktop: 80)),
+                child: AppBar(
+                  centerTitle: true,
+                  elevation: 2,
+                  title: Text(
+                      "${StringEnums.invoice_details.name.tr()} : " +
+                          invoice.invoiceNo.toString(),
+                      style: TextStyle(
+                          fontSize: context.AppResponsiveValue(20,
+                              mobile: 18, tablet: 24, desktop: 30),
+                          fontWeight: FontWeight.bold)),
+                  actions: [
+                    BlocBuilder<InvoiceDetailBloc, InvoiceDetailState>(
+                      builder: (context, state) {
+                        if (state is InvoiceDetailSuccess) {
+                          return Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            child:
+                                BlocBuilder<ReturnItemsCubit, ReturnItemsState>(
+                              builder: (context, _) {
+                                return ElevatedButton(
+                                  onPressed: () {
+                                    _showReturnItemsDialog(
+                                        context,
+                                        state.invoiceDetail.invoiceDtl,
+                                        state.invoiceDetail.invoices);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red,
+                                  ),
+                                  child: Text(
+                                    StringEnums.returnItems.name.tr(),
+                                    style: TextStyle(
+                                        fontSize: context.AppResponsiveValue(14,
+                                            mobile: 12,
+                                            tablet: 20,
+                                            desktop: 16)),
+                                  ),
+                                );
                               },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.red,
-                              ),
-                              child: Text(
-                                StringEnums.returnItems.name.tr(),
-                                style: TextStyle(
-                                    fontSize: context.AppResponsiveValue(14,
-                                        mobile: 12, tablet: 20, desktop: 16)),
-                              ),
-                            );
-                          },
-                        ),
-                      );
-                    }
-                    return const CircularProgressIndicator();
-                  },
+                            ),
+                          );
+                        }
+                        return const CircularProgressIndicator();
+                      },
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          body: BlocBuilder<InvoiceDetailBloc, InvoiceDetailState>(
-            builder: (context, state) {
-              if (state is InvoiceDetailLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (state is InvoiceDetailError) {
-                return ErrorCard(
-                  message: state.message,
-                  onRetry: () => context.read<InvoiceDetailBloc>().add(
-                      GetInvoiceDetailEvent(
-                          invoiceId: invoice.invoiceNo.toString())),
-                );
-              } else if (state is InvoiceDetailSuccess) {
-                return Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: SingleChildScrollView(
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildInvoiceHeader(
-                                context, state.invoiceDetail.invoices),
-                            const SizedBox(height: 20),
-                            _buildInvoiceItems(
-                                context, state.invoiceDetail.invoiceDtl),
-                            const SizedBox(height: 20),
-                            _buildPaymentInfo(
-                                context, state.invoiceDetail.invoicePayment),
-                          ]),
-                    ));
-              }
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            },
-          )),
+              ),
+              body: BlocBuilder<InvoiceDetailBloc, InvoiceDetailState>(
+                builder: (context, state) {
+                  if (state is InvoiceDetailLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (state is InvoiceDetailError) {
+                    return ErrorCard(
+                      message: state.message,
+                      onRetry: () => context.read<InvoiceDetailBloc>().add(
+                          GetInvoiceDetailEvent(
+                              invoiceId: invoice.invoiceNo.toString())),
+                    );
+                  } else if (state is InvoiceDetailSuccess) {
+                    return Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: SingleChildScrollView(
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                _buildInvoiceHeader(
+                                    context, state.invoiceDetail.invoices),
+                                const SizedBox(height: 20),
+                                _buildInvoiceItems(
+                                    context, state.invoiceDetail.invoiceDtl),
+                                const SizedBox(height: 20),
+                                _buildPaymentInfo(context,
+                                    state.invoiceDetail.invoicePayment),
+                              ]),
+                        ));
+                  }
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              ));
+        },
+      ),
     );
   }
 
@@ -333,14 +360,22 @@ class InvoiceDetailsScreen extends StatelessWidget {
     );
   }
 
-  void _showReturnItemsDialog(BuildContext ctx, List<InvoiceDtl> items) {
+  void _showReturnItemsDialog(
+      BuildContext ctx, List<InvoiceDtl> items, Invoices invoice) {
     // // Initialize the ReturnItemsCubit with the invoice items
     ctx.read<ReturnItemsCubit>().initItems(items);
 
     showDialog(
       context: ctx,
-      builder: (dialogContext) => BlocProvider.value(
-        value: ctx.read<ReturnItemsCubit>(),
+      builder: (dialogContext) => MultiBlocProvider(
+        providers: [
+          BlocProvider.value(
+            value: ctx.read<ReturnItemsCubit>(),
+          ),
+          BlocProvider.value(
+            value: ctx.read<ReturnInvoiceBloc>(),
+          ),
+        ],
         child: Dialog(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -491,31 +526,94 @@ class InvoiceDetailsScreen extends StatelessWidget {
                         const SizedBox(width: 16),
                         BlocBuilder<ReturnItemsCubit, ReturnItemsState>(
                           builder: (context, state) {
-                            return ElevatedButton(
-                              onPressed: state.returnItems.isEmpty
-                                  ? null
-                                  : () {
-                                      Navigator.of(dialogContext).pop();
-                                    },
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.green),
-                              child: Text(StringEnums.confirm.name.tr()),
+                            return BlocBuilder<ReturnInvoiceBloc,
+                                ReturnInvoiceState>(
+                              builder: (context, _) {
+                                return ElevatedButton(
+                                  onPressed: state.returnItems.isEmpty
+                                      ? null
+                                      : () {
+                                          // Create header for return invoice
+                                          final hdr = Hdr(
+                                            returnId:
+                                                0, // Will be assigned by backend
+                                            returnDate: DateTime.now(),
+                                            invoiceNo:
+                                                invoice.invoiceNo.toInt(),
+                                            returnedBy: invoice.empTaker,
+                                            fromCash:
+                                                invoice.invoiceCashNo.toInt(),
+                                            voidReason: 3, // Default reason
+                                            extraNote: '',
+                                            returnsSubTotal: _calculateSubTotal(
+                                                state.returnItems),
+                                            returnsDiscountTotal:
+                                                _calculateDiscountTotal(
+                                                    state.returnItems),
+                                            returnsServiceTotal: 0,
+                                            returnsTaxTotal: _calculateTaxTotal(
+                                                state.returnItems),
+                                            returnsGrandTotal:
+                                                _calculateGrandTotal(
+                                                    state.returnItems),
+                                            warehouse:
+                                                invoice.warehouse.toString(),
+                                            encryptionSeal:
+                                                invoice.encryptionSeal ?? "",
+                                            guid: invoice.guid,
+                                            qrcode: invoice.qrcode,
+                                            companyId: invoice
+                                                .deliveryCompany, // Default company ID
+                                            payType: 0, // Default payment type
+                                            stationId: invoice.stationId ?? "",
+                                          );
+
+                                          // Create detail items for return
+                                          final dtlItems = state.returnItems
+                                              .map((item) => Dtl(
+                                                    returnId:
+                                                        0, // Will be assigned by backend
+                                                    indexId: item.lineId,
+                                                    itemId: item.item,
+                                                    qty: item.qty.toInt(),
+                                                    unitPrice: item.price,
+                                                    subTotal: item.subtotal,
+                                                    discount: item.discountV,
+                                                    taxValue: item.taxV,
+                                                    discountPercentage:
+                                                        item.discountP,
+                                                    taxPercentage: item.taxP,
+                                                    grandTotal: item.grandTotal,
+                                                    posted: true,
+                                                    warehouse: item.warehouse
+                                                        .toString(),
+                                                  ))
+                                              .toList();
+                                          Navigator.of(dialogContext).pop();
+                                          ctx.read<ReturnInvoiceBloc>().add(
+                                              ReturnInvoice(ReturnParams(
+                                                  hdr: hdr, dtl: dtlItems)));
+                                        },
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.green),
+                                  child: Text(StringEnums.confirm.name.tr()),
+                                );
+                              },
                             );
                           },
                         ),
                       ],
                     ),
-                    BlocConsumer<ReturnItemsCubit, ReturnItemsState>(
-                      listener: (context, state) {
-                        // TODO: implement listener
-                      },
+                    BlocBuilder<ReturnItemsCubit, ReturnItemsState>(
                       builder: (context, state) {
                         return ElevatedButton(
                           onPressed: () {
                             ctx.read<ReturnItemsCubit>().returnAllItems();
                           },
                           style: ElevatedButton.styleFrom(
-                              backgroundColor:state.Items.isEmpty? Colors.red:Theme.of(ctx).primaryColor),
+                              backgroundColor: state.Items.isEmpty
+                                  ? Colors.red
+                                  : Theme.of(ctx).primaryColor),
                           child: Text(
                             state.Items.isEmpty
                                 ? StringEnums.restoreAll.name.tr()
@@ -532,5 +630,22 @@ class InvoiceDetailsScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  // Helper methods for calculating totals
+  double _calculateSubTotal(List<InvoiceDtl> items) {
+    return items.fold(0, (sum, item) => sum + item.subtotal);
+  }
+
+  double _calculateDiscountTotal(List<InvoiceDtl> items) {
+    return items.fold(0, (sum, item) => sum + item.discountV);
+  }
+
+  double _calculateTaxTotal(List<InvoiceDtl> items) {
+    return items.fold(0, (sum, item) => sum + item.taxV);
+  }
+
+  double _calculateGrandTotal(List<InvoiceDtl> items) {
+    return items.fold(0, (sum, item) => sum + item.grandTotal);
   }
 }
