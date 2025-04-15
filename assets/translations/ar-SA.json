@@ -257,5 +257,10 @@
   "shift_end": "انهاء الشفت",
   "requiredAmount": "المبلغ المطلوب",
   "openedPoints": "نقاط البيع المفتوحة",
-  "open_point": "فتح نقطة البيع"
+  "open_point": "فتح نقطة البيع",
+  "invoice_details":"تفاصيل الفاتورة",
+  "name":"الاسم",
+  "price":"السعر",
+  "items":"العناصر",
+  "returnItems":"ارجاع العناصر"
 }

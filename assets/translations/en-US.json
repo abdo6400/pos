@@ -257,5 +257,10 @@
   "shift_end": "Shift End",
   "requiredAmount": "Required Amount",
   "openedPoints": "Opened Points",
-  "open_point": "Open Point"
+  "open_point": "Open Point",
+  "invoice_details":"Invoice Details",
+  "name":"Name",
+   "price":"Price",
+   "items":"Items",
+   "returnItems":"Return Items"
 }

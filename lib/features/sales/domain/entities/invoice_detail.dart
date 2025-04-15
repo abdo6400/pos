@@ -18,13 +18,13 @@ abstract class InvoiceDetail extends Equatable {
 abstract class InvoiceDtl extends Equatable {
   final double invoiceNo;
   final String item;
-  final int qty;
+  final double qty;
   final double price;
   final double subtotal;
-  final int discountV;
-  final int discountP;
-  final int taxP;
-  final int taxV;
+  final double discountV;
+  final double discountP;
+  final double taxP;
+  final double taxV;
   final double grandTotal;
   final int taker;
   final String flavors;
@@ -76,7 +76,7 @@ abstract class InvoiceDtl extends Equatable {
 abstract class InvoicePayment extends Equatable {
   final double invoiceId;
   final int payType;
-  final int payment;
+  final double payment;
   final DateTime creditExpireDate;
   final String warehouse;
 
@@ -101,11 +101,11 @@ abstract class InvoicePayment extends Equatable {
 abstract class Invoices extends Equatable {
   final double invoiceNo;
   final double invoiceCashNo;
-  final int invoiceSubTotal;
-  final int invoiceDiscountTotal;
-  final int invoiceServiceTotal;
-  final int invoiceTaxTotal;
-  final int invoiceGrandTotal;
+  final double invoiceSubTotal;
+  final double invoiceDiscountTotal;
+  final double invoiceServiceTotal;
+  final double invoiceTaxTotal;
+  final double invoiceGrandTotal;
   final bool isPrinted;
   final int customer;
   final DateTime realTime;
@@ -113,7 +113,7 @@ abstract class Invoices extends Equatable {
   final int empTaker;
   final String takerName;
   final int queue;
-  final int cashPayment;
+  final double cashPayment;
   final int warehouse;
   final DateTime salesDate;
   final int deliveryCompany;

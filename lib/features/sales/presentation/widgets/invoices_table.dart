@@ -2,11 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:go_router/go_router.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
+import '../../../../config/routes/app_routes.dart';
 import '../../../../core/entities/field.dart';
 import '../../../../core/entities/form.dart';
 import '../../../../core/utils/enums/field_type_enums.dart';
@@ -61,10 +63,10 @@ class InvoicesTableState extends State<InvoicesTable> {
                     enabled: state is InvoicesLoading,
                     child: Column(
                       children: [
-                        Expanded(child: _buildDataGrid(invoices, _rowsPerPage)),
-                        if (state is InvoicesSuccess)
-                          _buildPaginationControls(invoices.length,
-                              _rowsPerPage, _InvoiceDataSource(invoices)),
+                        Expanded(child: _buildDataGrid(invoices, _rowsPerPage,context)),
+                        // if (state is InvoicesSuccess)
+                        //   _buildPaginationControls(invoices.length,
+                        //       _rowsPerPage, _InvoiceDataSource(invoices)),
                       ],
                     ),
                   );
@@ -121,15 +123,14 @@ class InvoicesTableState extends State<InvoicesTable> {
     );
   }
 
-  Widget _buildDataGrid(List<Invoice> invoices, int rowsPerPage) {
-    final _invoiceDataSource = _InvoiceDataSource(invoices);
+  Widget _buildDataGrid(List<Invoice> invoices, int rowsPerPage,BuildContext context) {
+    final _invoiceDataSource = _InvoiceDataSource(invoices,context: context);
     return SfDataGrid(
       columnWidthMode: ColumnWidthMode.fill,
       showCheckboxColumn: false,
       rowsPerPage: rowsPerPage,
       gridLinesVisibility: GridLinesVisibility.both,
       headerGridLinesVisibility: GridLinesVisibility.both,
-     
       tableSummaryRows: [
         GridTableSummaryRow(
             showSummaryInRow: true,
@@ -164,27 +165,27 @@ class InvoicesTableState extends State<InvoicesTable> {
     );
   }
 
-  Widget _buildPaginationControls(
-      int totalRows, int rowsPerPage, DataGridSource source) {
-    final pageCount = (totalRows / rowsPerPage).ceil();
-    return SfDataPager(
-      delegate: source,
-      pageCount: pageCount > 0 ? pageCount.toDouble() : 1.0,
-      direction: Axis.horizontal,
-      onPageNavigationStart: (int pageIndex) {
-        // Optional: Add any logic needed when page navigation starts
-      },
-      onPageNavigationEnd: (int pageIndex) {
-        // Optional: Add any logic needed when page navigation completes
-      },);
-  }
+  // Widget _buildPaginationControls(
+  //     int totalRows, int rowsPerPage, DataGridSource source) {
+  //   final pageCount = (totalRows / rowsPerPage).ceil();
+  //   return SfDataPager(
+  //     delegate: source,
+  //     pageCount: pageCount > 0 ? pageCount.toDouble() : 1.0,
+  //     direction: Axis.horizontal,
+  //     onPageNavigationStart: (int pageIndex) {
+  //       // Optional: Add any logic needed when page navigation starts
+  //     },
+  //     onPageNavigationEnd: (int pageIndex) {
+  //       // Optional: Add any logic needed when page navigation completes
+  //     },);
+  //}
 }
 
 class _InvoiceDataSource extends DataGridSource {
   final List<Invoice> _invoices;
-  @override
-  List<Invoice> get dataSource => _invoices;
-  _InvoiceDataSource(this._invoices) {
+  final BuildContext context;
+
+  _InvoiceDataSource(this._invoices, {required this.context}) {
     _buildDataGridRows();
   }
 
@@ -211,9 +212,9 @@ class _InvoiceDataSource extends DataGridSource {
         DataGridCell<double>(
             columnName: StringEnums.totalAmount.name,
             value: invoice.invoiceGrandTotal),
-        DataGridCell<String>(
+        DataGridCell<Invoice>(
             columnName: StringEnums.settings.name,
-            value: StringEnums.settings.name),
+            value: invoice),
       ]);
     }).toList();
   }
@@ -230,8 +231,10 @@ class _InvoiceDataSource extends DataGridSource {
             alignment: Alignment.center,
             padding: EdgeInsets.all(8.0),
             child: IconButton(
-              icon: Icon(Icons.visibility),
-              onPressed: () {},
+              icon: Icon(Icons.visibility, color: Theme.of(context).colorScheme.secondary),
+              onPressed: () {
+                context.push(AppRoutes.invoiceDetails, extra: dataGridCell.value);
+              },
             ),
           );
         }
@@ -244,43 +247,6 @@ class _InvoiceDataSource extends DataGridSource {
       }).toList(),
     );
   }
-
-
-  void _showInvoiceDetails(BuildContext ctx, DataGridRow row) {
-    final invoice = _invoices.firstWhere((inv) => 
-      inv.invoiceNo == row.getCells()[0].value &&
-      inv.salesDate == row.getCells()[1].value
-    );
-  
-    
-    showDialog(
-      context: ctx,
-      builder: (context) => AlertDialog(
-        title: Text('Invoice Details'.tr()),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Invoice No: ${invoice.invoiceNo}', style: TextStyle(fontSize: 16)),
-            Text('Date: ${invoice.salesDate}', style: TextStyle(fontSize: 16)),
-            Text('Subtotal: ${invoice.invoiceSubTotal}', style: TextStyle(fontSize: 16)),
-            Text('Discount: ${invoice.invoiceDiscountTotal}', style: TextStyle(fontSize: 16)),
-            Text('Tax: ${invoice.invoiceTaxTotal}', style: TextStyle(fontSize: 16)),
-            Text('Total: ${invoice.invoiceGrandTotal}', style: TextStyle(fontSize: 16))
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('Close'.tr()),
-          ),
-        ],
-      ),
-    );
-  }
-
-  @override
-  int get rowCount => _invoices.length;
 
   @override
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {

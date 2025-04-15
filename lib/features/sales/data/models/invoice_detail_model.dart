@@ -100,12 +100,12 @@ class InvoiceDtlModel extends InvoiceDtl {
         taxP: json[ApiKeys.taxP],
         taxV: json[ApiKeys.taxV],
         grandTotal: json[ApiKeys.grandTotal]?.toDouble(),
-        taker: json[ApiKeys.taker],
+        taker: json[ApiKeys.taker]??0,
         flavors: json[ApiKeys.flavors],
         warehouse: json[ApiKeys.warehouse],
         salesDate: DateTime.parse(json[ApiKeys.salesDate]),
         offerNo: json[ApiKeys.offerNo],
-        lineId: json[ApiKeys.lineId],
+        lineId: json[ApiKeys.lineID],
       );
 }
 

@@ -48,6 +48,6 @@ class SalesRemoteDataSourceImpl extends SalesRemoteDataSource {
         await _apiConsumer.get(EndPoints.getInvoiceDetail, queryParameters: {
       ApiKeys.invoiceNo: invoiceNo,
     });
-    return InvoiceDetailModel.fromJson(result);
+    return InvoiceDetailModel.fromJson(result[EndPoints.response]);
   }
 }
