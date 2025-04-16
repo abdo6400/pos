@@ -133,11 +133,11 @@ class AppRouterConfig {
                   create: (context) =>
                       locator<PaymentTypesBloc>()..add(GetPaymentTypesEvent())),
               BlocProvider(create: (_) => locator<PayBloc>()),
-              BlocProvider(create: (_) => locator<InvoiceBloc>()),
               BlocProvider(
                   create: (_) =>
                       locator<SummaryBloc>()..add(GetSummaryEvent())),
               BlocProvider(create: (_) => locator<CloseCashboxBloc>()),
+              BlocProvider(create: (_) => locator<InvoiceBloc>()),
               BlocProvider(
                   create: (_) =>
                       locator<SettingsBloc>()..add(GetSettingsEvent())),
@@ -164,7 +164,8 @@ class AppRouterConfig {
                     ..add(
                       GetInvoiceDetailEvent(
                           returnId: ((state.extra as Map<String, dynamic>)[
-                                  StringEnums.returnedItems.name] as ReturnInvoice?)
+                                      StringEnums.returnedItems.name]
+                                  as ReturnInvoice?)
                               ?.returnId,
                           invoiceId: ((state.extra as Map<String, dynamic>)[
                                   StringEnums.invoices.name] as Invoice)

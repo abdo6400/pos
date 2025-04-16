@@ -11,6 +11,7 @@ import '../../../../core/entities/field.dart';
 import '../../../../core/entities/form.dart';
 import '../../../../core/utils/assets.dart';
 import '../../../../core/utils/enums/field_type_enums.dart';
+import '../../../../core/utils/enums/state_enums.dart';
 import '../../../../core/utils/enums/string_enums.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/global_form_builder/custom_form_builder.dart';
@@ -27,6 +28,8 @@ class OpenPointScreen extends StatelessWidget {
           context.showLottieOverlayLoader(Assets.loader);
         } else if (state is OpenPointSuccess) {
           context.go(AppRoutes.main);
+        }else if(state is OpenPointFailure){
+          context.handleState(StateEnum.error, state.error);
         }
       },
       builder: (context, state) {
