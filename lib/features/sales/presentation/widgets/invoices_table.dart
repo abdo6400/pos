@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,6 +19,7 @@ import '../../../../core/widgets/empty_message.dart';
 import '../../../../core/widgets/errors/error_card.dart';
 import '../../../../core/widgets/global_form_builder/custom_form_builder.dart';
 import '../../domain/entities/invoice.dart';
+import '../../domain/entities/return_invoice.dart';
 import '../bloc/invoice/invoice_bloc.dart';
 
 class InvoicesTable extends StatefulWidget {
@@ -49,7 +51,18 @@ class InvoicesTableState extends State<InvoicesTable> {
               child: BlocBuilder<InvoiceBloc, InvoiceState>(
                 builder: (context, state) {
                   if (state is InvoicesError) {
-                    return ErrorCard(message: state.message);
+                    return ErrorCard(
+                      message: state.message,
+                      onRetry: () {
+                        final fromDate = _formKey.currentState!
+                            .value[StringEnums.from_date.name] as DateTime;
+                        final toDate = _formKey.currentState!
+                            .value[StringEnums.to_date.name] as DateTime;
+                        context.read<InvoiceBloc>().add(GetInvoicesEvent(
+                            '${fromDate.year}-${fromDate.month}-${fromDate.day}',
+                            '${toDate.year}-${toDate.month}-${toDate.day}'));
+                      },
+                    );
                   }
                   if (state is InvoicesSuccess && state.invoices.isEmpty) {
                     return EmptyMessage(
@@ -58,12 +71,15 @@ class InvoicesTableState extends State<InvoicesTable> {
 
                   final List<Invoice> invoices =
                       state is InvoicesSuccess ? state.invoices : [];
-
+                  final List<ReturnInvoice> returnInvoices =
+                      state is InvoicesSuccess ? state.returnInvoices : [];
                   return Skeletonizer(
                     enabled: state is InvoicesLoading,
                     child: Column(
                       children: [
-                        Expanded(child: _buildDataGrid(invoices, _rowsPerPage,context)),
+                        Expanded(
+                            child: _buildDataGrid(invoices, returnInvoices,
+                                _rowsPerPage, context)),
                         // if (state is InvoicesSuccess)
                         //   _buildPaginationControls(invoices.length,
                         //       _rowsPerPage, _InvoiceDataSource(invoices)),
@@ -123,8 +139,13 @@ class InvoicesTableState extends State<InvoicesTable> {
     );
   }
 
-  Widget _buildDataGrid(List<Invoice> invoices, int rowsPerPage,BuildContext context) {
-    final _invoiceDataSource = _InvoiceDataSource(invoices,context: context);
+  Widget _buildDataGrid(
+      List<Invoice> invoices,
+      List<ReturnInvoice> returnInvoices,
+      int rowsPerPage,
+      BuildContext context) {
+    final _invoiceDataSource =
+        _InvoiceDataSource(invoices, returnInvoices, context: context);
     return SfDataGrid(
       columnWidthMode: ColumnWidthMode.fill,
       showCheckboxColumn: false,
@@ -183,9 +204,11 @@ class InvoicesTableState extends State<InvoicesTable> {
 
 class _InvoiceDataSource extends DataGridSource {
   final List<Invoice> _invoices;
+  final List<ReturnInvoice> _returnInvoices;
   final BuildContext context;
 
-  _InvoiceDataSource(this._invoices, {required this.context}) {
+  _InvoiceDataSource(this._invoices, this._returnInvoices,
+      {required this.context}) {
     _buildDataGridRows();
   }
 
@@ -212,9 +235,13 @@ class _InvoiceDataSource extends DataGridSource {
         DataGridCell<double>(
             columnName: StringEnums.totalAmount.name,
             value: invoice.invoiceGrandTotal),
-        DataGridCell<Invoice>(
+        DataGridCell<Map<String, dynamic>>(
             columnName: StringEnums.settings.name,
-            value: invoice),
+            value: {
+              StringEnums.invoices.name: invoice,
+              StringEnums.returnedItems.name: _returnInvoices.firstWhereOrNull(
+                  (element) => element.invoiceNo == invoice.invoiceNo)
+            }),
       ]);
     }).toList();
   }
@@ -225,15 +252,22 @@ class _InvoiceDataSource extends DataGridSource {
   @override
   DataGridRowAdapter buildRow(DataGridRow row) {
     return DataGridRowAdapter(
+      color: _returnInvoices.firstWhereOrNull((element) =>
+                  element.invoiceNo == row.getCells()[0].value) !=
+              null
+          ? Colors.red.withOpacity(0.3)
+          : null,
       cells: row.getCells().map<Widget>((dataGridCell) {
         if (dataGridCell.columnName == StringEnums.settings.name) {
           return Container(
             alignment: Alignment.center,
             padding: EdgeInsets.all(8.0),
             child: IconButton(
-              icon: Icon(Icons.visibility, color: Theme.of(context).colorScheme.secondary),
+              icon: Icon(Icons.visibility,
+                  color: Theme.of(context).colorScheme.primary),
               onPressed: () {
-                context.push(AppRoutes.invoiceDetails, extra: dataGridCell.value);
+                context.push(AppRoutes.invoiceDetails,
+                    extra: dataGridCell.value);
               },
             ),
           );

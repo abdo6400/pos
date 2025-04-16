@@ -7,7 +7,7 @@ sealed class ReturnInvoiceEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class ReturnInvoice extends ReturnInvoiceEvent {
+class ReturnedInvoice extends ReturnInvoiceEvent {
   final ReturnParams params;
-  const ReturnInvoice(this.params);
+  const ReturnedInvoice(this.params);
 }

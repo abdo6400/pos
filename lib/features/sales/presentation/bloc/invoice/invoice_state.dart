@@ -13,7 +13,8 @@ class InvoicesLoading extends InvoiceState {}
 
 class InvoicesSuccess extends InvoiceState {
   final List<Invoice> invoices;
-  const InvoicesSuccess(this.invoices);
+   final List<ReturnInvoice> returnInvoices;
+  const InvoicesSuccess(this.invoices,this.returnInvoices);
 }
 
 class InvoicesError extends InvoiceState {

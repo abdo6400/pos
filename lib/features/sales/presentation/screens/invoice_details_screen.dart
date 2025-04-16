@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:retail/core/utils/enums/state_enums.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
-import 'package:retail/core/utils/extensions/responsive.dart';
-
-import '../../../../core/utils/constants.dart';
 import '../../../../core/utils/enums/string_enums.dart';
 import '../../../../core/widgets/errors/error_card.dart';
 import '../../domain/entities/invoice.dart';
 import '../../domain/entities/invoice_detail.dart';
+import '../../domain/entities/return_invoice.dart';
+import '../../domain/entities/return_invoice_detail.dart';
 import '../../domain/usecases/return_invoice_usecase.dart';
 import '../bloc/cubit/return_items_cubit.dart';
 import '../bloc/invoice_detail/invoice_detail_bloc.dart';
@@ -20,7 +19,11 @@ class InvoiceDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final invoice = ModalRoute.of(context)?.settings.arguments as Invoice;
+    final data =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+    final invoice = data[StringEnums.invoices.name] as Invoice;
+    final returnInvoice =
+        (data[StringEnums.returnedItems.name]) as ReturnInvoice?;
     return BlocProvider(
       create: (context) => ReturnItemsCubit(),
       child: BlocConsumer<ReturnInvoiceBloc, ReturnInvoiceState>(
@@ -66,7 +69,9 @@ class InvoiceDetailsScreen extends StatelessWidget {
                                     _showReturnItemsDialog(
                                         context,
                                         state.invoiceDetail.invoiceDtl,
-                                        state.invoiceDetail.invoices);
+                                        state.invoiceDetail.invoices,
+                                        (state.returnedInvoiceDetail?.dtl) ??
+                                            []);
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.red,
@@ -101,7 +106,8 @@ class InvoiceDetailsScreen extends StatelessWidget {
                       message: state.message,
                       onRetry: () => context.read<InvoiceDetailBloc>().add(
                           GetInvoiceDetailEvent(
-                              invoiceId: invoice.invoiceNo.toString())),
+                              invoiceId: invoice.invoiceNo.toString(),
+                              returnId: returnInvoice?.returnId)),
                     );
                   } else if (state is InvoiceDetailSuccess) {
                     return Padding(
@@ -111,10 +117,14 @@ class InvoiceDetailsScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 _buildInvoiceHeader(
-                                    context, state.invoiceDetail.invoices),
+                                    context,
+                                    state.invoiceDetail.invoices,
+                                    state.returnedInvoiceDetail?.hdr),
                                 const SizedBox(height: 20),
                                 _buildInvoiceItems(
-                                    context, state.invoiceDetail.invoiceDtl),
+                                    context,
+                                    state.invoiceDetail.invoiceDtl,
+                                    state.returnedInvoiceDetail?.dtl ?? []),
                                 const SizedBox(height: 20),
                                 _buildPaymentInfo(context,
                                     state.invoiceDetail.invoicePayment),
@@ -131,33 +141,59 @@ class InvoiceDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInvoiceHeader(BuildContext context, Invoices invoice) {
+  Widget _buildInvoiceHeader(BuildContext context, Invoices invoice,
+      ReturnInvoiceHdr? returnInvoiceHdr) {
     final dateFormat = DateFormat('yyyy-MM-dd HH:mm');
     return Card(
-      elevation: 4,
+      elevation: 0.2,
+      color: returnInvoiceHdr != null ? Colors.red.withAlpha(100) : null,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Text(
+                StringEnums.invoices.name.tr(),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: context.AppResponsiveValue(16,
+                      mobile: 14, tablet: 18, desktop: 20),
+                ),
+              ),
+            ),
             _buildInfoRow(StringEnums.invoice_number.name.tr(),
                 invoice.invoiceNo.toString(),
                 context: context),
             _buildInfoRow(StringEnums.invoice_date.name.tr(),
                 dateFormat.format(invoice.salesDate),
                 context: context),
-            _buildInfoRow(StringEnums.subTotalAmount.name.tr(),
-                invoice.invoiceSubTotal.toStringAsFixed(2),
+            _buildInfoRow(
+                StringEnums.subTotalAmount.name.tr(),
+                (invoice.invoiceSubTotal -
+                        (returnInvoiceHdr?.returnsSubTotal ?? 0.0))
+                    .toStringAsFixed(2),
                 context: context),
-            _buildInfoRow(StringEnums.discount.name.tr(),
-                invoice.invoiceDiscountTotal.toStringAsFixed(2),
+            _buildInfoRow(
+                StringEnums.discount.name.tr(),
+                (invoice.invoiceDiscountTotal -
+                        (returnInvoiceHdr?.returnsDiscountTotal ?? 0.0))
+                    .toStringAsFixed(2),
                 context: context),
-            _buildInfoRow(StringEnums.taxAmount.name.tr(),
-                invoice.invoiceTaxTotal.toStringAsFixed(2),
+            _buildInfoRow(
+                StringEnums.taxAmount.name.tr(),
+                (invoice.invoiceTaxTotal -
+                        (returnInvoiceHdr?.returnsTaxTotal ?? 0.0))
+                    .toStringAsFixed(2),
                 context: context),
-            _buildInfoRow(StringEnums.totalAmount.name.tr(),
-                invoice.invoiceGrandTotal.toStringAsFixed(2),
-                isTotal: true, context: context),
+            _buildInfoRow(
+                StringEnums.totalAmount.name.tr(),
+                (invoice.invoiceGrandTotal -
+                        (returnInvoiceHdr?.returnsGrandTotal ?? 0.0))
+                    .toStringAsFixed(2),
+                isTotal: true,
+                context: context),
           ],
         ),
       ),
@@ -165,7 +201,9 @@ class InvoiceDetailsScreen extends StatelessWidget {
   }
 
   Widget _buildInfoRow(String label, String value,
-      {bool isTotal = false, required BuildContext context}) {
+      {bool isTotal = false,
+      bool isReturn = false,
+      required BuildContext context}) {
     return Padding(
       padding: EdgeInsets.symmetric(
           vertical: context.AppResponsiveValue(4.0,
@@ -176,12 +214,14 @@ class InvoiceDetailsScreen extends StatelessWidget {
           Text(label,
               style: TextStyle(
                   fontWeight: FontWeight.w500,
+                  color: isReturn ? Colors.red : null,
                   fontSize: context.AppResponsiveValue(14,
                       mobile: 12, tablet: 16, desktop: 16))),
           Text(
             value,
             style: TextStyle(
               fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
+              color: isReturn ? Colors.red : null,
               fontSize: context.AppResponsiveValue(isTotal ? 16 : 14,
                   mobile: isTotal ? 14 : 12,
                   tablet: isTotal ? 18 : 16,
@@ -193,7 +233,8 @@ class InvoiceDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInvoiceItems(BuildContext context, List<InvoiceDtl> items) {
+  Widget _buildInvoiceItems(BuildContext context, List<InvoiceDtl> items,
+      List<returnInvoiceDtl> returnItems) {
     return Card(
       elevation: 4,
       child: Padding(
@@ -252,17 +293,39 @@ class InvoiceDetailsScreen extends StatelessWidget {
               ],
             ),
             const Divider(),
-            // Table rows
-            ...items.map((item) => Padding(
+            ...items.map((item) => Container(
+                  decoration: BoxDecoration(
+                    color: returnItems
+                            .any((returnItem) => returnItem.itemId == item.item)
+                        ? Colors.red.withOpacity(0.2)
+                        : null,
+                    borderRadius: BorderRadius.circular(4.0),
+                  ),
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Row(
                     children: [
                       Expanded(
                           flex: 3,
-                          child: Text(item.item,
-                              style: TextStyle(
-                                  fontSize: context.AppResponsiveValue(14,
-                                      mobile: 12, tablet: 16, desktop: 16)))),
+                          child: Row(
+                            children: [
+                              // Add a lock icon for returned items
+                              if (returnItems.any((returnItem) =>
+                                  returnItem.itemId == item.item))
+                                const Padding(
+                                  padding: EdgeInsets.only(right: 8.0),
+                                  child: Icon(Icons.lock,
+                                      color: Colors.red, size: 16),
+                                ),
+                              Expanded(
+                                child: Text(item.item,
+                                    style: TextStyle(
+                                        fontSize: context.AppResponsiveValue(14,
+                                            mobile: 12,
+                                            tablet: 16,
+                                            desktop: 16))),
+                              ),
+                            ],
+                          )),
                       Expanded(
                           child: Text(item.qty.toString(),
                               style: TextStyle(
@@ -360,10 +423,10 @@ class InvoiceDetailsScreen extends StatelessWidget {
     );
   }
 
-  void _showReturnItemsDialog(
-      BuildContext ctx, List<InvoiceDtl> items, Invoices invoice) {
-    // // Initialize the ReturnItemsCubit with the invoice items
-    ctx.read<ReturnItemsCubit>().initItems(items);
+  void _showReturnItemsDialog(BuildContext ctx, List<InvoiceDtl> items,
+      Invoices invoice, List<returnInvoiceDtl> returnItems) {
+    // Initialize the ReturnItemsCubit with the invoice items and previously returned items
+    ctx.read<ReturnItemsCubit>().initItems(items, returnItems);
 
     showDialog(
       context: ctx,
@@ -390,7 +453,7 @@ class InvoiceDetailsScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      StringEnums.returnItems.name.tr(),
+                      invoice.invoiceNo.toString(),
                       style: TextStyle(
                         fontSize: ctx.AppResponsiveValue(20,
                             mobile: 18, tablet: 24, desktop: 26),
@@ -433,7 +496,18 @@ class InvoiceDetailsScreen extends StatelessWidget {
                                         margin: const EdgeInsets.symmetric(
                                             vertical: 4),
                                         child: ListTile(
-                                          title: Text(item.item),
+                                          title: Row(
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  item.item,
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                           subtitle: Text(
                                             '${StringEnums.quentity.name.tr()}: ${item.qty} - ${StringEnums.price.name.tr()}: ${item.price.toStringAsFixed(2)}',
                                           ),
@@ -445,6 +519,58 @@ class InvoiceDetailsScreen extends StatelessWidget {
                                               context
                                                   .read<ReturnItemsCubit>()
                                                   .addToReturnItems(item);
+                                            },
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const VerticalDivider(),
+                      // Return Items List
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              StringEnums.returnItems.name.tr(),
+                              style: TextStyle(
+                                fontSize: ctx.AppResponsiveValue(16,
+                                    mobile: 14, tablet: 18, desktop: 20),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Expanded(
+                              child: BlocBuilder<ReturnItemsCubit,
+                                  ReturnItemsState>(
+                                builder: (context, state) {
+                                  return ListView.builder(
+                                    itemCount: state.returnItems.length,
+                                    itemBuilder: (context, index) {
+                                      final item = state.returnItems[index];
+                                      return Card(
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 4),
+                                        child: ListTile(
+                                          title: Text(
+                                            item.item,
+                                          ),
+                                          subtitle: Text(
+                                            '${StringEnums.quentity.name.tr()}: ${item.qty} - ${StringEnums.price.name.tr()}: ${item.price.toStringAsFixed(2)}',
+                                          ),
+                                          trailing: IconButton(
+                                            icon: const Icon(Icons.arrow_back,
+                                                color: Colors.red),
+                                            onPressed: () {
+                                              context
+                                                  .read<ReturnItemsCubit>()
+                                                  .removeFromReturnItems(item);
                                             },
                                           ),
                                         ),
@@ -477,27 +603,34 @@ class InvoiceDetailsScreen extends StatelessWidget {
                                   ReturnItemsState>(
                                 builder: (context, state) {
                                   return ListView.builder(
-                                    itemCount: state.returnItems.length,
+                                    itemCount: state.originallyReturned.length,
                                     itemBuilder: (context, index) {
-                                      final item = state.returnItems[index];
                                       return Card(
+                                        elevation: 0,
                                         margin: const EdgeInsets.symmetric(
                                             vertical: 4),
+                                        // Apply red background for originally returned items
+                                        color: Colors.red.withAlpha(100),
                                         child: ListTile(
-                                          title: Text(item.item),
-                                          subtitle: Text(
-                                            '${StringEnums.quentity.name.tr()}: ${item.qty} - ${StringEnums.price.name.tr()}: ${item.price.toStringAsFixed(2)}',
-                                          ),
-                                          trailing: IconButton(
-                                            icon: const Icon(Icons.arrow_back,
-                                                color: Colors.red),
-                                            onPressed: () {
-                                              context
-                                                  .read<ReturnItemsCubit>()
-                                                  .removeFromReturnItems(item);
-                                            },
-                                          ),
-                                        ),
+                                            leading: const Icon(Icons.lock,
+                                                color: Colors.red, size: 20),
+                                            title: Text(
+                                              state.originallyReturned[index]
+                                                  .item,
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            subtitle: Text(
+                                              '${StringEnums.quentity.name.tr()}: ${state.originallyReturned[index].qty} - ${StringEnums.price.name.tr()}: ${state.originallyReturned[index].price.toStringAsFixed(2)}',
+                                            ),
+                                            trailing: Tooltip(
+                                              message: StringEnums
+                                                  .cannot_be_modified.name
+                                                  .tr(),
+                                              child: const Icon(
+                                                  Icons.info_outline,
+                                                  color: Colors.red),
+                                            )),
                                       );
                                     },
                                   );
@@ -539,10 +672,10 @@ class InvoiceDetailsScreen extends StatelessWidget {
                                                 0, // Will be assigned by backend
                                             returnDate: DateTime.now(),
                                             invoiceNo:
-                                                invoice.invoiceNo.toInt(),
+                                                invoice.invoiceNo,
                                             returnedBy: invoice.empTaker,
                                             fromCash:
-                                                invoice.invoiceCashNo.toInt(),
+                                                invoice.invoiceCashNo,
                                             voidReason: 3, // Default reason
                                             extraNote: '',
                                             returnsSubTotal: _calculateSubTotal(
@@ -591,7 +724,7 @@ class InvoiceDetailsScreen extends StatelessWidget {
                                               .toList();
                                           Navigator.of(dialogContext).pop();
                                           ctx.read<ReturnInvoiceBloc>().add(
-                                              ReturnInvoice(ReturnParams(
+                                              ReturnedInvoice(ReturnParams(
                                                   hdr: hdr, dtl: dtlItems)));
                                         },
                                   style: ElevatedButton.styleFrom(

@@ -265,5 +265,7 @@
   "returnItems": "Return Items",
   "returnAll": "Return All",
   "returnedItems": "Returned Items",
-  "restoreAll":"Restore All"
+  "restoreAll": "Restore All",
+  "cannot_be_modified": "cannot be modified",
+  "locked_items": "Locked Items"
 }

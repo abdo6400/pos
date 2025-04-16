@@ -9,5 +9,7 @@ sealed class InvoiceDetailEvent extends Equatable {
 
 class GetInvoiceDetailEvent extends InvoiceDetailEvent {
   final String invoiceId;
-  const GetInvoiceDetailEvent({required this.invoiceId});
+  final int? returnId;
+  const GetInvoiceDetailEvent(
+      {required this.invoiceId, required this.returnId});
 }

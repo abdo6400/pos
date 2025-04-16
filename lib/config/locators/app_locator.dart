@@ -46,6 +46,8 @@ import '../../features/payment/domain/usecases/pay_usecase.dart';
 import '../../features/payment/presentation/bloc/pay/pay_bloc.dart';
 import '../../features/payment/presentation/bloc/payment_types/payment_types_bloc.dart';
 import '../../features/sales/data/repositories/sales_repository_impl.dart';
+import '../../features/sales/domain/usecases/get_returned_invoice_detail_usecase.dart';
+import '../../features/sales/domain/usecases/get_returned_invoices_usecase.dart';
 import '../../features/sales/domain/usecases/return_invoice_usecase.dart';
 import '../../features/sales/presentation/bloc/invoice/invoice_bloc.dart';
 import '../../features/sales/presentation/bloc/invoice_detail/invoice_detail_bloc.dart';
@@ -157,17 +159,26 @@ class AppLocator {
         () => PaymentLocalDataSourceImpl(localConsumer: locator()));
 
     //sales
-    locator.registerFactory<InvoiceBloc>(() => InvoiceBloc(locator()));
-     locator.registerFactory<ReturnInvoiceBloc>(() => ReturnInvoiceBloc(locator()));
+    locator.registerFactory<InvoiceBloc>(() => InvoiceBloc(
+          locator(),
+          locator(),
+        ));
+    locator
+        .registerFactory<ReturnInvoiceBloc>(() => ReturnInvoiceBloc(locator()));
     locator.registerFactory<InvoiceDetailBloc>(() => InvoiceDetailBloc(
+          locator(),
           locator(),
         ));
     locator.registerLazySingleton<ReturnInvoiceUsecase>(
         () => ReturnInvoiceUsecase(locator()));
-     locator.registerLazySingleton<GetInvoicesUsecase>(
+    locator.registerLazySingleton<GetInvoicesUsecase>(
         () => GetInvoicesUsecase(locator()));
     locator.registerLazySingleton<GetInvoiceDetailUsecase>(
         () => GetInvoiceDetailUsecase(locator()));
+    locator.registerLazySingleton<GetReturnedInvoicesUsecase>(
+        () => GetReturnedInvoicesUsecase(locator()));
+    locator.registerLazySingleton<GetReturnedInvoiceDetailUsecase>(
+        () => GetReturnedInvoiceDetailUsecase(locator()));
     locator.registerLazySingleton<SalesRepository>(() => SalesRepositoryImpl(
           salesRemoteDataSource: locator(),
         ));

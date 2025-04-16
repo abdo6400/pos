@@ -38,7 +38,8 @@ class EndPoints {
   static const String getSalesByUser = 'RestaurantSales/v1.0/AppGetByUser';
   static const String openPointByParameters =
       'RestaurantSales/v1.0/OpenPointByParameters';
-  static const String insertByParameters = "RestaurantSalesDay/v1.0/InsertByParameters";
+  static const String insertByParameters =
+      "RestaurantSalesDay/v1.0/InsertByParameters";
   static const String endDay = 'RestaurantSalesDay/v1.0/EndDay';
   static const String openLastDay = 'RestaurantSalesDay/v1.0/OpenLastDay';
   static const String getSalesByDate = 'RestaurantSales/v1.0/AppGetByDate';
@@ -51,5 +52,6 @@ class EndPoints {
   // Return Endpoints
   static const String getReturnId = 'Return/v1.0/GetCurrentKey';
   static const String insertReturn = 'Return/v1.0/ReturnInsert';
-
+  static const String getReturnedInvoices = 'Return/v1.0/AppGetByUser';
+  static const String getReturnedInvoiceDetail = "Return/v1.0/GetById";
 }

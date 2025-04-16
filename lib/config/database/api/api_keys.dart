@@ -252,4 +252,29 @@ class ApiKeys {
   static const String sum = "sum";
   static const String cashServiceTotal = "CashServiceTotal";
   static const String subTotal = "SubTotal";
+
+  static const String returnId = "ReturnId";
+  static const String returnDate = "ReturnDate";
+  static const String returnedBy = "ReturnedBy";
+  static const String fromCash = "FromCash";
+  static const String voidReason = "VoidReason";
+  static const String returnsSubTotal = "ReturnsSubTotal";
+  static const String returnsDiscountTotal = "ReturnsDiscountTotal";
+  static const String returnsTaxTotal = "ReturnsTaxTotal";
+  static const String returnsGrandTotal = "ReturnsGrandTotal";
+
+  static const String hdr = "Hdr";
+  static const String dtl = "Dtl";
+
+  static const String extraNote = "ExtraNote";
+  static const String returnsServiceTotal = "ReturnsServiceTotal";
+  static const String itemId = "ItemId";
+  static const String indexId = "IndexId";
+  static const String unitPrice = "UnitPrice";
+  static const String taxValue = "TaxValue";
+  static const String posted = "Posted";
+
+  static const String companyID ="CompanyID";
+
+  static const String stationID ="StationID";
 }

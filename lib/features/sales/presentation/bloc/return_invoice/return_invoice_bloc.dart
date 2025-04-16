@@ -7,7 +7,7 @@ part 'return_invoice_state.dart';
 class ReturnInvoiceBloc extends Bloc<ReturnInvoiceEvent, ReturnInvoiceState> {
   final ReturnInvoiceUsecase _invoiceUsecase; 
   ReturnInvoiceBloc(this._invoiceUsecase) : super(ReturnInvoiceInitial()) {
-    on<ReturnInvoice>((event, emit) async{
+    on<ReturnedInvoice>((event, emit) async{
       emit(ReturnInvoiceLoading());
       final result = await _invoiceUsecase(event.params);
       emit(result.fold((failure) => ReturnInvoiceError( failure.message), (_) => ReturnInvoiceLoaded()));

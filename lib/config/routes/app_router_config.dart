@@ -24,6 +24,7 @@ import '../../features/payment/presentation/bloc/pay/pay_bloc.dart';
 import '../../features/payment/presentation/bloc/payment_types/payment_types_bloc.dart';
 import '../../features/payment/presentation/screens/payment_screen.dart';
 import '../../features/sales/domain/entities/invoice.dart';
+import '../../features/sales/domain/entities/return_invoice.dart';
 import '../../features/sales/presentation/bloc/invoice/invoice_bloc.dart';
 import '../../features/sales/presentation/bloc/invoice_detail/invoice_detail_bloc.dart';
 import '../../features/sales/presentation/bloc/return_invoice/return_invoice_bloc.dart';
@@ -162,8 +163,13 @@ class AppRouterConfig {
                   create: (context) => locator<InvoiceDetailBloc>()
                     ..add(
                       GetInvoiceDetailEvent(
-                          invoiceId:
-                              (state.extra as Invoice).invoiceNo.toString()),
+                          returnId: ((state.extra as Map<String, dynamic>)[
+                                  StringEnums.returnedItems.name] as ReturnInvoice?)
+                              ?.returnId,
+                          invoiceId: ((state.extra as Map<String, dynamic>)[
+                                  StringEnums.invoices.name] as Invoice)
+                              .invoiceNo
+                              .toString()),
                     ),
                 ),
                 BlocProvider(

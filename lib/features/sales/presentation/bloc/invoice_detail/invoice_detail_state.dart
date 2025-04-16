@@ -13,7 +13,9 @@ class InvoiceDetailLoading extends InvoiceDetailState {}
 
 class InvoiceDetailSuccess extends InvoiceDetailState {
   final InvoiceDetail invoiceDetail;
-  const InvoiceDetailSuccess({required this.invoiceDetail});
+  final ReturnInvoiceDetail? returnedInvoiceDetail;
+  const InvoiceDetailSuccess(
+      {required this.invoiceDetail, required this.returnedInvoiceDetail});
 }
 
 class InvoiceDetailError extends InvoiceDetailState {

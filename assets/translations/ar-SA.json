@@ -265,5 +265,7 @@
   "returnItems": "ارجاع العناصر",
   "returnAll": "ارجاع الكل",
   "returnedItems": "العناصر المُرجعة",
-  "restoreAll":"استعادة الكل"
+  "restoreAll":"استعادة الكل",
+   "cannot_be_modified":" لا يمكن تعديلها",
+   "locked_items":" العناصر المحفوظة"
 }
