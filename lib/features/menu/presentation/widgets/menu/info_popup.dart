@@ -21,120 +21,126 @@ class InfoPopup extends StatelessWidget {
           fontSize: context.AppResponsiveValue(12,
               mobile: 10, tablet: 16, desktop: 20),
         );
-    return PopupMenuButton<String>(
-      icon: Icon(Icons.person_2_outlined),
-      offset: Offset.fromDirection(3.14 / 2, 50),
-      iconSize:
-          context.AppResponsiveValue(25, mobile: 25, tablet: 35, desktop: 40),
-      onSelected: (value) {
-        if (value == 'logout') {
-          context.showConfirmDilog(
-              title: StringEnums.loggingOut.name,
-              onSubmit: () {
-                storage.clearAuthTokenState();
-                context.go(AppRoutes.login);
-              });
-        } else if (value == 'settings') {
-            context.push(AppRoutes.settings);
-        }
-        // else if (value == 'endDay') {
-        //   context.push(AppRoutes.openedPoints);
-        // }
-      },
-      itemBuilder: (BuildContext context) {
-        return [
-          PopupMenuItem(
-            value: 'user_info',
-            enabled: false,
-            child: BlocProvider.value(
-              value: cubit as UserCubit,
-              child: BlocBuilder<UserCubit, AuthTokens?>(
-                builder: (context, state) {
-                  return Skeletonizer(
-                    enabled: state == null,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            spacing: 5,
-                            children: [
-                              state?.defaultBranch,
-                              state?.defaultCurrency,
-                            ]
-                                .map(
-                                  (e) => Text(
-                                    e ?? '',
+    return BlocBuilder<UserCubit, AuthTokens?>(
+      builder: (context, state) {
+        return PopupMenuButton<String>(
+          icon: Icon(Icons.person_2_outlined),
+          offset: Offset.fromDirection(3.14 / 2, 50),
+          iconSize: context.AppResponsiveValue(25,
+              mobile: 25, tablet: 35, desktop: 40),
+          onSelected: (value) {
+            if (value == 'logout') {
+              context.showConfirmDilog(
+                  title: StringEnums.loggingOut.name,
+                  onSubmit: () {
+                    context.read<UserCubit>().clearUser();
+                    storage.clearAuthTokenState();
+                    context.go(AppRoutes.login);
+                  });
+            } else if (value == 'settings') {
+              context.push(AppRoutes.settings);
+            }
+            // else if (value == 'endDay') {
+            //   context.push(AppRoutes.openedPoints);
+            // }
+          },
+          itemBuilder: (BuildContext context) {
+            return [
+              PopupMenuItem(
+                value: 'user_info',
+                enabled: false,
+                child: BlocProvider.value(
+                  value: cubit as UserCubit,
+                  child: BlocBuilder<UserCubit, AuthTokens?>(
+                    builder: (context, state) {
+                      return Skeletonizer(
+                        enabled: state == null,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                spacing: 5,
+                                children: [
+                                  state?.defaultBranch,
+                                  state?.defaultCurrency,
+                                ]
+                                    .map(
+                                      (e) => Text(
+                                        e ?? '',
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: style,
+                                      ),
+                                    )
+                                    .toList()),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              spacing: 5,
+                              children: [
+                                Image.asset(
+                                  Assets.logo,
+                                  height: context.AppResponsiveValue(30,
+                                      mobile: 30, tablet: 40, desktop: 50),
+                                ),
+                                Text(state?.username ?? '',
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
-                                    style: style,
-                                  ),
-                                )
-                                .toList()),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          spacing: 5,
-                          children: [
-                            Image.asset(
-                              Assets.logo,
-                              height: context.AppResponsiveValue(30,
-                                  mobile: 30, tablet: 40, desktop: 50),
+                                    style: style),
+                              ],
                             ),
-                            Text(state?.username ?? '',
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                style: style),
                           ],
                         ),
-                      ],
-                    ),
-                  );
-                },
+                      );
+                    },
+                  ),
+                ),
               ),
-            ),
-          ),
-          PopupMenuDivider(),
-          //  PopupMenuItem(
-          //   value: 'endDay',
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //     children: [
-          //       Icon(Icons.point_of_sale_outlined, color: Colors.green),
-          //       Text(
-          //         StringEnums.shift_end.name.tr(),
-          //         style: style,
-          //       ),
-          //     ],
-          //   ),
-          // ),
-          PopupMenuItem(
-            value: 'settings',
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Icon(Icons.settings, color: Colors.blue),
-                Text(
-                  StringEnums.settings.name.tr(),
-                  style: style,
+              PopupMenuDivider(),
+              //  PopupMenuItem(
+              //   value: 'endDay',
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //     children: [
+              //       Icon(Icons.point_of_sale_outlined, color: Colors.green),
+              //       Text(
+              //         StringEnums.shift_end.name.tr(),
+              //         style: style,
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              PopupMenuItem(
+                value: 'settings',
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Icon(Icons.settings, color: Colors.blue),
+                    Text(
+                      StringEnums.settings.name.tr(),
+                      style: style,
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          PopupMenuItem(
-            value: 'logout',
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Icon(Icons.logout, color: Colors.red),
-                Text(
-                  StringEnums.logout.name.tr(),
-                  style: style,
+              ),
+              PopupMenuItem(
+                value: 'logout',
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Icon(Icons.logout, color: Colors.red),
+                    Text(
+                      StringEnums.logout.name.tr(),
+                      style: style,
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-        ];
+              ),
+            ];
+          },
+        );
       },
     );
   }

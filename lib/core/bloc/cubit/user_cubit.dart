@@ -10,4 +10,9 @@ class UserCubit extends Cubit<AuthTokens?> {
     final userData = await storage.getUser();
     emit(userData);
   }
+
+  void clearUser() async {
+    await storage.clearUser();
+    emit(null);
+  }
 }

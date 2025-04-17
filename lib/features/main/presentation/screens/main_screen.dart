@@ -9,10 +9,7 @@ import '../../../../core/utils/enums/string_enums.dart';
 import '../../../close_cashbox/presentation/screens/close_cashbox_screen.dart';
 import '../../../home/presentation/screens/home_screen.dart';
 import '../../../sales/presentation/screens/sales_summary_screen.dart';
-import '../../../settings/presentation/bloc/cubit/comparison_cubit.dart';
-import '../../../settings/presentation/bloc/get_sales_by_user/get_sales_by_user_bloc.dart';
-import '../../../settings/presentation/bloc/get_sales_by_warehouse/get_sales_by_warehouse_bloc.dart';
-import '../../../settings/presentation/bloc/settings_bloc.dart';
+import '../../../settings/presentation/bloc/checker_point/checker_point_bloc.dart';
 import '../bloc/cubit/screen_cubit.dart';
 
 class MainScreen extends StatelessWidget {
@@ -22,118 +19,78 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child:  BlocConsumer<ComparisonCubit, ComparisonState>(
-          listener: (context, state) {
-            if (state.isLoading) {
-              context.showLottieOverlayLoader(
-                Assets.loader,
-              );
-            } else if (state.isError) {
+      child: BlocConsumer<CheckerPointBloc, CheckerPointState>(
+        listener: (context, state) {
+          // Handle loading state
+          if (state is CheckerPointLoading) {
+            context.showLottieOverlayLoader(Assets.loader);
+          }
+          // Handle error state
+          else if (state is CheckerPointError) {
+            context.go(AppRoutes.openPoint);
+          }
+          // Handle success state with navigation logic
+          else if (state is CheckerPointReady) {
+            if (state.mustCloseDay) {
+              context.go(AppRoutes.openedPoints, extra: {
+                StringEnums.mustCloseDay.name: state.mustCloseDay,
+                StringEnums.to_date.name: state.closeTime,
+                StringEnums.from_date.name: state.startDate,
+              });
+            } else if (!state.hasPoint) {
               context.go(AppRoutes.openPoint);
-            } else if (!state.isLoading &&
-                !state.isError &&
-                state.firstValue != null &&
-                state.secondValue != null &&
-                state.secondValue!.isNotEmpty) {
-              if (state.hasPoint && !state.mustCloseDay) {
-                context.hideOverlayLoader();
-                context.hideOverlayLoader();
-              } else {
-                if (state.mustCloseDay) {
-                  context.go(AppRoutes.openedPoints, extra: {
-                    'mustCloseDay': state.mustCloseDay,
-                    StringEnums.to_date.name: state.closeTime,
-                    StringEnums.from_date.name: state.startDate,
-                  });
-                } else {
-                  context.go(AppRoutes.openPoint);
-                }
-              }
+            } else {
+              context.hideOverlayLoader();
             }
-          },
-          builder: (context, state) {
-            return MultiBlocListener(
-              listeners: [
-                BlocListener<GetSalesByWarehouseBloc, GetSalesByWarehouseState>(
-                  listener: (context, state) {
-                    if (state is GetSalesByWarehouseFailure) {
-                      context.read<ComparisonCubit>().hasError();
-                    } else if (state is GetSalesByWarehouseSuccess) {
-                      context
-                          .read<ComparisonCubit>()
-                          .updateFirstValue(state.sales);
-                    }
-                  },
+          }
+        },
+        builder: (context, state) {
+          return BlocBuilder<ScreenCubit, int>(
+            builder: (context, index) {
+              return Scaffold(
+                resizeToAvoidBottomInset: false,
+                floatingActionButton: AnimatedFloatingActionButton(
+                  key: menuKey,
+                  fabButtons: <Widget>[
+                    FloatingActionButton(
+                        child: const Icon(Icons.home),
+                        onPressed: () {
+                          context.read<ScreenCubit>().changeScreen(0);
+                        }),
+                    FloatingActionButton(
+                        child: const Icon(Icons.receipt_long),
+                        onPressed: () {
+                          context.read<ScreenCubit>().changeScreen(1);
+                        }),
+                    FloatingActionButton(
+                        child: const Icon(Icons.money),
+                        onPressed: () {
+                          context.read<ScreenCubit>().changeScreen(2);
+                        }),
+                    // FloatingActionButton(
+                    //     child: const Icon(Icons.timeline_rounded),
+                    //     onPressed: () {
+                    //       context.read<ScreenCubit>().changeScreen(3);
+                    //     }),
+                  ],
+                  animatedIconData: AnimatedIcons.menu_close,
+                  colorStartAnimation: Theme.of(context).colorScheme.primary,
+                  colorEndAnimation: Theme.of(context).colorScheme.secondary,
                 ),
-                BlocListener<GetSalesByUserBloc, GetSalesByUserState>(
-                  listener: (context, state) {
-                    if (state is GetSalesByUserSuccess) {
-                      context
-                          .read<ComparisonCubit>()
-                          .updateThirdValue(state.cash);
-                    }
-                  },
+                body: IndexedStack(
+                  index: index,
+                  children: const [
+                    HomeScreen(),
+                    SalesSummaryScreen(),
+                    CloseCashboxScreen(),
+                    // SalesReportScreen()
+                  ],
                 ),
-                BlocListener<SettingsBloc, SettingsState>(
-                  listener: (context, state) {
-                    if (state is SettingsSuccess) {
-                      context
-                          .read<ComparisonCubit>()
-                          .updateSecondValue(state.settings);
-                    }
-                  },
-                ),
-              ],
-              child: BlocBuilder<ScreenCubit, int>(
-                builder: (context, index) {
-                  return Scaffold(
-                    resizeToAvoidBottomInset: false,
-                    floatingActionButton: AnimatedFloatingActionButton(
-                      key: menuKey,
-                      fabButtons: <Widget>[
-                        FloatingActionButton(
-                            child: const Icon(Icons.home),
-                            onPressed: () {
-                              context.read<ScreenCubit>().changeScreen(0);
-                            }),
-                        FloatingActionButton(
-                            child: const Icon(Icons.receipt_long),
-                            onPressed: () {
-                              context.read<ScreenCubit>().changeScreen(1);
-                            }),
-                        FloatingActionButton(
-                            child: const Icon(Icons.money),
-                            onPressed: () {
-                              context.read<ScreenCubit>().changeScreen(2);
-                            }),
-                        // FloatingActionButton(
-                        //     child: const Icon(Icons.timeline_rounded),
-                        //     onPressed: () {
-                        //       context.read<ScreenCubit>().changeScreen(3);
-                        //     }),
-                      ],
-                      animatedIconData: AnimatedIcons.menu_close,
-                      colorStartAnimation:
-                          Theme.of(context).colorScheme.primary,
-                      colorEndAnimation:
-                          Theme.of(context).colorScheme.secondary,
-                    ),
-                    body: IndexedStack(
-                      index: index,
-                      children: const [
-                        HomeScreen(),
-                        SalesSummaryScreen(),
-                        CloseCashboxScreen(),
-                        // SalesReportScreen()
-                      ],
-                    ),
-                  );
-                },
-              ),
-            );
-          },
-        ),
-    
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

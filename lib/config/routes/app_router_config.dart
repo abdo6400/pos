@@ -29,10 +29,8 @@ import '../../features/sales/presentation/bloc/invoice/invoice_bloc.dart';
 import '../../features/sales/presentation/bloc/invoice_detail/invoice_detail_bloc.dart';
 import '../../features/sales/presentation/bloc/return_invoice/return_invoice_bloc.dart';
 import '../../features/sales/presentation/screens/invoice_details_screen.dart';
-import '../../features/settings/presentation/bloc/cubit/comparison_cubit.dart';
+import '../../features/settings/presentation/bloc/checker_point/checker_point_bloc.dart';
 import '../../features/settings/presentation/bloc/end_day/end_day_bloc.dart';
-import '../../features/settings/presentation/bloc/get_sales_by_user/get_sales_by_user_bloc.dart';
-import '../../features/settings/presentation/bloc/get_sales_by_warehouse/get_sales_by_warehouse_bloc.dart';
 import '../../features/settings/presentation/bloc/open_point/open_point_bloc.dart';
 import '../../features/settings/presentation/bloc/opened_point/opened_points_bloc.dart';
 import '../../features/settings/presentation/bloc/settings_bloc.dart';
@@ -97,9 +95,6 @@ class AppRouterConfig {
                 create: (context) => ScreenCubit(),
               ),
               BlocProvider(
-                create: (context) => ComparisonCubit(),
-              ),
-              BlocProvider(
                 create: (context) =>
                     locator<CategoryBloc>()..add(GetCategoriesEvent()),
               ),
@@ -140,13 +135,16 @@ class AppRouterConfig {
               BlocProvider(create: (_) => locator<InvoiceBloc>()),
               BlocProvider(
                   create: (_) =>
+                      locator<CheckerPointBloc>()..add(CheckPointStatus())),
+              BlocProvider(
+                  create: (_) =>
                       locator<SettingsBloc>()..add(GetSettingsEvent())),
-              BlocProvider(
-                  create: (_) => locator<GetSalesByUserBloc>()
-                    ..add(GetSalesByUserRequested())),
-              BlocProvider(
-                  create: (_) => locator<GetSalesByWarehouseBloc>()
-                    ..add(GetSalesByWarehouseRequested())),
+              // BlocProvider(
+              //     create: (_) => locator<GetSalesByUserBloc>()
+              //       ..add(GetSalesByUserRequested())),
+              // BlocProvider(
+              //     create: (_) => locator<GetSalesByWarehouseBloc>()
+              //       ..add(GetSalesByWarehouseRequested())),
             ], child: MainScreen()),
           );
         },

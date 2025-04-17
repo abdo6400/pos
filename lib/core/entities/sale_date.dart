@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 abstract class SaleDate extends Equatable {
   final DateTime lineDate;
   final DateTime openTime;
-  final dynamic closeTime;
+  final DateTime closeTime;
   final bool closed;
   final int id;
   final int weatherCond;

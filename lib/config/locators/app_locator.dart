@@ -61,6 +61,7 @@ import '../../features/settings/domain/usecases/get_sales_by_user_usecase.dart';
 import '../../features/settings/domain/usecases/get_sales_by_warehouse_usecase.dart';
 import '../../features/settings/domain/usecases/get_settings_usecase.dart';
 import '../../features/settings/domain/usecases/open_point_by_parameters_usecase.dart';
+import '../../features/settings/presentation/bloc/checker_point/checker_point_bloc.dart';
 import '../../features/settings/presentation/bloc/end_day/end_day_bloc.dart';
 import '../../features/settings/presentation/bloc/get_sales_by_user/get_sales_by_user_bloc.dart';
 import '../../features/settings/presentation/bloc/get_sales_by_warehouse/get_sales_by_warehouse_bloc.dart';
@@ -159,6 +160,11 @@ class AppLocator {
         () => PaymentLocalDataSourceImpl(localConsumer: locator()));
 
     //sales
+    locator.registerFactory<CheckerPointBloc>(() => CheckerPointBloc(
+          locator(),
+          locator(),
+          locator(),
+        ));
     locator.registerFactory<InvoiceBloc>(() => InvoiceBloc(
           locator(),
           locator(),

@@ -18,7 +18,7 @@ class SaleDateModel extends SaleDate {
   factory SaleDateModel.fromJson(Map<String, dynamic> json) => SaleDateModel(
         lineDate: DateTime.parse(json[ApiKeys.lineDate]),
         openTime: DateTime.parse(json[ApiKeys.openTime]),
-        closeTime: json[ApiKeys.closeTime],
+        closeTime:json[ApiKeys.closeTime]!=null? DateTime.parse(json[ApiKeys.closeTime]):DateTime.now(),
         closed: json[ApiKeys.closed],
         id: json[ApiKeys.id],
         weatherCond: json[ApiKeys.weatherCond],
@@ -32,7 +32,7 @@ class SaleDateModel extends SaleDate {
   Map<String, dynamic> toJson() => {
         ApiKeys.lineDate: lineDate.toIso8601String(),
         ApiKeys.openTime: openTime.toIso8601String(),
-        ApiKeys.closeTime: closeTime,
+        ApiKeys.closeTime: closeTime.toIso8601String(),
         ApiKeys.closed: closed,
         ApiKeys.id: id,
         ApiKeys.weatherCond: weatherCond,

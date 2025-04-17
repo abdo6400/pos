@@ -18,7 +18,7 @@ class OpenedPointsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final data =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final mustCloseDay = data['mustCloseDay'] as bool;
+    final mustCloseDay = data[ StringEnums.mustCloseDay.name] as bool;
     return PopScope(
       canPop: !mustCloseDay,
       onPopInvokedWithResult: (value, _) {

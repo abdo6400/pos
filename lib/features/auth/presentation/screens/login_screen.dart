@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../config/routes/app_routes.dart';
+import '../../../../core/bloc/cubit/user_cubit.dart';
+import '../../../../core/entities/auth_tokens.dart';
 import '../../../../core/utils/assets.dart';
 import '../../../../core/utils/constants.dart';
 import '../../../../core/utils/enums/string_enums.dart';
@@ -39,34 +41,41 @@ class LoginScreen extends StatelessWidget {
                   child: SizedBox(
                     width: context.AppResponsiveValue(300,
                         mobile: 200, tablet: 500, desktop: 600),
-                    child: BlocConsumer<LoginBloc, LoginState>(
-                      listener: (context, state) async {
-                        if (state is LoginSuccess) {
-                          await storage.saveAuthTokenState(
-                              state.tokens.token, state.tokens.toJson());
-                          _formKey.currentState?.reset();
-                          context.hideOverlayLoader();
-                          context.go(AppRoutes.main);
-                        } else if (state is LoginError) {
-                          context.hideOverlayLoader();
-                          context.showMessageToast(msg: state.message);
-                        } else if (state is LoginLoading) {
-                          context.showLottieOverlayLoader(Assets.loader);
-                        }
+                    child: BlocBuilder<UserCubit, AuthTokens?>(
+                      builder: (context, state) {
+                        return BlocConsumer<LoginBloc, LoginState>(
+                          listener: (context, state) async {
+                            if (state is LoginSuccess) {
+                              await storage.saveAuthTokenState(
+                                  state.tokens.token, state.tokens.toJson());
+                              _formKey.currentState?.reset();
+                              context.hideOverlayLoader();
+                              context.read<UserCubit>().setUser();
+                              context.go(AppRoutes.main);
+                            } else if (state is LoginError) {
+                              context.hideOverlayLoader();
+                              context.showMessageToast(msg: state.message);
+                            } else if (state is LoginLoading) {
+                              context.showLottieOverlayLoader(Assets.loader);
+                            }
+                          },
+                          builder: (context, state) => LoginFormBuilder(
+                            formKey: _formKey,
+                            onSubmit: () async => context.read<LoginBloc>().add(
+                                  LoginEvent(
+                                    email: _formKey.currentState
+                                        ?.fields[StringEnums.email.name]?.value,
+                                    password: _formKey
+                                        .currentState
+                                        ?.fields[StringEnums.password.name]
+                                        ?.value,
+                                  ),
+                                ),
+                            onReset: () {},
+                            onLoginWithGoogle: () {},
+                          ),
+                        );
                       },
-                      builder: (context, state) => LoginFormBuilder(
-                        formKey: _formKey,
-                        onSubmit: () async => context.read<LoginBloc>().add(
-                              LoginEvent(
-                                email: _formKey.currentState
-                                    ?.fields[StringEnums.email.name]?.value,
-                                password: _formKey.currentState
-                                    ?.fields[StringEnums.password.name]?.value,
-                              ),
-                            ),
-                        onReset: () {},
-                        onLoginWithGoogle: () {},
-                      ),
                     ),
                   ),
                 ),

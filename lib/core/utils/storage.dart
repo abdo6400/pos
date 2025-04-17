@@ -55,12 +55,21 @@ class Storage {
     await _cache.clearValue(key: SharedPrefEnums.RefrashToken.name);
   }
 
-    Future<void> saveSettings(Settings settings) async {
-    await _cache.save(key: SharedPrefEnums.settings.name, value: jsonEncode(settings.toJson()));
+  Future<void> saveSettings(Settings settings) async {
+    await _cache.save(
+        key: SharedPrefEnums.settings.name,
+        value: jsonEncode(settings.toJson()));
   }
 
-    Future<Settings?> getSettings() async {
-    final String? settings = await _cache.get(key: SharedPrefEnums.settings.name);
-    return settings == null ? null : SettingsModel.fromJson(jsonDecode(settings));
+  Future<Settings?> getSettings() async {
+    final String? settings =
+        await _cache.get(key: SharedPrefEnums.settings.name);
+    return settings == null
+        ? null
+        : SettingsModel.fromJson(jsonDecode(settings));
+  }
+
+  Future<void> clearUser() async {
+    await _cache.clearValue(key: SharedPrefEnums.user.name);
   }
 }
