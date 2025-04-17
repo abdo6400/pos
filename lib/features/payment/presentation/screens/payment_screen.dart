@@ -21,7 +21,8 @@ class PaymentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final param = ModalRoute.of(context)!.settings.arguments as List;
-    final List<PaymentType> paymentTypes = param[0] as List<PaymentType>;
+    final List<PaymentType> paymentTypes =
+        (param[0] as List<PaymentType>).takeWhile((e) => e.isActive).toList();
     final pay = param[1] as Function(Map<int, double>);
     final grandTotal = param[2] as double;
 
