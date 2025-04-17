@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
 import '../../../../../core/utils/assets.dart';
+import '../../bloc/cart/cart_bloc.dart';
 import '../../bloc/cart/cart_item.dart';
 
 class CartItemWidget extends StatelessWidget {
@@ -9,26 +11,29 @@ class CartItemWidget extends StatelessWidget {
   final VoidCallback onEdit;
   final bool isOffer;
   final double? price;
-
-  const CartItemWidget({
+  late final TextEditingController _quantityController;
+  CartItemWidget({
     Key? key,
     required this.cartItem,
     required this.onEdit,
     this.isOffer = false,
     this.price,
-  }) : super(key: key);
+  }) : super(key: key) {
+    _quantityController =
+        TextEditingController(text: cartItem.quantity.toString());
+  }
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final titleStyle = textTheme.bodyMedium!.copyWith(
       fontSize:
-          context.AppResponsiveValue(10, mobile: 10, tablet: 16, desktop: 18),
+          context.AppResponsiveValue(8, mobile: 8, tablet: 12, desktop: 18),
       fontWeight: FontWeight.w500,
     );
     final subtitleStyle = textTheme.bodySmall!.copyWith(
       fontSize:
-          context.AppResponsiveValue(8, mobile: 8, tablet: 14, desktop: 16),
+          context.AppResponsiveValue(8, mobile: 8, tablet: 11, desktop: 16),
       color: Colors.black54,
     );
     final priceStyle = textTheme.bodyMedium!.copyWith(
@@ -112,7 +117,38 @@ class CartItemWidget extends StatelessWidget {
                   style: priceStyle,
                 ),
               ),
-
+ Column(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    context.read<CartBloc>().add(UpdateCartEvent(
+                            cartItem: cartItem.copyWith(
+                          quantity: int.parse(_quantityController.text) + 1,
+                        )));
+                  },
+                  icon: Icon(
+                    Icons.add_circle_outline,
+                    color: Theme.of(context).colorScheme.secondary,
+                    size: context.AppResponsiveValue(20,
+                        mobile: 20, tablet: 30, desktop: 35),
+                  ),
+                ),
+                IconButton(
+                    onPressed: () {
+                      if (int.parse(_quantityController.text) > 1)
+                      context.read<CartBloc>().add(UpdateCartEvent(
+                              cartItem: cartItem.copyWith(
+                            quantity: int.parse(_quantityController.text) - 1,
+                          )));
+                    },
+                    icon: Icon(
+                      Icons.remove_circle_outline,
+                      color: Theme.of(context).colorScheme.secondary,
+                      size: context.AppResponsiveValue(20,
+                          mobile: 20, tablet: 30, desktop: 35),
+                    ))
+              ],
+            ),
             // Edit button
             if (!isOffer)
               IconButton(
@@ -127,6 +163,7 @@ class CartItemWidget extends StatelessWidget {
                     mobile: 4, tablet: 6, desktop: 8)),
                 constraints: BoxConstraints(),
               ),
+           
           ],
         ),
       ),
@@ -135,7 +172,7 @@ class CartItemWidget extends StatelessWidget {
 
   Widget _buildProductImage(BuildContext context) {
     final imageSize =
-        context.AppResponsiveValue(45, mobile: 45, tablet: 70, desktop: 90);
+        context.AppResponsiveValue(45, mobile: 45, tablet: 60, desktop: 90);
 
     if (isOffer) {
       return Image.asset(
