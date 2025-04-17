@@ -425,7 +425,7 @@ class InvoiceDetailsScreen extends StatelessWidget {
   }
 
   void _showReturnItemsDialog(BuildContext ctx, List<InvoiceDtl> items,
-      Invoices invoice,Invoice invoice1, List<returnInvoiceDtl> returnItems) {
+      Invoices invoice, Invoice invoice1, List<returnInvoiceDtl> returnItems) {
     // Initialize the ReturnItemsCubit with the invoice items and previously returned items
     ctx.read<ReturnItemsCubit>().initItems(items, returnItems);
 
@@ -672,11 +672,9 @@ class InvoiceDetailsScreen extends StatelessWidget {
                                             returnId:
                                                 0, // Will be assigned by backend
                                             returnDate: DateTime.now(),
-                                            invoiceNo:
-                                                invoice1.invoiceNo,
+                                            invoiceNo: invoice1.invoiceNo,
                                             returnedBy: invoice.empTaker,
-                                            fromCash:
-                                               invoice1.invoiceCashNo,
+                                            fromCash: invoice1.invoiceCashNo,
                                             voidReason: 3, // Default reason
                                             extraNote: '',
                                             returnsSubTotal: _calculateSubTotal(
@@ -703,26 +701,30 @@ class InvoiceDetailsScreen extends StatelessWidget {
                                           );
 
                                           // Create detail items for return
-                                          final dtlItems = state.returnItems
-                                              .map((item) => Dtl(
-                                                    returnId:
-                                                        0, // Will be assigned by backend
-                                                    indexId: item.lineId,
-                                                    itemId: item.item,
-                                                    qty: item.qty.toInt(),
-                                                    unitPrice: item.price,
-                                                    subTotal: item.subtotal,
-                                                    discount: item.discountV,
-                                                    taxValue: item.taxV,
-                                                    discountPercentage:
-                                                        item.discountP,
-                                                    taxPercentage: item.taxP,
-                                                    grandTotal: item.grandTotal,
-                                                    posted: true,
-                                                    warehouse: item.warehouse
-                                                        .toString(),
-                                                  ))
-                                              .toList();
+                                          final dtlItems = <Dtl>[];
+                                          int index = 0; 
+                                          for (final item
+                                              in state.returnItems) {
+                                            dtlItems.add(Dtl(
+                                              returnId:
+                                                  0, 
+                                              indexId: index,
+                                              itemId: item.item,
+                                              qty: item.qty.toInt(),
+                                              unitPrice: item.price,
+                                              subTotal: item.subtotal,
+                                              discount: item.discountV,
+                                              taxValue: item.taxV,
+                                              discountPercentage:
+                                                  item.discountP,
+                                              taxPercentage: item.taxP,
+                                              grandTotal: item.grandTotal,
+                                              posted: true,
+                                              warehouse:
+                                                  item.warehouse.toString(),
+                                            ));
+                                            index++; // Increment index after each item
+                                          }
                                           Navigator.of(dialogContext).pop();
                                           ctx.read<ReturnInvoiceBloc>().add(
                                               ReturnedInvoice(ReturnParams(
