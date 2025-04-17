@@ -55,6 +55,7 @@ class AppRouterConfig {
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         return PageTransition(
           type: transitionType,
+          key: ValueKey(state.path),
           child: child,
           duration: Duration(milliseconds: 300),
         ).buildTransitions(context, animation, secondaryAnimation, child);

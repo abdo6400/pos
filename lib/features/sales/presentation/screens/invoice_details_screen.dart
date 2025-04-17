@@ -70,6 +70,7 @@ class InvoiceDetailsScreen extends StatelessWidget {
                                         context,
                                         state.invoiceDetail.invoiceDtl,
                                         state.invoiceDetail.invoices,
+                                        invoice,
                                         (state.returnedInvoiceDetail?.dtl) ??
                                             []);
                                   },
@@ -424,7 +425,7 @@ class InvoiceDetailsScreen extends StatelessWidget {
   }
 
   void _showReturnItemsDialog(BuildContext ctx, List<InvoiceDtl> items,
-      Invoices invoice, List<returnInvoiceDtl> returnItems) {
+      Invoices invoice,Invoice invoice1, List<returnInvoiceDtl> returnItems) {
     // Initialize the ReturnItemsCubit with the invoice items and previously returned items
     ctx.read<ReturnItemsCubit>().initItems(items, returnItems);
 
@@ -666,16 +667,16 @@ class InvoiceDetailsScreen extends StatelessWidget {
                                   onPressed: state.returnItems.isEmpty
                                       ? null
                                       : () {
-                                          // Create header for return invoice
+                                          // // Create header for return invoice
                                           final hdr = Hdr(
                                             returnId:
                                                 0, // Will be assigned by backend
                                             returnDate: DateTime.now(),
                                             invoiceNo:
-                                                invoice.invoiceNo,
+                                                invoice1.invoiceNo,
                                             returnedBy: invoice.empTaker,
                                             fromCash:
-                                                invoice.invoiceCashNo,
+                                               invoice1.invoiceCashNo,
                                             voidReason: 3, // Default reason
                                             extraNote: '',
                                             returnsSubTotal: _calculateSubTotal(
