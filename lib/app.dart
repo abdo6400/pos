@@ -6,11 +6,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'config/routes/app_router_config.dart';
 import 'config/themes/app_theme.dart';
+import 'core/bloc/cubit/printing_cubit.dart';
 import 'core/bloc/cubit/settings_cubit.dart';
 import 'core/bloc/cubit/user_cubit.dart';
 import 'core/utils/constants.dart';
 import 'core/utils/assets.dart';
-
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -23,7 +23,10 @@ class App extends StatelessWidget {
           create: (context) => UserCubit()..setUser(),
         ),
         BlocProvider(
-          create: (context) => SettingsCubit()..setSettings(),
+          create: (context) => locator<PrintingCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => SettingsCubit(),
         ),
       ],
       child: EasyLocalization(

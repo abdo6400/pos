@@ -37,8 +37,18 @@ android {
             signingConfig = signingConfigs.debug
         }
     }
+       sourceSets {
+        main {
+            jniLibs.srcDirs 'src/main/libs'
+            jni.srcDirs = []
+        }
+    }
 }
+dependencies {
+    implementation files('libs/iminPrinterSDK.jar')
+    implementation files('libs/IminLibs1.0.15.jar')
 
+}
 flutter {
     source = "../.."
 }

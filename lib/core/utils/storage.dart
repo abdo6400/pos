@@ -1,9 +1,7 @@
 import 'dart:convert';
 import '../../config/database/cache/cache_consumer.dart';
 import '../entities/auth_tokens.dart';
-import '../entities/settings.dart';
 import '../models/auth_tokens_model.dart';
-import '../models/settings_model.dart';
 import 'enums/shared_pref_enums.dart';
 
 class Storage {
@@ -54,21 +52,6 @@ class Storage {
     await _cache.clearValue(key: SharedPrefEnums.AccessToken.name);
     await _cache.clearValue(key: SharedPrefEnums.RefrashToken.name);
   }
-
-  Future<void> saveSettings(Settings settings) async {
-    await _cache.save(
-        key: SharedPrefEnums.settings.name,
-        value: jsonEncode(settings.toJson()));
-  }
-
-  Future<Settings?> getSettings() async {
-    final String? settings =
-        await _cache.get(key: SharedPrefEnums.settings.name);
-    return settings == null
-        ? null
-        : SettingsModel.fromJson(jsonDecode(settings));
-  }
-
   Future<void> clearUser() async {
     await _cache.clearValue(key: SharedPrefEnums.user.name);
   }
