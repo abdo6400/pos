@@ -1,6 +1,7 @@
 import '../entities/settings.dart';
 import '../utils/enums/printer_type_enums.dart';
 
+
 class SettingsModel extends Settings {
   SettingsModel({
     required super.stationName,
@@ -20,10 +21,23 @@ class SettingsModel extends Settings {
     required super.macAddress,
   });
 
+  static PrinterType _handlePrinterType(int type) {
+    switch (type) {
+      case 0:
+        return PrinterType.imin;
+      case 1:
+        return PrinterType.bluetooth;
+      case 2:
+        return PrinterType.network;
+      default:
+        return PrinterType.usb;
+    }
+  }
+
   factory SettingsModel.fromJson(Map<String, dynamic> json) {
     return SettingsModel(
         stationName: json['stationName'] as String,
-        printerType: json['printerType'],
+        printerType: _handlePrinterType(json['printerType'] as int),
         printerCashIp: json['printerCashIp'] as String,
         printerKitchenIp1: json['printerKitchenIp1'] as String,
         printerKitchenIp2: json['printerKitchenIp2'] as String,
@@ -36,15 +50,14 @@ class SettingsModel extends Settings {
         portKitchen4: json['portKitchen4'] as String,
         vendorId: json['vendorId'] as String,
         productId: json['productId'] as String,
-        macAddress: json['macAddress'] as String
-        );
+        macAddress: json['macAddress'] as String);
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
       'stationName': stationName,
-      'printerType': printerType,
+      'printerType': printerType.index,
       'printerCashIp': printerCashIp,
       'printerKitchenIp1': printerKitchenIp1,
       'printerKitchenIp2': printerKitchenIp2,
@@ -60,7 +73,7 @@ class SettingsModel extends Settings {
       'macAddress': macAddress,
     };
   }
-  
+
   SettingsModel copyWith({
     String? stationName,
     PrinterType? printerType,

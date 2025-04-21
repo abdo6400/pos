@@ -23,7 +23,7 @@ class SettingsScreen extends StatelessWidget {
               mobile: 18, tablet: 20, desktop: 25),
         );
     return BlocBuilder<SettingsCubit, Settings>(
-      builder: (context, state) {
+      builder: (context, settings) {
         return Scaffold(
             appBar: AppBar(
               centerTitle: true,
@@ -52,6 +52,7 @@ class SettingsScreen extends StatelessWidget {
                   return ListView(children: [
                     MultiSelectCheckList<PrinterType>(
                       maxSelectableCount: 1,
+                      singleSelectedItem: true,
                       listViewSettings: ListViewSettings(
                           separatorBuilder: (context, index) => const Divider(
                                 height: 0,
@@ -61,6 +62,8 @@ class SettingsScreen extends StatelessWidget {
                           PrinterType.values.length,
                           (index) => CheckListCard(
                                 value: PrinterType.values[index],
+                                selected: settings.printerType.index ==
+                                    PrinterType.values[index].index,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5),
                                 ),
