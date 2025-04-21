@@ -1,9 +1,11 @@
+import 'package:flutter_thermal_printer/utils/printer.dart';
+
 import '../utils/enums/printer_type_enums.dart';
 
 abstract class Settings {
   final String stationName;
   final PrinterType printerType;
-  final dynamic printer;
+  final Printer? printer;
   final String printerCashIp;
   final String portCash;
   final String printerKitchenIp1;
@@ -45,6 +47,6 @@ abstract class Settings {
     String? portKitchen2,
     String? portKitchen3,
     String? portKitchen4,
-    dynamic printer,
+    Printer? printer,
   });
 }

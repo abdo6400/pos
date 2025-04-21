@@ -23,12 +23,14 @@ class IminPrinterService {
     }
   }
 
-  Future<String> printImage(Uint8List imageData) async {
+  Future<bool> printImage(Uint8List imageData) async {
     try {
       await _channel.invokeMethod('printImage', imageData);
-      return 'Image printed successfully';
-    } on PlatformException catch (e) {
-      return 'Failed to print image: ${e.message}';
+      return true;
+    } on PlatformException {
+      return false;
+    } catch (e) {
+      return false;
     }
   }
 

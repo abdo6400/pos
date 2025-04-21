@@ -1,23 +1,17 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_thermal_printer/flutter_thermal_printer.dart';
 import 'package:flutter_thermal_printer/utils/printer.dart';
-import 'package:image/image.dart' show decodeImage;
 
 class BluetoothPrinterService {
   final _flutterThermalPrinterPlugin = FlutterThermalPrinter.instance;
-  Future<List<Printer>> getDevices() async {
+  Stream<List<Printer>> getDevices() {
     try {
-      await _flutterThermalPrinterPlugin.getPrinters(connectionTypes: [
+      _flutterThermalPrinterPlugin.getPrinters(connectionTypes: [
         ConnectionType.BLE,
-        ConnectionType.USB,
       ]);
-
-      // Get devices from stream
-      final List<Printer> devices =
-          await _flutterThermalPrinterPlugin.devicesStream.first;
-      return devices;
+      return _flutterThermalPrinterPlugin.devicesStream;
     } catch (e) {
-      throw Exception('Failed to get Bluetooth devices: $e');
+      return Stream.empty();
     }
   }
 
@@ -34,7 +28,7 @@ class BluetoothPrinterService {
     }
   }
 
-  Future<String> printImage(Uint8List imageData, Printer printer) async {
+  Future<bool> printImage(Uint8List imageData, Printer printer) async {
     try {
       // final profile = await CapabilityProfile.load();
       // final generator = Generator(PaperSize.mm80, profile);
@@ -46,11 +40,11 @@ class BluetoothPrinterService {
       // bytes += generator.cut();
       await _flutterThermalPrinterPlugin.printImageBytes(
           imageBytes: imageData, printer: printer);
-      return 'Image printed successfully';
-    } on PlatformException catch (e) {
-      return 'Failed to print image: ${e.message}';
+      return true;
+    } on PlatformException {
+      return false;
     } catch (e) {
-      return 'Error printing image: $e';
+      return false;
     }
   }
 

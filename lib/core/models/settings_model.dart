@@ -1,3 +1,5 @@
+import 'package:flutter_thermal_printer/utils/printer.dart';
+
 import '../entities/settings.dart';
 import '../utils/enums/printer_type_enums.dart';
 
@@ -45,7 +47,9 @@ class SettingsModel extends Settings {
       portKitchen2: json['portKitchen2'] as String,
       portKitchen3: json['portKitchen3'] as String,
       portKitchen4: json['portKitchen4'] as String,
-      printer: json['printer'] as String,
+      printer: json['printer'] != null
+          ? Printer.fromJson(json['printer'] as Map<String, dynamic>)
+          : null,
     );
   }
 
@@ -64,7 +68,7 @@ class SettingsModel extends Settings {
       'portKitchen2': portKitchen2,
       'portKitchen3': portKitchen3,
       'portKitchen4': portKitchen4,
-      'printer': printer,
+      'printer': printer?.toJson(),
     };
   }
 
@@ -81,7 +85,7 @@ class SettingsModel extends Settings {
     String? portKitchen2,
     String? portKitchen3,
     String? portKitchen4,
-    dynamic printer,
+    Printer? printer,
   }) {
     return SettingsModel(
       stationName: stationName ?? this.stationName,

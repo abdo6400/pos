@@ -3,7 +3,7 @@ import 'package:flutter_thermal_printer/flutter_thermal_printer.dart';
 import 'package:image/image.dart' show decodeImage;
 
 class NetworkPrinterService {
-  Future<String> printImage(
+  Future<bool> printImage(
       Uint8List imageData, String ipAddress, int port) async {
     try {
       final profile = await CapabilityProfile.load();
@@ -18,11 +18,11 @@ class NetworkPrinterService {
       await service.connect();
       await service.printTicket(bytes);
       await service.disconnect();
-      return 'Image printed successfully';
-    } on PlatformException catch (e) {
-      return 'Failed to print image: ${e.message}';
+       return true;
+    } on PlatformException {
+      return false;
     } catch (e) {
-      return 'Error printing image: $e';
+      return false;
     }
   }
 }

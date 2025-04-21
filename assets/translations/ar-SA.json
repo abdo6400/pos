@@ -245,5 +245,18 @@
   "bluetooth": "Bluetooth طابعة ",
   "network": "Wifi طابعة ",
   "usb": " USB طابعة ",
-  "printer_type": " نوع الطابعة"
+  "printer_type": " نوع الطابعة",
+  "choose_printer": "اختر الطابعة",
+  "printer_cash_ip": "عنوان IP للنقدية",
+  "printer_cash_port": "منفذ النقدية",
+  "printer_kitchen_ip1": "عنوان IP للمطبخ 1",
+  "printer_kitchen_port1": "منفذ المطبخ 1",
+  "printer_kitchen_port2": "منفذ المطبخ 2",
+  "printer_kitchen_ip2": "عنوان IP للمطبخ 2",
+  "printer_kitchen_ip3": "عنوان IP للمطبخ 3",
+  "printer_kitchen_port3": "منفذ المطبخ 3",
+  "printer_kitchen_ip4": "عنوان IP للمطبخ 4",
+  "printer_kitchen_port4": "منفذ المطبخ 4",
+  "no_printer_selected":"لا توجد طابعة محددة",
+  "test_print":"تجربة الطابعة"
 }

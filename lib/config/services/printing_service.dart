@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:flutter_thermal_printer/flutter_thermal_printer.dart';
 import 'package:flutter_thermal_printer/utils/printer.dart';
 
 import '../../core/utils/enums/printer_type_enums.dart';
@@ -9,10 +10,12 @@ import 'network_printer_service.dart';
 import 'usb_printer_service.dart';
 
 abstract class PrintingService {
-  Future<String> printImage(Uint8List imageData, PrinterType printerType,
+  Future<bool> printImage(Uint8List imageData, PrinterType printerType,
       {String ipAddress = '', int port = 9100, Printer? printer});
-  Future<List> getDevices(PrinterType printerType);
+  Stream<List<Printer>> getDevices(PrinterType printerType);
   Future<bool> connect(PrinterType printerType, Printer printer);
+
+  Future<Uint8List> generateTestImage();
 }
 
 class PrintingServiceImpl implements PrintingService {
@@ -46,19 +49,19 @@ class PrintingServiceImpl implements PrintingService {
   }
 
   @override
-  Future<List> getDevices(PrinterType printerType) async {
+  Stream<List<Printer>> getDevices(PrinterType printerType) {
     switch (printerType) {
       case PrinterType.bluetooth:
-        return await _bluetoothPrinterService.getDevices();
+        return _bluetoothPrinterService.getDevices();
       case PrinterType.usb:
-        return await _usbPrinterService.getDevices();
+        return _usbPrinterService.getDevices();
       default:
-        return [];
+        return Stream.empty();
     }
   }
 
   @override
-  Future<String> printImage(
+  Future<bool> printImage(
     Uint8List imageData,
     PrinterType printerType, {
     String ipAddress = '',
@@ -76,5 +79,22 @@ class PrintingServiceImpl implements PrintingService {
       case PrinterType.imin:
         return await _iminPrinterService.printImage(imageData);
     }
+  }
+
+  @override
+  Future<Uint8List> generateTestImage() async {
+    final profile = await CapabilityProfile.load();
+    final generator = Generator(PaperSize.mm80, profile);
+    List<int> bytes = [];
+    bytes += generator.text(
+      "Teste Network print",
+      styles: const PosStyles(
+        bold: true,
+        height: PosTextSize.size3,
+        width: PosTextSize.size3,
+      ),
+    );
+    bytes += generator.cut();
+    return bytes as Uint8List;
   }
 }
