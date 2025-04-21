@@ -1,7 +1,6 @@
 import '../entities/settings.dart';
 import '../utils/enums/printer_type_enums.dart';
 
-
 class SettingsModel extends Settings {
   SettingsModel({
     required super.stationName,
@@ -16,9 +15,7 @@ class SettingsModel extends Settings {
     required super.portKitchen2,
     required super.portKitchen3,
     required super.portKitchen4,
-    required super.vendorId,
-    required super.productId,
-    required super.macAddress,
+    required super.printer,
   });
 
   static PrinterType _handlePrinterType(int type) {
@@ -36,21 +33,20 @@ class SettingsModel extends Settings {
 
   factory SettingsModel.fromJson(Map<String, dynamic> json) {
     return SettingsModel(
-        stationName: json['stationName'] as String,
-        printerType: _handlePrinterType(json['printerType'] as int),
-        printerCashIp: json['printerCashIp'] as String,
-        printerKitchenIp1: json['printerKitchenIp1'] as String,
-        printerKitchenIp2: json['printerKitchenIp2'] as String,
-        printerKitchenIp3: json['printerKitchenIp3'] as String,
-        printerKitchenIp4: json['printerKitchenIp4'] as String,
-        portCash: json['portCash'] as String,
-        portKitchen1: json['portKitchen1'] as String,
-        portKitchen2: json['portKitchen2'] as String,
-        portKitchen3: json['portKitchen3'] as String,
-        portKitchen4: json['portKitchen4'] as String,
-        vendorId: json['vendorId'] as String,
-        productId: json['productId'] as String,
-        macAddress: json['macAddress'] as String);
+      stationName: json['stationName'] as String,
+      printerType: _handlePrinterType(json['printerType'] as int),
+      printerCashIp: json['printerCashIp'] as String,
+      printerKitchenIp1: json['printerKitchenIp1'] as String,
+      printerKitchenIp2: json['printerKitchenIp2'] as String,
+      printerKitchenIp3: json['printerKitchenIp3'] as String,
+      printerKitchenIp4: json['printerKitchenIp4'] as String,
+      portCash: json['portCash'] as String,
+      portKitchen1: json['portKitchen1'] as String,
+      portKitchen2: json['portKitchen2'] as String,
+      portKitchen3: json['portKitchen3'] as String,
+      portKitchen4: json['portKitchen4'] as String,
+      printer: json['printer'] as String,
+    );
   }
 
   @override
@@ -68,9 +64,7 @@ class SettingsModel extends Settings {
       'portKitchen2': portKitchen2,
       'portKitchen3': portKitchen3,
       'portKitchen4': portKitchen4,
-      'vendorId': vendorId,
-      'productId': productId,
-      'macAddress': macAddress,
+      'printer': printer,
     };
   }
 
@@ -87,9 +81,7 @@ class SettingsModel extends Settings {
     String? portKitchen2,
     String? portKitchen3,
     String? portKitchen4,
-    String? vendorId,
-    String? productId,
-    String? macAddress,
+    dynamic printer,
   }) {
     return SettingsModel(
       stationName: stationName ?? this.stationName,
@@ -104,9 +96,7 @@ class SettingsModel extends Settings {
       portKitchen2: portKitchen2 ?? this.portKitchen2,
       portKitchen3: portKitchen3 ?? this.portKitchen3,
       portKitchen4: portKitchen4 ?? this.portKitchen4,
-      vendorId: vendorId ?? this.vendorId,
-      productId: productId ?? this.productId,
-      macAddress: macAddress ?? this.macAddress,
+      printer: printer ?? this.printer,
     );
   }
 }

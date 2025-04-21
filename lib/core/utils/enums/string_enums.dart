@@ -184,5 +184,5 @@ enum StringEnums {
   close_cash,
   shift_end,
   requiredAmount,
-  openedPoints, open_point, invoice_details, name, price, items, returnItems, returnAll, returnedItems, restoreAll, cannot_be_modified, locked_items, mustCloseDay
+  openedPoints, open_point, invoice_details, name, price, items, returnItems, returnAll, returnedItems, restoreAll, cannot_be_modified, locked_items, mustCloseDay, printer_type
 }

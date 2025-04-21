@@ -238,7 +238,12 @@
   "returnItems": "ارجاع العناصر",
   "returnAll": "ارجاع الكل",
   "returnedItems": "العناصر المُرجعة",
-  "restoreAll":"استعادة الكل",
-   "cannot_be_modified":" لا يمكن تعديلها",
-   "locked_items":" العناصر المحفوظة"
+  "restoreAll": "استعادة الكل",
+  "cannot_be_modified": " لا يمكن تعديلها",
+  "locked_items": " العناصر المحفوظة",
+  "imin": "IMIN طابعة",
+  "bluetooth": "Bluetooth طابعة ",
+  "network": "Wifi طابعة ",
+  "usb": " USB طابعة ",
+  "printer_type": " نوع الطابعة"
 }

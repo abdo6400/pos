@@ -50,6 +50,11 @@ class SettingsScreen extends StatelessWidget {
                   );
                 } else if (state is SettingsSuccess) {
                   return ListView(children: [
+                    Text(
+                      StringEnums.printer_type.name.tr(),
+                      style: style,
+                    ),
+                    Divider(),
                     MultiSelectCheckList<PrinterType>(
                       maxSelectableCount: 1,
                       singleSelectedItem: true,
@@ -68,7 +73,7 @@ class SettingsScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(5),
                                 ),
                                 title: Text(
-                                  PrinterType.values[index].name,
+                                  PrinterType.values[index].name.tr(),
                                 ),
                                 leadingCheckBox: false,
                                 textStyles: MultiSelectItemTextStyles(

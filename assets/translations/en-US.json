@@ -267,5 +267,10 @@
   "returnedItems": "Returned Items",
   "restoreAll": "Restore All",
   "cannot_be_modified": "cannot be modified",
-  "locked_items": "Locked Items"
+  "locked_items": "Locked Items",
+  "imin": "IMIN Printer",
+  "bluetooth": "Bluetooth Printer",
+  "network": "Wifi Printer",
+  "usb": "USB Printer",
+  "printer_type": "Printer Type"
 }

@@ -1,3 +1,4 @@
+import 'package:flutter_thermal_printer/utils/printer.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import '../../entities/settings.dart';
 import '../../models/settings_model.dart';
@@ -18,9 +19,7 @@ class SettingsCubit extends HydratedCubit<Settings> {
           portKitchen2: "",
           portKitchen3: "",
           portKitchen4: "",
-          vendorId: "",
-          productId: "",
-          macAddress: "",
+          printer: null,
         ));
 
   void updateStationName(String stationName) {
@@ -36,23 +35,19 @@ class SettingsCubit extends HydratedCubit<Settings> {
   }
 
   void updatePrinterKitchenIp1(String printerKitchenIp1) {
-    emit((state)
-        .copyWith(printerKitchenIp1: printerKitchenIp1));
+    emit((state).copyWith(printerKitchenIp1: printerKitchenIp1));
   }
 
   void updatePrinterKitchenIp2(String printerKitchenIp2) {
-    emit((state)
-        .copyWith(printerKitchenIp2: printerKitchenIp2));
+    emit((state).copyWith(printerKitchenIp2: printerKitchenIp2));
   }
 
   void updatePrinterKitchenIp3(String printerKitchenIp3) {
-    emit((state)
-        .copyWith(printerKitchenIp3: printerKitchenIp3));
+    emit((state).copyWith(printerKitchenIp3: printerKitchenIp3));
   }
 
   void updatePrinterKitchenIp4(String printerKitchenIp4) {
-    emit((state)
-        .copyWith(printerKitchenIp4: printerKitchenIp4));
+    emit((state).copyWith(printerKitchenIp4: printerKitchenIp4));
   }
 
   void updatePortCash(String portCash) {
@@ -75,16 +70,8 @@ class SettingsCubit extends HydratedCubit<Settings> {
     emit((state).copyWith(portKitchen4: portKitchen4));
   }
 
-  void updateVendorId(String vendorId) {
-    emit((state).copyWith(vendorId: vendorId));
-  }
-
-  void updateProductId(String productId) {
-    emit((state).copyWith(productId: productId));
-  }
-
-  void updateMacAddress(String macAddress) {
-    emit((state).copyWith(macAddress: macAddress));
+  void updatePrinter(Printer printer) {
+    emit((state).copyWith(printer: printer));
   }
 
   @override
