@@ -1,4 +1,6 @@
-import 'package:flutter_thermal_printer/utils/printer.dart';
+import 'dart:convert';
+
+import 'package:printer_service/thermal_printer.dart' show PrinterDevice;
 
 import '../entities/settings.dart';
 import '../utils/enums/printer_type_enums.dart';
@@ -17,7 +19,10 @@ class SettingsModel extends Settings {
     required super.portKitchen2,
     required super.portKitchen3,
     required super.portKitchen4,
-    required super.printer,
+    required super.bltPrinter,
+    required super.netPrinter,
+    required super.usbPrinter,
+    required super.addCustomAddresses,
   });
 
   static PrinterType _handlePrinterType(int type) {
@@ -34,6 +39,13 @@ class SettingsModel extends Settings {
   }
 
   factory SettingsModel.fromJson(Map<String, dynamic> json) {
+    final btlPrinterJson =
+        json['bltPrinter'] != null ? jsonDecode(json['bltPrinter']) : null;
+    final netPrinterJson =
+        json['netPrinter'] != null ? jsonDecode(json['netPrinter']) : null;
+    final usbPrinterJson =
+        json['usbPrinter'] != null ? jsonDecode(json['usbPrinter']) : null;
+
     return SettingsModel(
       stationName: json['stationName'] as String,
       printerType: _handlePrinterType(json['printerType'] as int),
@@ -47,14 +59,60 @@ class SettingsModel extends Settings {
       portKitchen2: json['portKitchen2'] as String,
       portKitchen3: json['portKitchen3'] as String,
       portKitchen4: json['portKitchen4'] as String,
-      printer: json['printer'] != null
-          ? Printer.fromJson(json['printer'] as Map<String, dynamic>)
+      addCustomAddresses: json['addCustomAddresses'] == 1 ? true : false,
+      netPrinter: netPrinterJson != null
+          ? PrinterDevice(
+              name: netPrinterJson['name'] as String,
+              address: netPrinterJson['address'] as String?,
+              productId: netPrinterJson['productId'] as String?,
+              vendorId: netPrinterJson['vendorId'] as String?,
+            )
+          : null,
+      usbPrinter: usbPrinterJson != null
+          ? PrinterDevice(
+              name: usbPrinterJson['name'] as String,
+              address: usbPrinterJson['address'] as String?,
+              productId: usbPrinterJson['productId'] as String?,
+              vendorId: usbPrinterJson['vendorId'] as String?,
+            )
+          : null,
+      bltPrinter: btlPrinterJson != null
+          ? PrinterDevice(
+              name: btlPrinterJson['name'] as String,
+              address: btlPrinterJson['address'] as String?,
+              productId: btlPrinterJson['productId'] as String?,
+              vendorId: btlPrinterJson['vendorId'] as String?,
+            )
           : null,
     );
   }
 
   @override
   Map<String, dynamic> toJson() {
+    final bltPrinterJson = bltPrinter != null
+        ? {
+            'name': bltPrinter?.name,
+            'address': bltPrinter?.address,
+            'productId': bltPrinter?.productId,
+            'vendorId': bltPrinter?.vendorId
+          }
+        : null;
+    final netPrinterJson = netPrinter != null
+        ? {
+            'name': netPrinter?.name,
+            'address': netPrinter?.address,
+            'productId': netPrinter?.productId,
+            'vendorId': netPrinter?.vendorId
+          }
+        : null;
+    final usbPrinterJson = usbPrinter != null
+        ? {
+            'name': usbPrinter?.name,
+            'address': usbPrinter?.address,
+            'productId': usbPrinter?.productId,
+            'vendorId': usbPrinter?.vendorId
+          }
+        : null;
     return {
       'stationName': stationName,
       'printerType': printerType.index,
@@ -64,29 +122,34 @@ class SettingsModel extends Settings {
       'printerKitchenIp3': printerKitchenIp3,
       'printerKitchenIp4': printerKitchenIp4,
       'portCash': portCash,
+      'addCustomAddresses': addCustomAddresses ? 1 : 0,
       'portKitchen1': portKitchen1,
       'portKitchen2': portKitchen2,
       'portKitchen3': portKitchen3,
       'portKitchen4': portKitchen4,
-      'printer': printer?.toJson(),
+      'bltPrinter': bltPrinter != null ? jsonEncode(bltPrinterJson) : null,
+      'netPrinter': netPrinter != null ? jsonEncode(netPrinterJson) : null,
+      'usbPrinter': usbPrinter != null ? jsonEncode(usbPrinterJson) : null,
     };
   }
 
-  SettingsModel copyWith({
-    String? stationName,
-    PrinterType? printerType,
-    String? printerCashIp,
-    String? printerKitchenIp1,
-    String? printerKitchenIp2,
-    String? printerKitchenIp3,
-    String? printerKitchenIp4,
-    String? portCash,
-    String? portKitchen1,
-    String? portKitchen2,
-    String? portKitchen3,
-    String? portKitchen4,
-    Printer? printer,
-  }) {
+  SettingsModel copyWith(
+      {String? stationName,
+      PrinterType? printerType,
+      String? printerCashIp,
+      String? printerKitchenIp1,
+      String? printerKitchenIp2,
+      String? printerKitchenIp3,
+      String? printerKitchenIp4,
+      String? portCash,
+      String? portKitchen1,
+      String? portKitchen2,
+      String? portKitchen3,
+      String? portKitchen4,
+      bool? addCustomAddresses,
+      PrinterDevice? bltPrinter,
+      PrinterDevice? netPrinter,
+      PrinterDevice? usbPrinter}) {
     return SettingsModel(
       stationName: stationName ?? this.stationName,
       printerType: printerType ?? this.printerType,
@@ -96,11 +159,14 @@ class SettingsModel extends Settings {
       printerKitchenIp3: printerKitchenIp3 ?? this.printerKitchenIp3,
       printerKitchenIp4: printerKitchenIp4 ?? this.printerKitchenIp4,
       portCash: portCash ?? this.portCash,
+      addCustomAddresses: addCustomAddresses ?? this.addCustomAddresses,
       portKitchen1: portKitchen1 ?? this.portKitchen1,
       portKitchen2: portKitchen2 ?? this.portKitchen2,
       portKitchen3: portKitchen3 ?? this.portKitchen3,
       portKitchen4: portKitchen4 ?? this.portKitchen4,
-      printer: printer ?? this.printer,
+      bltPrinter: bltPrinter ?? this.bltPrinter,
+      netPrinter: netPrinter ?? this.netPrinter,
+      usbPrinter: usbPrinter ?? this.usbPrinter,
     );
   }
 }

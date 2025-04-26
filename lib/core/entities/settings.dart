@@ -1,11 +1,16 @@
-import 'package:flutter_thermal_printer/utils/printer.dart';
+
+
+import 'package:printer_service/thermal_printer.dart' show PrinterDevice;
 
 import '../utils/enums/printer_type_enums.dart';
 
 abstract class Settings {
   final String stationName;
   final PrinterType printerType;
-  final Printer? printer;
+  final PrinterDevice? bltPrinter;
+  final PrinterDevice? netPrinter;
+  final PrinterDevice? usbPrinter;
+  final bool addCustomAddresses;
   final String printerCashIp;
   final String portCash;
   final String printerKitchenIp1;
@@ -20,7 +25,10 @@ abstract class Settings {
   Settings({
     required this.stationName,
     required this.printerType,
-    required this.printer,
+    required this.bltPrinter,
+    required this.netPrinter,
+    required this.usbPrinter,
+    required this.addCustomAddresses,
     required this.printerCashIp,
     required this.printerKitchenIp1,
     required this.printerKitchenIp2,
@@ -47,6 +55,9 @@ abstract class Settings {
     String? portKitchen2,
     String? portKitchen3,
     String? portKitchen4,
-    Printer? printer,
+    bool? addCustomAddresses,
+    PrinterDevice? bltPrinter,
+    PrinterDevice? netPrinter,
+    PrinterDevice? usbPrinter
   });
 }

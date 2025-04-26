@@ -1,48 +1,59 @@
+import 'dart:async';
+import 'package:rxdart/rxdart.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_thermal_printer/flutter_thermal_printer.dart';
-import 'package:flutter_thermal_printer/utils/printer.dart';
+import 'package:image/image.dart' show decodeImage;
+import 'package:printer_service/esc_pos_utils_platform/esc_pos_utils_platform.dart';
+import 'package:printer_service/thermal_printer.dart';
 
 class UsbPrinterService {
-  final _flutterThermalPrinterPlugin = FlutterThermalPrinter.instance;
+  final PrinterManager _printerManager;
 
-  Stream<List<Printer>> getDevices() {
+  UsbPrinterService({required PrinterManager printerManager})
+      : _printerManager = printerManager;
+
+  Stream<List<PrinterDevice>> getDevices() {
     try {
-      _flutterThermalPrinterPlugin.getPrinters(connectionTypes: [
-        ConnectionType.USB,
-      ]);
-      return _flutterThermalPrinterPlugin.devicesStream;
+      return _printerManager
+          .discovery(type: PrinterType.usb)
+          .scan<List<PrinterDevice>>(
+        (List<PrinterDevice> accumulated, PrinterDevice device, _) {
+          return [...accumulated, device]; // Add new device to the list
+        },
+        <PrinterDevice>[], // Initial empty list
+      );
     } catch (e) {
       return Stream.empty();
     }
   }
 
-  Future<bool> connect(Printer printer) async {
+  Future<bool> connect(PrinterDevice printer) async {
     try {
-      if (printer.isConnected ?? false) {
-        return true;
-      }
-
-      final bool result = await _flutterThermalPrinterPlugin.connect(printer);
+      final bool result = await _printerManager.connect(
+          type: PrinterType.usb,
+          model: UsbPrinterInput(
+            name: printer.name,
+            vendorId: printer.vendorId,
+            productId: printer.productId,
+          ));
       return result;
     } catch (e) {
       throw Exception('Failed to connect to USB printer: $e');
     }
   }
 
-  Future<bool> printImage(Uint8List imageData, Printer printer) async {
+  Future<bool> printImage(Uint8List imageData, PrinterDevice printer) async {
     try {
-      // final profile = await CapabilityProfile.load();
-      // final generator = Generator(PaperSize.mm80, profile);
-      // List<int> bytes = [];
-      // final image = img.decodeImage(imageData);
-      // if (image != null) {
-      //   bytes += generator.image(image);
-      // }
-      // bytes += generator.cut();
-
-      await _flutterThermalPrinterPlugin.printImageBytes(
-          imageBytes: imageData, printer: printer);
-       return true;
+      final profile = await CapabilityProfile.load();
+      final generator = Generator(PaperSize.mm80, profile);
+      List<int> bytes = [];
+      final image = decodeImage(imageData);
+      if (image != null) {
+        bytes += generator.image(image);
+      }
+      bytes += generator.cut();
+      final bool result =
+          await _printerManager.send(bytes: bytes, type: PrinterType.usb);
+      return result;
     } on PlatformException {
       return false;
     } catch (e) {
@@ -50,12 +61,16 @@ class UsbPrinterService {
     }
   }
 
-  Future<bool> disconnect(Printer printer) async {
+  Future<bool> disconnect() async {
     try {
-      await _flutterThermalPrinterPlugin.disconnect(printer);
-      return true;
+      final result = await _printerManager.disconnect(type: PrinterType.usb);
+      return result;
     } catch (e) {
       return false;
     }
+  }
+
+  bool checkConnection() {
+    return _printerManager.currentStatusUSB == USBStatus.connected;
   }
 }

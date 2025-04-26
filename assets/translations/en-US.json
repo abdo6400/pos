@@ -285,5 +285,6 @@
   "printer_kitchen_ip4": " Kitchen IP Address4",
   "printer_kitchen_port4": " Kitchen Port4",
   "no_printer_selected":"No printer selected",
-  "test_print":"Test Print"
+  "test_print":"Test Print",
+  "addCustomAddresses":"Add Custom Addresses"
 }

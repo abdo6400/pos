@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:printer_service/thermal_printer.dart';
 import '../../core/utils/constants.dart';
 import '../database/api/api_consumer.dart';
 import '../database/api/dio_consumer.dart';
@@ -34,10 +35,11 @@ class GlobalLocator {
         networkPrinterService: locator(),
         usbPrinterService: locator()));
     locator.registerLazySingleton<BluetoothPrinterService>(
-        () => BluetoothPrinterService());
+        () => BluetoothPrinterService(printerManager: locator()));
     locator.registerLazySingleton<NetworkPrinterService>(
-        () => NetworkPrinterService());
-    locator.registerLazySingleton<UsbPrinterService>(() => UsbPrinterService());
+        () => NetworkPrinterService(printerManager: locator()));
+    locator.registerLazySingleton<UsbPrinterService>(
+        () => UsbPrinterService(printerManager: locator()));
     locator
         .registerLazySingleton<IminPrinterService>(() => IminPrinterService());
     await EasyLocalization.ensureInitialized();
@@ -56,6 +58,7 @@ class GlobalLocator {
     );
     // Extarnal
     locator.registerLazySingleton(() => Dio());
+    locator.registerLazySingleton(() => PrinterManager.instance);
     locator.registerLazySingleton(() => FlutterSecureStorage());
     locator.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl());
   }

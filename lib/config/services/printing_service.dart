@@ -1,7 +1,9 @@
 import 'dart:typed_data';
-
-import 'package:flutter_thermal_printer/flutter_thermal_printer.dart';
-import 'package:flutter_thermal_printer/utils/printer.dart';
+import 'package:printer_service/esc_pos_utils_platform/src/capability_profile.dart';
+import 'package:printer_service/esc_pos_utils_platform/src/enums.dart';
+import 'package:printer_service/esc_pos_utils_platform/src/generator.dart';
+import 'package:printer_service/esc_pos_utils_platform/src/pos_styles.dart';
+import 'package:printer_service/thermal_printer.dart' show PrinterDevice;
 
 import '../../core/utils/enums/printer_type_enums.dart';
 import 'Imin_printer_service.dart';
@@ -11,9 +13,12 @@ import 'usb_printer_service.dart';
 
 abstract class PrintingService {
   Future<bool> printImage(Uint8List imageData, PrinterType printerType,
-      {String ipAddress = '', int port = 9100, Printer? printer});
-  Stream<List<Printer>> getDevices(PrinterType printerType);
-  Future<bool> connect(PrinterType printerType, Printer printer);
+      {String ipAddress = '', int port = 9100, PrinterDevice? printer});
+  Stream<List<PrinterDevice>> getDevices(PrinterType printerType);
+  Future<bool> connect(PrinterType printerType, PrinterDevice printer,
+      {String? ipAddress, int? port});
+  Future<bool> disconnect(PrinterType printerType);
+  bool checkConnection(PrinterType printerType);
 
   Future<Uint8List> generateTestImage();
 }
@@ -35,26 +40,30 @@ class PrintingServiceImpl implements PrintingService {
         _usbPrinterService = usbPrinterService;
 
   @override
-  Future<bool> connect(PrinterType printerType, Printer printer) async {
+  Future<bool> connect(PrinterType printerType, PrinterDevice printer,
+      {String? ipAddress, int? port}) async {
     switch (printerType) {
       case PrinterType.bluetooth:
         return await _bluetoothPrinterService.connect(printer);
       case PrinterType.usb:
         return await _usbPrinterService.connect(printer);
       case PrinterType.network:
-        return true;
+        return await _networkPrinterService.connect(printer,
+            ipAddress: ipAddress, port: port);
       case PrinterType.imin:
         return await _iminPrinterService.initSdk();
     }
   }
 
   @override
-  Stream<List<Printer>> getDevices(PrinterType printerType) {
+  Stream<List<PrinterDevice>> getDevices(PrinterType printerType) {
     switch (printerType) {
       case PrinterType.bluetooth:
         return _bluetoothPrinterService.getDevices();
       case PrinterType.usb:
         return _usbPrinterService.getDevices();
+      case PrinterType.network:
+        return _networkPrinterService.getDevices();
       default:
         return Stream.empty();
     }
@@ -66,7 +75,7 @@ class PrintingServiceImpl implements PrintingService {
     PrinterType printerType, {
     String ipAddress = '',
     int port = 9100,
-    Printer? printer,
+    PrinterDevice? printer,
   }) async {
     switch (printerType) {
       case PrinterType.bluetooth:
@@ -74,27 +83,57 @@ class PrintingServiceImpl implements PrintingService {
       case PrinterType.usb:
         return await _usbPrinterService.printImage(imageData, printer!);
       case PrinterType.network:
-        return await _networkPrinterService.printImage(
-            imageData, ipAddress, port);
+        return await _networkPrinterService.printImage(imageData, printer!);
       case PrinterType.imin:
         return await _iminPrinterService.printImage(imageData);
     }
   }
 
   @override
+  @override
   Future<Uint8List> generateTestImage() async {
     final profile = await CapabilityProfile.load();
     final generator = Generator(PaperSize.mm80, profile);
-    List<int> bytes = [];
-    bytes += generator.text(
+
+    final List<int> bytes = [];
+    bytes.addAll(generator.text(
       "Teste Network print",
       styles: const PosStyles(
         bold: true,
         height: PosTextSize.size3,
         width: PosTextSize.size3,
       ),
-    );
-    bytes += generator.cut();
-    return bytes as Uint8List;
+    ));
+    bytes.addAll(generator.cut());
+
+    return Uint8List.fromList(bytes);
+  }
+
+  @override
+  Future<bool> disconnect(PrinterType printerType) {
+    switch (printerType) {
+      case PrinterType.bluetooth:
+        return _bluetoothPrinterService.disconnect();
+      case PrinterType.usb:
+        return _usbPrinterService.disconnect();
+      case PrinterType.network:
+        return _networkPrinterService.disconnect();
+      case PrinterType.imin:
+        return Future.value(true);
+    }
+  }
+
+  @override
+  bool checkConnection(PrinterType printerType) {
+    switch (printerType) {
+      case PrinterType.bluetooth:
+        return _bluetoothPrinterService.checkConnection();
+      case PrinterType.usb:
+        return _usbPrinterService.checkConnection();
+      case PrinterType.network:
+        return _networkPrinterService.checkConnection();
+      case PrinterType.imin:
+        return true;
+    }
   }
 }

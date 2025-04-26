@@ -25,6 +25,8 @@ class IminPrinterService {
 
   Future<bool> printImage(Uint8List imageData) async {
     try {
+      await _channel.invokeMethod('sdkInit');
+      await _channel.invokeMethod('opencashBox');
       await _channel.invokeMethod('printImage', imageData);
       return true;
     } on PlatformException {

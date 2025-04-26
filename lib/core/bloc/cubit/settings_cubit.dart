@@ -1,5 +1,5 @@
-import 'package:flutter_thermal_printer/utils/printer.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:printer_service/thermal_printer.dart' show PrinterDevice;
 import '../../entities/settings.dart';
 import '../../models/settings_model.dart';
 import '../../utils/enums/printer_type_enums.dart';
@@ -7,19 +7,22 @@ import '../../utils/enums/printer_type_enums.dart';
 class SettingsCubit extends HydratedCubit<Settings> {
   SettingsCubit()
       : super(SettingsModel(
-          stationName: "",
+          stationName: "test",
           printerType: PrinterType.imin,
-          printerCashIp: "",
-          printerKitchenIp1: "",
-          printerKitchenIp2: "",
-          printerKitchenIp3: "",
-          printerKitchenIp4: "",
-          portCash: "",
-          portKitchen1: "",
-          portKitchen2: "",
-          portKitchen3: "",
-          portKitchen4: "",
-          printer: null,
+          printerCashIp: "0",
+          printerKitchenIp1: "0",
+          printerKitchenIp2: "0",
+          printerKitchenIp3: "0",
+          printerKitchenIp4: "0",
+          portCash: "0",
+          addCustomAddresses: false,
+          portKitchen1: "0",
+          portKitchen2: "0",
+          portKitchen3: "0",
+          portKitchen4: "0",
+          bltPrinter: null,
+          netPrinter: null,
+          usbPrinter: null,
         ));
 
   void updateStationName(String stationName) {
@@ -70,8 +73,24 @@ class SettingsCubit extends HydratedCubit<Settings> {
     emit((state).copyWith(portKitchen4: portKitchen4));
   }
 
-  void updatePrinter(Printer printer) {
-    emit((state).copyWith(printer: printer));
+  void updatePrinter(PrinterDevice printer, PrinterType printerType) {
+    switch (printerType) {
+      case PrinterType.bluetooth:
+        emit((state).copyWith(bltPrinter: printer));
+        break;
+      case PrinterType.network:
+        emit((state).copyWith(netPrinter: printer));
+        break;
+      case PrinterType.usb:
+        emit((state).copyWith(usbPrinter: printer));
+        break;
+      case PrinterType.imin:
+        break;
+    }
+  }
+
+  void updateAddCustomAddresses(bool addCustomAddresses) {
+    emit((state).copyWith(addCustomAddresses: addCustomAddresses));
   }
 
   @override

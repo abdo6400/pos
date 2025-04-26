@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter_thermal_printer/utils/printer.dart';
+import 'package:printer_service/thermal_printer.dart' show PrinterDevice;
 
 import '../../../config/services/printing_service.dart';
 import '../../utils/enums/printer_type_enums.dart';
@@ -11,7 +11,7 @@ class PrintingCubit extends Cubit<StateEnum> {
   final PrintingService _printingService;
   PrintingCubit(this._printingService) : super(StateEnum.initial);
 
-  Stream<List<Printer>> getPrinters(
+  Stream<List<PrinterDevice>> getPrinters(
     PrinterType printerType,
   ) {
     return _printingService.getDevices(printerType);
@@ -21,11 +21,12 @@ class PrintingCubit extends Cubit<StateEnum> {
     PrinterType printerType, {
     String ipAddress = '',
     int port = 9100,
-    Printer? printer,
+    PrinterDevice? printer,
   }) async {
     emit(StateEnum.loading);
     Uint8List imageData = await _printingService.generateTestImage();
-    bool result = await _printingService.printImage(imageData, printerType);
+    bool result = await _printingService.printImage(imageData, printerType,
+        ipAddress: ipAddress, port: port, printer: printer);
     if (result) {
       emit(StateEnum.success);
     } else {
@@ -39,10 +40,17 @@ class PrintingCubit extends Cubit<StateEnum> {
 
   Future<void> connectPrinter(
     PrinterType printerType,
-    Printer printer,
-  ) async {
+    PrinterDevice printer, {
+    String? ipAddress,
+    int? port,
+  }) async {
     emit(StateEnum.loading);
-    bool result = await _printingService.connect(printerType, printer);
+    if (_printingService.checkConnection(printerType)) {
+      emit(StateEnum.success);
+      return;
+    }
+    bool result = await _printingService.connect(printerType, printer,
+        ipAddress: ipAddress, port: port);
     if (result) {
       emit(StateEnum.success);
     } else {

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_multi_select_items/flutter_multi_select_items.dart';
-import 'package:flutter_thermal_printer/utils/printer.dart' show Printer;
+import 'package:printer_service/thermal_printer.dart' show PrinterDevice;
 import 'package:retail/core/utils/extensions/extensions.dart';
 import '../../../../core/bloc/cubit/printing_cubit.dart';
 import '../../../../core/bloc/cubit/settings_cubit.dart';
@@ -25,8 +25,13 @@ class SettingsScreen extends StatelessWidget {
     if (settings.printerType == PrinterType.imin) {
       return Center();
     }
-    if (settings.printerType == PrinterType.bluetooth ||
-        settings.printerType == PrinterType.usb) {
+    final PrinterDevice? printer = switch (settings.printerType) {
+      PrinterType.bluetooth => settings.bltPrinter,
+      PrinterType.usb => settings.usbPrinter,
+      PrinterType.network => settings.netPrinter,
+      _ => null
+    };
+    if (!settings.addCustomAddresses) {
       return Column(
         children: [
           ListTile(
@@ -44,15 +49,14 @@ class SettingsScreen extends StatelessWidget {
                   ),
             ),
             trailing: Text(
-              settings.printer?.name ??
-                  StringEnums.no_printer_selected.name.tr(),
+              printer?.name ?? StringEnums.no_printer_selected.name.tr(),
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     fontSize: context.AppResponsiveValue(18,
                         mobile: 18, tablet: 24, desktop: 30),
                   ),
             ),
           ),
-          StreamBuilder<List<Printer>>(
+          StreamBuilder<List<PrinterDevice>>(
               stream: context
                   .read<PrintingCubit>()
                   .getPrinters(settings.printerType),
@@ -60,7 +64,7 @@ class SettingsScreen extends StatelessWidget {
                 return snapshot.hasData
                     ? Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: MultiSelectCheckList<Printer>(
+                        child: MultiSelectCheckList<PrinterDevice>(
                             maxSelectableCount: 1,
                             singleSelectedItem: true,
                             listViewSettings: ListViewSettings(
@@ -69,9 +73,8 @@ class SettingsScreen extends StatelessWidget {
                                       height: 0,
                                     )),
                             onChange: (allSelectedItems, selectedItem) {
-                              context
-                                  .read<SettingsCubit>()
-                                  .updatePrinter(selectedItem);
+                              context.read<SettingsCubit>().updatePrinter(
+                                  selectedItem, settings.printerType);
                               context.read<PrintingCubit>().connectPrinter(
                                   settings.printerType, selectedItem);
                             },
@@ -81,17 +84,34 @@ class SettingsScreen extends StatelessWidget {
                                       value: snapshot.data![index],
                                       selected: snapshot.data![index].address
                                               ?.compareTo(
-                                                  settings.printer?.address ??
-                                                      "") ==
+                                                  printer?.address ?? "") ==
                                           0,
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(5),
                                       ),
-                                      title: Text(
-                                        snapshot.data![index].name ?? "",
+                                      title: Row(
+                                        spacing: 50,
+                                        children: [
+                                          Text(
+                                            snapshot.data![index].name,
+                                          ),
+                                          Text(
+                                            snapshot.data![index].address ?? "",
+                                          )
+                                        ],
                                       ),
-                                      subtitle: Text(
-                                        snapshot.data![index].address ?? "",
+                                      subtitle: Row(
+                                        spacing: 50,
+                                        children: [
+                                          Text(
+                                            snapshot.data![index].productId ??
+                                                "",
+                                          ),
+                                          Text(
+                                            snapshot.data![index].vendorId ??
+                                                "",
+                                          )
+                                        ],
                                       ),
                                       leadingCheckBox: false,
                                     ))),
@@ -246,37 +266,46 @@ class SettingsScreen extends StatelessWidget {
                   ),
                 ),
                 floatingActionButton: ElevatedButton(
-                  
                   onPressed: () {
                     if (settings.printerType == PrinterType.imin) {
                       context.read<PrintingCubit>().printTest(
                             settings.printerType,
-                            printer: settings.printer,
                             ipAddress: settings.printerCashIp,
-                            port: int.parse(settings.portCash),
+                            port: int.tryParse(settings.portCash)??0,
                           );
-                    } else if (settings.printerType == PrinterType.bluetooth ||
-                        settings.printerType == PrinterType.usb) {
-                      if (settings.printer != null &&
-                          (settings.printer!.isConnected ?? false)) {
+                    } else if (settings.printerType == PrinterType.bluetooth) {
+                      if (settings.bltPrinter != null) {
                         context.read<PrintingCubit>().printTest(
                               settings.printerType,
-                              printer: settings.printer,
+                              printer: settings.bltPrinter,
                               ipAddress: settings.printerCashIp,
-                              port: int.parse(settings.portCash),
+                              port: int.tryParse(settings.portCash)??0,
+                            );
+                      } else {
+                        context.showMessageToast(
+                            msg: "Please connect to printer");
+                      }
+                    } else if (settings.printerType == PrinterType.usb) {
+                      if (settings.usbPrinter != null) {
+                        context.read<PrintingCubit>().printTest(
+                              settings.printerType,
+                              printer: settings.usbPrinter,
+                              ipAddress: settings.printerCashIp,
+                              port: int.tryParse(settings.portCash)??0,
                             );
                       } else {
                         context.showMessageToast(
                             msg: "Please connect to printer");
                       }
                     } else if (settings.printerType == PrinterType.network) {
-                      if (settings.printerCashIp.isNotEmpty &&
-                          settings.portCash.isNotEmpty) {
+                      if (settings.netPrinter != null ||
+                          (settings.printerCashIp.isNotEmpty &&
+                              settings.portCash.isNotEmpty)) {
                         context.read<PrintingCubit>().printTest(
                               settings.printerType,
-                              printer: settings.printer,
+                              printer: settings.netPrinter,
                               ipAddress: settings.printerCashIp,
-                              port: int.parse(settings.portCash),
+                              port: int.tryParse(settings.portCash)??0,
                             );
                       } else {
                         context.showMessageToast(
@@ -379,6 +408,23 @@ class SettingsScreen extends StatelessWidget {
                               height: context.AppResponsiveValue(10,
                                   mobile: 10, tablet: 15, desktop: 20),
                             ),
+                            if (settings.printerType == PrinterType.network)
+                              CheckboxListTile(
+                                  value: settings.addCustomAddresses,
+                                  title: Text(
+                                    StringEnums.addCustomAddresses.name.tr(),
+                                  ),
+                                  onChanged: (v) {
+                                    context
+                                        .read<SettingsCubit>()
+                                        .updateAddCustomAddresses(
+                                            !settings.addCustomAddresses);
+                                  }),
+                            if (settings.printerType == PrinterType.network)
+                              SizedBox(
+                                height: context.AppResponsiveValue(10,
+                                    mobile: 10, tablet: 15, desktop: 20),
+                              ),
                             _buildPrinterType(settings, context)
                           ]);
                     }
