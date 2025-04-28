@@ -34,7 +34,7 @@ class PaymentRepositoryImpl extends PaymentRepository {
   }
 
   @override
-  Future<Either<Failure, void>> pay(Map<String, dynamic> data) {
+  Future<Either<Failure, String>> pay(Map<String, dynamic> data) {
     return _networkInfo.handleNetworkPendingRequest(
       remoteRequest: () => _paymentRemoteDataSource.pay(data),
       localRequest: () => _paymentLocalDataSource.pay(data),

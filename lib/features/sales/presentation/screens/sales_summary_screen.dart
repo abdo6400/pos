@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/bloc/cubit/settings_cubit.dart';
+import '../../../../core/entities/settings.dart';
 import '../widgets/invoices_table.dart';
 
 class SalesSummaryScreen extends StatelessWidget {
@@ -6,8 +9,14 @@ class SalesSummaryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: InvoicesTable(),
+    return BlocBuilder<SettingsCubit, Settings>(
+      builder: (context, settings) {
+        return Scaffold(
+          body: InvoicesTable(
+            settings: settings,
+          ),
+        );
+      },
     );
   }
 }

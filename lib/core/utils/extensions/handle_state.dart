@@ -19,7 +19,7 @@ extension HandleState on BuildContext {
         );
         break;
 
-      case StateEnum.addError:
+      case StateEnum.addError || StateEnum.error:
         this.showMessageToast(
           msg: errorMessage!,
           backgroundColor: Colors.red,

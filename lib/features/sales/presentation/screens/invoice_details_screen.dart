@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:retail/core/utils/enums/state_enums.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
+import 'package:screenshot/screenshot.dart';
+import '../../../../core/bloc/cubit/printing_cubit.dart';
+import '../../../../core/entities/settings.dart';
 import '../../../../core/utils/enums/string_enums.dart';
+import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/errors/error_card.dart';
+import '../../../../core/widgets/invoice_card.dart';
 import '../../domain/entities/invoice.dart';
 import '../../domain/entities/invoice_detail.dart';
 import '../../domain/entities/return_invoice.dart';
@@ -16,7 +21,7 @@ import '../bloc/return_invoice/return_invoice_bloc.dart';
 
 class InvoiceDetailsScreen extends StatelessWidget {
   const InvoiceDetailsScreen({super.key});
-
+  static ScreenshotController screenshotController = ScreenshotController();
   @override
   Widget build(BuildContext context) {
     final data =
@@ -24,6 +29,8 @@ class InvoiceDetailsScreen extends StatelessWidget {
     final invoice = data[StringEnums.invoices.name] as Invoice;
     final returnInvoice =
         (data[StringEnums.returnedItems.name]) as ReturnInvoice?;
+    final bool isPrint = data[StringEnums.isPrint.name] as bool;
+    final settings = data[StringEnums.settings.name] as Settings;
     return BlocProvider(
       create: (context) => ReturnItemsCubit(),
       child: BlocConsumer<ReturnInvoiceBloc, ReturnInvoiceState>(
@@ -56,46 +63,59 @@ class InvoiceDetailsScreen extends StatelessWidget {
                               mobile: 18, tablet: 24, desktop: 30),
                           fontWeight: FontWeight.bold)),
                   actions: [
-                    BlocBuilder<InvoiceDetailBloc, InvoiceDetailState>(
-                      builder: (context, state) {
-                        if (state is InvoiceDetailSuccess) {
-                          return Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            child:
-                                BlocBuilder<ReturnItemsCubit, ReturnItemsState>(
-                              builder: (context, _) {
-                                return ElevatedButton(
-                                  onPressed: () {
-                                    _showReturnItemsDialog(
-                                        context,
-                                        state.invoiceDetail.invoiceDtl,
-                                        state.invoiceDetail.invoices,
-                                        invoice,
-                                        (state.returnedInvoiceDetail?.dtl) ??
-                                            []);
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.red,
-                                  ),
-                                  child: Text(
-                                    StringEnums.returnItems.name.tr(),
-                                    style: TextStyle(
-                                        fontSize: context.AppResponsiveValue(14,
-                                            mobile: 12,
-                                            tablet: 20,
-                                            desktop: 16)),
-                                  ),
-                                );
-                              },
-                            ),
-                          );
-                        }
-                        return const CircularProgressIndicator();
-                      },
-                    ),
+                    if (!isPrint)
+                      BlocBuilder<InvoiceDetailBloc, InvoiceDetailState>(
+                        builder: (context, state) {
+                          if (state is InvoiceDetailSuccess) {
+                            return Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              child: BlocBuilder<ReturnItemsCubit,
+                                  ReturnItemsState>(
+                                builder: (context, _) {
+                                  return ElevatedButton(
+                                    onPressed: () {
+                                      _showReturnItemsDialog(
+                                          context,
+                                          state.invoiceDetail.invoiceDtl,
+                                          state.invoiceDetail.invoices,
+                                          invoice,
+                                          (state.returnedInvoiceDetail?.dtl) ??
+                                              []);
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                    ),
+                                    child: Text(
+                                      StringEnums.returnItems.name.tr(),
+                                      style: TextStyle(
+                                          fontSize: context.AppResponsiveValue(
+                                              14,
+                                              mobile: 12,
+                                              tablet: 20,
+                                              desktop: 16)),
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+                          }
+                          return const CircularProgressIndicator();
+                        },
+                      ),
                   ],
                 ),
               ),
+              bottomNavigationBar:isPrint? Padding(
+                padding:  EdgeInsets.symmetric(horizontal: 300,vertical: 20),
+                child: CustomButton(
+                    buttonLabel: StringEnums.print.name, onSubmit: () {
+                      screenshotController.capture().then((image) {
+                        if (image != null) {
+                          context.read<PrintingCubit>().handlePrint(settings, context,image: image);
+                        }
+                      });
+                    }),
+              ):null,
               body: BlocBuilder<InvoiceDetailBloc, InvoiceDetailState>(
                 builder: (context, state) {
                   if (state is InvoiceDetailLoading) {
@@ -111,26 +131,99 @@ class InvoiceDetailsScreen extends StatelessWidget {
                               returnId: returnInvoice?.returnId)),
                     );
                   } else if (state is InvoiceDetailSuccess) {
-                    return Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: SingleChildScrollView(
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _buildInvoiceHeader(
-                                    context,
-                                    state.invoiceDetail.invoices,
-                                    state.returnedInvoiceDetail?.hdr),
-                                const SizedBox(height: 20),
-                                _buildInvoiceItems(
-                                    context,
-                                    state.invoiceDetail.invoiceDtl,
-                                    state.returnedInvoiceDetail?.dtl ?? []),
-                                const SizedBox(height: 20),
-                                _buildPaymentInfo(context,
-                                    state.invoiceDetail.invoicePayment),
-                              ]),
-                        ));
+                    return isPrint
+                        ? Screenshot(
+                            controller: screenshotController,
+                            child: InvoiceCard(
+                              isReprint: true,
+                              cashierName:
+                                  state.invoiceDetail.invoices.takerName,
+                              cashChange:
+                                  state.invoiceDetail.invoices.cashPayment,
+                              invoiceNumber: state
+                                  .invoiceDetail.invoices.invoiceNo
+                                  .toString(),
+                              items: state.invoiceDetail.invoiceDtl.map((e) {
+                                // Check if this item has been returned
+                                final bool isReturned = state
+                                        .returnedInvoiceDetail?.dtl
+                                        .any((returnItem) =>
+                                            returnItem.itemId == e.item) ??
+                                    false;
+
+                                // If returned, find the returned item to get its quantity
+                                final returnedItem = isReturned
+                                    ? state.returnedInvoiceDetail!.dtl
+                                        .firstWhere((returnItem) =>
+                                            returnItem.itemId == e.item)
+                                    : null;
+
+                                // Calculate the actual quantity after returns
+                                final actualQty = isReturned
+                                    ? e.qty - returnedItem!.qty
+                                    : e.qty;
+
+                                // Calculate the actual total after returns
+                                final actualTotal = isReturned
+                                    ? e.grandTotal - returnedItem!.grandTotal
+                                    : e.grandTotal;
+
+                                return {
+                                  "name": isReturned
+                                      ? "${e.item} (Partial Return)"
+                                      : e.item,
+                                  "qty": actualQty,
+                                  "price": e.price,
+                                  "total": actualTotal,
+                                  "isReturned": isReturned
+                                };
+                              }).toList(),
+                              subtotal:
+                                  state.invoiceDetail.invoices.invoiceSubTotal -
+                                      (state.returnedInvoiceDetail != null
+                                          ? state.returnedInvoiceDetail!.hdr
+                                              .returnsSubTotal
+                                          : 0.0),
+                              tax:
+                                  state.invoiceDetail.invoices.invoiceTaxTotal -
+                                      (state.returnedInvoiceDetail != null
+                                          ? state.returnedInvoiceDetail!.hdr
+                                              .returnsTaxTotal
+                                          : 0.0),
+                              discount: state.invoiceDetail.invoices
+                                      .invoiceDiscountTotal -
+                                  (state.returnedInvoiceDetail != null
+                                      ? state.returnedInvoiceDetail!.hdr
+                                          .returnsDiscountTotal
+                                      : 0.0),
+                              total: state.invoiceDetail.invoices
+                                      .invoiceGrandTotal -
+                                  (state.returnedInvoiceDetail != null
+                                      ? state.returnedInvoiceDetail!.hdr
+                                          .returnsGrandTotal
+                                      : 0.0),
+                            ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    _buildInvoiceHeader(
+                                        context,
+                                        state.invoiceDetail.invoices,
+                                        state.returnedInvoiceDetail?.hdr),
+                                    const SizedBox(height: 20),
+                                    _buildInvoiceItems(
+                                        context,
+                                        state.invoiceDetail.invoiceDtl,
+                                        state.returnedInvoiceDetail?.dtl ?? []),
+                                    const SizedBox(height: 20),
+                                    _buildPaymentInfo(context,
+                                        state.invoiceDetail.invoicePayment),
+                                  ]),
+                            ));
                   }
                   return const Center(
                     child: CircularProgressIndicator(),
@@ -702,12 +795,11 @@ class InvoiceDetailsScreen extends StatelessWidget {
 
                                           // Create detail items for return
                                           final dtlItems = <Dtl>[];
-                                          int index = 0; 
+                                          int index = 0;
                                           for (final item
                                               in state.returnItems) {
                                             dtlItems.add(Dtl(
-                                              returnId:
-                                                  0, 
+                                              returnId: 0,
                                               indexId: index,
                                               itemId: item.item,
                                               qty: item.qty.toInt(),

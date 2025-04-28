@@ -10,12 +10,12 @@ import '../entities/invoice_id.dart';
 import '../../../../core/entities/sale_date.dart';
 import '../repositories/payment_repository.dart';
 
-class PayUsecase extends UseCase<Either<Failure, void>, InvoiceParams> {
+class PayUsecase extends UseCase<Either<Failure, String>, InvoiceParams> {
   final PaymentRepository _paymentRepository;
 
   PayUsecase(this._paymentRepository);
   @override
-  Future<Either<Failure, void>> call(params) async {
+  Future<Either<Failure, String>> call(params) async {
     return _paymentRepository.pay(params.toJson(
         saleDate: (await _paymentRepository.getSaleDate(params.branchId))
             .fold((l) => null, (r) => r),

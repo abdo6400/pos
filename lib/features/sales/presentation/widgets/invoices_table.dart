@@ -8,10 +8,10 @@ import 'package:responsive_framework/responsive_framework.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-
 import '../../../../config/routes/app_routes.dart';
 import '../../../../core/entities/field.dart';
 import '../../../../core/entities/form.dart';
+import '../../../../core/entities/settings.dart';
 import '../../../../core/utils/enums/field_type_enums.dart';
 import '../../../../core/utils/enums/string_enums.dart';
 import '../../../../core/widgets/custom_button.dart';
@@ -23,7 +23,8 @@ import '../../domain/entities/return_invoice.dart';
 import '../bloc/invoice/invoice_bloc.dart';
 
 class InvoicesTable extends StatefulWidget {
-  const InvoicesTable({super.key});
+  final Settings settings;
+  const InvoicesTable({super.key, required this.settings});
 
   @override
   InvoicesTableState createState() => InvoicesTableState();
@@ -79,7 +80,7 @@ class InvoicesTableState extends State<InvoicesTable> {
                       children: [
                         Expanded(
                             child: _buildDataGrid(invoices, returnInvoices,
-                                _rowsPerPage, context)),
+                                _rowsPerPage, context, widget.settings)),
                         // if (state is InvoicesSuccess)
                         //   _buildPaginationControls(invoices.length,
                         //       _rowsPerPage, _InvoiceDataSource(invoices)),
@@ -143,9 +144,10 @@ class InvoicesTableState extends State<InvoicesTable> {
       List<Invoice> invoices,
       List<ReturnInvoice> returnInvoices,
       int rowsPerPage,
-      BuildContext context) {
-    final _invoiceDataSource =
-        _InvoiceDataSource(invoices, returnInvoices, context: context);
+      BuildContext context,
+      Settings settings) {
+    final _invoiceDataSource = _InvoiceDataSource(invoices, returnInvoices,
+        context: context, settings: settings);
     return SfDataGrid(
       columnWidthMode: ColumnWidthMode.fill,
       showCheckboxColumn: false,
@@ -206,9 +208,10 @@ class _InvoiceDataSource extends DataGridSource {
   final List<Invoice> _invoices;
   final List<ReturnInvoice> _returnInvoices;
   final BuildContext context;
+  final Settings settings;
 
   _InvoiceDataSource(this._invoices, this._returnInvoices,
-      {required this.context}) {
+      {required this.context, required this.settings}) {
     _buildDataGridRows();
   }
 
@@ -240,7 +243,8 @@ class _InvoiceDataSource extends DataGridSource {
             value: {
               StringEnums.invoices.name: invoice,
               StringEnums.returnedItems.name: _returnInvoices.firstWhereOrNull(
-                  (element) => element.invoiceNo == invoice.invoiceNo)
+                  (element) => element.invoiceNo == invoice.invoiceNo),
+              StringEnums.settings.name: settings
             }),
       ]);
     }).toList();
@@ -262,13 +266,21 @@ class _InvoiceDataSource extends DataGridSource {
           return Container(
             alignment: Alignment.center,
             padding: EdgeInsets.all(8.0),
-            child: IconButton(
-              icon: Icon(Icons.visibility,
-                  color: Theme.of(context).colorScheme.primary),
-              onPressed: () {
-                context.push(AppRoutes.invoiceDetails,
-                    extra: dataGridCell.value);
-              },
+            child: Row(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.visibility,
+                      color: Theme.of(context).colorScheme.primary),
+                  onPressed: () => context.push(AppRoutes.invoiceDetails,
+                      extra: {...dataGridCell.value.cast<String, dynamic>(), 'isPrint': false}.cast<String, dynamic>()),
+                ),
+                IconButton(
+                  icon: Icon(Icons.print,
+                      color: Theme.of(context).colorScheme.secondary),
+                  onPressed: () => context.push(AppRoutes.invoiceDetails,
+                      extra: {...dataGridCell.value.cast<String, dynamic>(), 'isPrint': true}.cast<String, dynamic>()),
+                ),
+              ],
             ),
           );
         }

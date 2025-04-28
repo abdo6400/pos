@@ -67,6 +67,7 @@ class CloseCashboxScreen extends StatelessWidget {
           } else {
             storage.clearAuthTokenState();
             context.go(AppRoutes.login);
+            
           }
         } else if (state is CloseCashboxError) {
           context.handleState(StateEnum.error, state.message);

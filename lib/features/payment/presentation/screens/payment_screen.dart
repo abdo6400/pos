@@ -17,13 +17,74 @@ import '../bloc/cubit/returned_amount_cubit.dart';
 class PaymentScreen extends StatelessWidget {
   const PaymentScreen({super.key});
   static GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+  void payInvoice(
+      List<PaymentType> paymentTypes,
+      bool isPrint,
+      double grandTotal,
+      Function(Map<int, double>, bool) pay,
+      BuildContext context) {
+    if (_formKey.currentState!.saveAndValidate()) {
+      final paymentTypeLookup = <String, int>{};
+      for (final paymentType in paymentTypes) {
+        paymentTypeLookup[paymentType.paymentEnDesc] = paymentType.ptype;
+        paymentTypeLookup[paymentType.paymentArDesc] = paymentType.ptype;
+      }
+
+      final payments = <int, double>{};
+      _formKey.currentState!.fields.forEach((key, value) {
+        if (value.value != null && value.value!.isNotEmpty) {
+          final amount = double.parse(value.value!);
+          if (amount > 0) {
+            final ptype = paymentTypeLookup[key];
+            if (ptype != null) {
+              payments.putIfAbsent(ptype, () => amount);
+            }
+          }
+        }
+      });
+
+      // Calculate the total of non-cash payments (PayType 1, PayType 2, etc.)
+      double nonCashTotal = 0;
+      payments.forEach((ptype, amount) {
+        if (ptype != 0) {
+          // Exclude cash payment (PayType 0)
+          nonCashTotal += amount;
+        }
+      });
+
+      // Calculate the required cash payment (PayType 0)
+      double cashPayment = grandTotal - nonCashTotal;
+
+      // Ensure cash payment is not negative
+      if (cashPayment < 0) {
+        cashPayment = 0;
+      }
+
+      // Add or update the cash payment in the payments map
+      payments[0] = cashPayment; // Assuming PayType 0 is cash
+
+      // Calculate the total payments
+      double totalPayments =
+          payments.values.fold(0, (sum, amount) => sum + amount);
+
+      // Check if total payments match the grandTotal
+      if (totalPayments >= grandTotal) {
+        Navigator.pop(context);
+        pay(payments, isPrint); // Send the payments
+      } else {
+        context.showMessageToast(
+          msg: StringEnums.amount_less_than_grand_total.name.tr(),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final param = ModalRoute.of(context)!.settings.arguments as List;
     final List<PaymentType> paymentTypes =
         (param[0] as List<PaymentType>).takeWhile((e) => e.isActive).toList();
-    final pay = param[1] as Function(Map<int, double>);
+    final pay = param[1] as Function(Map<int, double>, bool);
     final grandTotal = param[2] as double;
 
     return MultiBlocProvider(
@@ -90,68 +151,8 @@ class PaymentScreen extends StatelessWidget {
                       child: CustomButton(
                         backgroundColor: Colors.green,
                         buttonLabel: StringEnums.save.name,
-                        onSubmit: () {
-                          if (_formKey.currentState!.saveAndValidate()) {
-                            final paymentTypeLookup = <String, int>{};
-                            for (final paymentType in paymentTypes) {
-                              paymentTypeLookup[paymentType.paymentEnDesc] =
-                                  paymentType.ptype;
-                              paymentTypeLookup[paymentType.paymentArDesc] =
-                                  paymentType.ptype;
-                            }
-
-                            final payments = <int, double>{};
-                            _formKey.currentState!.fields.forEach((key, value) {
-                              if (value.value != null &&
-                                  value.value!.isNotEmpty) {
-                                final amount = double.parse(value.value!);
-                                if (amount > 0) {
-                                  final ptype = paymentTypeLookup[key];
-                                  if (ptype != null) {
-                                    payments.putIfAbsent(ptype, () => amount);
-                                  }
-                                }
-                              }
-                            });
-
-                            // Calculate the total of non-cash payments (PayType 1, PayType 2, etc.)
-                            double nonCashTotal = 0;
-                            payments.forEach((ptype, amount) {
-                              if (ptype != 0) {
-                                // Exclude cash payment (PayType 0)
-                                nonCashTotal += amount;
-                              }
-                            });
-
-                            // Calculate the required cash payment (PayType 0)
-                            double cashPayment = grandTotal - nonCashTotal;
-
-                            // Ensure cash payment is not negative
-                            if (cashPayment < 0) {
-                              cashPayment = 0;
-                            }
-
-                            // Add or update the cash payment in the payments map
-                            payments[0] =
-                                cashPayment; // Assuming PayType 0 is cash
-
-                            // Calculate the total payments
-                            double totalPayments = payments.values
-                                .fold(0, (sum, amount) => sum + amount);
-
-                            // Check if total payments match the grandTotal
-                            if (totalPayments >= grandTotal) {
-                              Navigator.pop(context);
-                              pay(payments); // Send the payments
-                            } else {
-                              context.showMessageToast(
-                                msg: StringEnums
-                                    .amount_less_than_grand_total.name
-                                    .tr(),
-                              );
-                            }
-                          }
-                        },
+                        onSubmit: () => payInvoice(
+                            paymentTypes, false, grandTotal, pay, context),
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -159,7 +160,8 @@ class PaymentScreen extends StatelessWidget {
                       child: CustomButton(
                         backgroundColor: Colors.blue,
                         buttonLabel: StringEnums.print.name,
-                        onSubmit: () => Navigator.pop(context),
+                        onSubmit: () => payInvoice(
+                            paymentTypes, true, grandTotal, pay, context),
                       ),
                     ),
                   ],

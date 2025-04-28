@@ -8,9 +8,7 @@ import 'package:retail/core/utils/extensions/extensions.dart';
 import '../../../../core/bloc/cubit/printing_cubit.dart';
 import '../../../../core/bloc/cubit/settings_cubit.dart';
 import '../../../../core/entities/settings.dart';
-import '../../../../core/utils/assets.dart';
 import '../../../../core/utils/enums/printer_type_enums.dart';
-import '../../../../core/utils/enums/state_enums.dart';
 import '../../../../core/utils/enums/string_enums.dart';
 import '../../../../core/widgets/errors/error_card.dart';
 import '../bloc/settings_bloc.dart';
@@ -240,201 +238,139 @@ class SettingsScreen extends StatelessWidget {
           fontSize: context.AppResponsiveValue(18,
               mobile: 18, tablet: 20, desktop: 25),
         );
-    return BlocConsumer<PrintingCubit, StateEnum>(
-      listener: (context, state) {
-        if (state == StateEnum.loading) {
-          context.showLottieOverlayLoader(Assets.loader);
-        } else if (state == StateEnum.success) {
-          context.handleState(state, "");
-        } else if (state == StateEnum.error) {
-          context.handleState(state, "");
-        }
-      },
-      builder: (context, state) {
-        return BlocBuilder<SettingsCubit, Settings>(
-          builder: (context, settings) {
-            return Scaffold(
-                appBar: AppBar(
-                  centerTitle: true,
-                  elevation: 2,
-                  title: Text(
-                    StringEnums.settings.name.tr(),
-                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                          fontSize: context.AppResponsiveValue(20,
-                              mobile: 20, tablet: 25, desktop: 30),
-                        ),
-                  ),
-                ),
-                floatingActionButton: ElevatedButton(
-                  onPressed: () {
-                    if (settings.printerType == PrinterType.imin) {
-                      context.read<PrintingCubit>().printTest(
-                            settings.printerType,
-                            ipAddress: settings.printerCashIp,
-                            port: int.tryParse(settings.portCash)??0,
-                          );
-                    } else if (settings.printerType == PrinterType.bluetooth) {
-                      if (settings.bltPrinter != null) {
-                        context.read<PrintingCubit>().printTest(
-                              settings.printerType,
-                              printer: settings.bltPrinter,
-                              ipAddress: settings.printerCashIp,
-                              port: int.tryParse(settings.portCash)??0,
-                            );
-                      } else {
-                        context.showMessageToast(
-                            msg: "Please connect to printer");
-                      }
-                    } else if (settings.printerType == PrinterType.usb) {
-                      if (settings.usbPrinter != null) {
-                        context.read<PrintingCubit>().printTest(
-                              settings.printerType,
-                              printer: settings.usbPrinter,
-                              ipAddress: settings.printerCashIp,
-                              port: int.tryParse(settings.portCash)??0,
-                            );
-                      } else {
-                        context.showMessageToast(
-                            msg: "Please connect to printer");
-                      }
-                    } else if (settings.printerType == PrinterType.network) {
-                      if (settings.netPrinter != null ||
-                          (settings.printerCashIp.isNotEmpty &&
-                              settings.portCash.isNotEmpty)) {
-                        context.read<PrintingCubit>().printTest(
-                              settings.printerType,
-                              printer: settings.netPrinter,
-                              ipAddress: settings.printerCashIp,
-                              port: int.tryParse(settings.portCash)??0,
-                            );
-                      } else {
-                        context.showMessageToast(
-                            msg: "Please enter printer ip and port");
-                      }
-                    }
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    spacing: 20,
-                    children: [
-                      Icon(Icons.print_rounded),
-                      Text(StringEnums.test_print.name.tr()),
-                    ],
-                  ),
-                ),
-                body: BlocBuilder<SettingsBloc, SettingsState>(
-                  builder: (context, state) {
-                    if (state is SettingsLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (state is SettingsError) {
-                      return ErrorCard(
-                        message: state.message,
-                        onRetry: () => context
-                            .read<SettingsBloc>()
-                            .add(GetSettingsEvent()),
-                      );
-                    } else if (state is SettingsSuccess) {
-                      return ListView(
-                          padding: EdgeInsets.all(context.AppResponsiveValue(10,
-                              mobile: 10, tablet: 15, desktop: 20)),
+    return BlocBuilder<SettingsCubit, Settings>(
+      builder: (context, settings) {
+        return Scaffold(
+            appBar: AppBar(
+              centerTitle: true,
+              elevation: 2,
+              title: Text(
+                StringEnums.settings.name.tr(),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontSize: context.AppResponsiveValue(20,
+                          mobile: 20, tablet: 25, desktop: 30),
+                    ),
+              ),
+            ),
+            floatingActionButton: ElevatedButton(
+              onPressed: () => context
+                  .read<PrintingCubit>()
+                  .handlePrint(settings, context, isTest: true),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                spacing: 20,
+                children: [
+                  Icon(Icons.print_rounded),
+                  Text(StringEnums.test_print.name.tr()),
+                ],
+              ),
+            ),
+            body: BlocBuilder<SettingsBloc, SettingsState>(
+              builder: (context, state) {
+                if (state is SettingsLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (state is SettingsError) {
+                  return ErrorCard(
+                    message: state.message,
+                    onRetry: () =>
+                        context.read<SettingsBloc>().add(GetSettingsEvent()),
+                  );
+                } else if (state is SettingsSuccess) {
+                  return ListView(
+                      padding: EdgeInsets.all(context.AppResponsiveValue(10,
+                          mobile: 10, tablet: 15, desktop: 20)),
+                      children: [
+                        Row(
                           children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.print,
-                                  color: Theme.of(context).primaryColor,
-                                  size: context.AppResponsiveValue(20,
-                                      mobile: 20, tablet: 25, desktop: 30),
-                                ),
-                                Text(
-                                  StringEnums.printer_type.name.tr(),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium!
-                                      .copyWith(
-                                        fontSize: context.AppResponsiveValue(18,
-                                            mobile: 18,
-                                            tablet: 24,
-                                            desktop: 25),
-                                      ),
-                                ),
-                              ],
+                            Icon(
+                              Icons.print,
+                              color: Theme.of(context).primaryColor,
+                              size: context.AppResponsiveValue(20,
+                                  mobile: 20, tablet: 25, desktop: 30),
                             ),
-                            SizedBox(
-                              height: context.AppResponsiveValue(10,
-                                  mobile: 10, tablet: 15, desktop: 20),
-                            ),
-                            Card(
-                              child: MultiSelectCheckList<PrinterType>(
-                                maxSelectableCount: 1,
-                                singleSelectedItem: true,
-                                listViewSettings: ListViewSettings(
-                                    separatorBuilder: (context, index) =>
-                                        const Divider(
-                                          height: 0,
-                                        )),
-                                controller: controller,
-                                items: List.generate(
-                                    PrinterType.values.length,
-                                    (index) => CheckListCard(
-                                          value: PrinterType.values[index],
-                                          selected: settings
-                                                  .printerType.index ==
-                                              PrinterType.values[index].index,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                          ),
-                                          title: Text(
-                                            PrinterType.values[index].name.tr(),
-                                          ),
-                                          leadingCheckBox: false,
-                                          textStyles: MultiSelectItemTextStyles(
-                                              selectedTextStyle: style,
-                                              disabledTextStyle: style,
-                                              textStyle: style),
-                                        )),
-                                onChange: (allSelectedItems, selectedItem) {
-                                  context
-                                      .read<SettingsCubit>()
-                                      .updatePrinterType(selectedItem);
-                                },
-                              ),
-                            ),
-                            SizedBox(
-                              height: context.AppResponsiveValue(10,
-                                  mobile: 10, tablet: 15, desktop: 20),
-                            ),
-                            if (settings.printerType == PrinterType.network)
-                              CheckboxListTile(
-                                  value: settings.addCustomAddresses,
-                                  title: Text(
-                                    StringEnums.addCustomAddresses.name.tr(),
+                            Text(
+                              StringEnums.printer_type.name.tr(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(
+                                    fontSize: context.AppResponsiveValue(18,
+                                        mobile: 18, tablet: 24, desktop: 25),
                                   ),
-                                  onChanged: (v) {
-                                    context
-                                        .read<SettingsCubit>()
-                                        .updateAddCustomAddresses(
-                                            !settings.addCustomAddresses);
-                                  }),
-                            if (settings.printerType == PrinterType.network)
-                              SizedBox(
-                                height: context.AppResponsiveValue(10,
-                                    mobile: 10, tablet: 15, desktop: 20),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: context.AppResponsiveValue(10,
+                              mobile: 10, tablet: 15, desktop: 20),
+                        ),
+                        Card(
+                          child: MultiSelectCheckList<PrinterType>(
+                            maxSelectableCount: 1,
+                            singleSelectedItem: true,
+                            listViewSettings: ListViewSettings(
+                                separatorBuilder: (context, index) =>
+                                    const Divider(
+                                      height: 0,
+                                    )),
+                            controller: controller,
+                            items: List.generate(
+                                PrinterType.values.length,
+                                (index) => CheckListCard(
+                                      value: PrinterType.values[index],
+                                      selected: settings.printerType.index ==
+                                          PrinterType.values[index].index,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      title: Text(
+                                        PrinterType.values[index].name.tr(),
+                                      ),
+                                      leadingCheckBox: false,
+                                      textStyles: MultiSelectItemTextStyles(
+                                          selectedTextStyle: style,
+                                          disabledTextStyle: style,
+                                          textStyle: style),
+                                    )),
+                            onChange: (allSelectedItems, selectedItem) {
+                              context
+                                  .read<SettingsCubit>()
+                                  .updatePrinterType(selectedItem);
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          height: context.AppResponsiveValue(10,
+                              mobile: 10, tablet: 15, desktop: 20),
+                        ),
+                        if (settings.printerType == PrinterType.network)
+                          CheckboxListTile(
+                              value: settings.addCustomAddresses,
+                              title: Text(
+                                StringEnums.addCustomAddresses.name.tr(),
                               ),
-                            _buildPrinterType(settings, context)
-                          ]);
-                    }
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  },
-                ));
-          },
-        );
+                              onChanged: (v) {
+                                context
+                                    .read<SettingsCubit>()
+                                    .updateAddCustomAddresses(
+                                        !settings.addCustomAddresses);
+                              }),
+                        if (settings.printerType == PrinterType.network)
+                          SizedBox(
+                            height: context.AppResponsiveValue(10,
+                                mobile: 10, tablet: 15, desktop: 20),
+                          ),
+                        _buildPrinterType(settings, context)
+                      ]);
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+            ));
       },
     );
   }

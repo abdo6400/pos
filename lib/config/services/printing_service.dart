@@ -1,9 +1,11 @@
 import 'dart:typed_data';
+import 'package:flutter/widgets.dart';
 import 'package:printer_service/esc_pos_utils_platform/src/capability_profile.dart';
 import 'package:printer_service/esc_pos_utils_platform/src/enums.dart';
 import 'package:printer_service/esc_pos_utils_platform/src/generator.dart';
 import 'package:printer_service/esc_pos_utils_platform/src/pos_styles.dart';
 import 'package:printer_service/thermal_printer.dart' show PrinterDevice;
+import 'package:screenshot/screenshot.dart';
 
 import '../../core/utils/enums/printer_type_enums.dart';
 import 'Imin_printer_service.dart';
@@ -19,8 +21,8 @@ abstract class PrintingService {
       {String? ipAddress, int? port});
   Future<bool> disconnect(PrinterType printerType);
   bool checkConnection(PrinterType printerType);
-
   Future<Uint8List> generateTestImage();
+  Future<Uint8List> generateImage(Widget widget);
 }
 
 class PrintingServiceImpl implements PrintingService {
@@ -135,5 +137,11 @@ class PrintingServiceImpl implements PrintingService {
       case PrinterType.imin:
         return true;
     }
+  }
+
+  @override
+  Future<Uint8List> generateImage(Widget widget) {
+    ScreenshotController screenshotController = ScreenshotController();
+    return screenshotController.captureFromLongWidget(widget);
   }
 }

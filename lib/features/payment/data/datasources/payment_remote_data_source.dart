@@ -8,7 +8,7 @@ import '../../../../core/models/sale_date_model.dart';
 
 abstract class PaymentRemoteDataSource {
   Future<List<PaymentTypeModel>> getPaymentTypes();
-  Future<void> pay(Map<String, dynamic> data);
+  Future<String> pay(Map<String, dynamic> data);
   Future<InvoiceIdModel> getLastInvoiceId(int branchId);
   Future<CashModel> getCash(int userNo);
   Future<SaleDateModel> getSaleDate(int branchId);
@@ -27,9 +27,10 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
   }
 
   @override
-  Future<void> pay(Map<String, dynamic> data) async {
-    await _apiConsumer.post(EndPoints.insertInvoice,
+  Future<String> pay(Map<String, dynamic> data) async {
+   final result =  await _apiConsumer.post(EndPoints.insertInvoice,
         body: data, formDataIsEnabled: false);
+    return result[EndPoints.response];
   }
 
   @override

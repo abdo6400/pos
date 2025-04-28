@@ -7,7 +7,7 @@ abstract class PaymentLocalDataSource {
   Future<List<PaymentTypeModel>> getPaymentTypes();
   Future<List<InvoiceModel>> getPendingInvoices();
   Future<void> insertPaymentTypes(List<Map<String, dynamic>> dataList);
-  Future<void> pay(Map<String, dynamic> data);
+  Future<String> pay(Map<String, dynamic> data);
 }
 
 class PaymentLocalDataSourceImpl extends PaymentLocalDataSource {
@@ -24,7 +24,7 @@ class PaymentLocalDataSourceImpl extends PaymentLocalDataSource {
   }
 
   @override
-  Future<void> pay(Map<String, dynamic> data) async {
+  Future<String> pay(Map<String, dynamic> data) async {
     Map<String, dynamic> invoice = data[TablesKeys.invoices];
     List<Map<String, dynamic>> invoiceDtl =
         (data[TablesKeys.invoiceDtl] as List<dynamic>)
@@ -36,6 +36,8 @@ class PaymentLocalDataSourceImpl extends PaymentLocalDataSource {
     await _localConsumer.insertMultiple(TablesKeys.invoiceDtlTable, invoiceDtl);
     await _localConsumer.insertMultiple(
         TablesKeys.invoicePaymentTable, invoicePayment);
+
+    return "0000";
   }
 
   @override
