@@ -122,7 +122,6 @@ class PrintingServiceImpl implements PrintingService {
   }
 
   @override
-  @override
   Future<Uint8List> generateTestImage() async {
     final profile = await CapabilityProfile.load();
     final generator = Generator(PaperSize.mm80, profile);
