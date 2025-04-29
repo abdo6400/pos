@@ -79,16 +79,25 @@ class PrintingServiceImpl implements PrintingService {
     int port = 9100,
     PrinterDevice? printer,
   }) async {
-    switch (printerType) {
-      case PrinterType.bluetooth:
-        return await _bluetoothPrinterService.printImage(imageData, printer!);
-      case PrinterType.usb:
-        return await _usbPrinterService.printImage(imageData, printer!);
-      case PrinterType.network:
-        return await _networkPrinterService.printImage(imageData, printer!);
-      case PrinterType.imin:
-        return await _iminPrinterService.printImage(imageData);
+    bool check = checkConnection(printerType);
+    if (printerType != PrinterType.imin) {
+      if (!checkConnection(printerType)) {
+        check = await connect(printerType, printer!);
+      }
     }
+    if (check) {
+      switch (printerType) {
+        case PrinterType.bluetooth:
+          return await _bluetoothPrinterService.printImage(imageData, printer!);
+        case PrinterType.usb:
+          return await _usbPrinterService.printImage(imageData, printer!);
+        case PrinterType.network:
+          return await _networkPrinterService.printImage(imageData, printer!);
+        case PrinterType.imin:
+          return await _iminPrinterService.printImage(imageData);
+      }
+    }
+    return check;
   }
 
   @override

@@ -20,15 +20,22 @@ class PrintingCubit extends Cubit<StateEnum> {
     return _printingService.getDevices(printerType);
   }
 
-  void handlePrint(Settings settings, BuildContext context,
-      {Widget? widget, Uint8List? image, bool isTest = false}) {
+  void handlePrint(
+    Settings settings,
+    BuildContext context, {
+    Widget? widget,
+    Uint8List? image,
+    bool isTest = false,
+    Function? onPrint,
+  }) {
     switch (settings.printerType) {
       case PrinterType.imin:
         isTest
             ? printTest(
                 settings.printerType,
               )
-            : print(settings.printerType, widget: widget, image: image);
+            : print(settings.printerType,
+                widget: widget, image: image, onPrint: onPrint);
         break;
 
       case PrinterType.bluetooth:
@@ -44,7 +51,10 @@ class PrintingCubit extends Cubit<StateEnum> {
                   printer: printer,
                 )
               : print(settings.printerType,
-                  widget: widget, printer: printer, image: image);
+                  widget: widget,
+                  printer: printer,
+                  image: image,
+                  onPrint: onPrint);
         } else {
           context.showMessageToast(msg: "Please connect to printer");
         }
@@ -62,14 +72,13 @@ class PrintingCubit extends Cubit<StateEnum> {
                   port: port,
                   printer: settings.netPrinter,
                 )
-              : print(
-                  settings.printerType,
+              : print(settings.printerType,
                   widget: widget,
                   image: image,
                   printer: settings.netPrinter,
                   ipAddress: settings.printerCashIp,
                   port: port,
-                );
+                  onPrint: onPrint);
         } else {
           context.showMessageToast(msg: "Please enter printer ip and port");
         }
@@ -101,6 +110,7 @@ class PrintingCubit extends Cubit<StateEnum> {
     Uint8List? image,
     Widget? widget,
     PrinterDevice? printer,
+    Function? onPrint,
   }) async {
     emit(StateEnum.loading);
     Uint8List imageData =
@@ -112,6 +122,7 @@ class PrintingCubit extends Cubit<StateEnum> {
     } else {
       emit(StateEnum.error);
     }
+    onPrint?.call();
   }
 
   Future<void> connectPrinter(

@@ -69,41 +69,29 @@ class CloseCashboxScreen extends StatelessWidget {
           context.hideOverlayLoader();
           ScreenshotController screenshotController = ScreenshotController();
           ;
-          showDialog(context: context, builder: (ctx) => Dialog(
-              backgroundColor: Colors.transparent,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Screenshot(
-                      controller: screenshotController,
-                      child: EndDayCard(
-                        cashierName: state.params.cashUser.toString(),
-                        totalSales: state.params.cashGrandTotal,
-                        totalTax: state.params.cashTaxTotal,
-                        totalDiscount: state.params.cashDiscountTotal,
-                        cashAmount: state.params.cashCustomerPayment,
-                        paymentMethods: state.payments,
-                      ),
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
+          showDialog(
+              context: context,
+              builder: (ctx) => Dialog(
+                  backgroundColor: Colors.transparent,
+                  child: SingleChildScrollView(
+                    child: Column(
                       children: [
-                        TextButton(
-                          onPressed: () {
-                            if (isEndDay) {
-                              context.pop(ctx);
-                              context.pop();
-                            } else {
-                              storage.clearAuthTokenState();
-                              context.go(AppRoutes.login);
-                            }
-                          },
-                          child: Text(StringEnums.cancel.name.tr()),
+                        Screenshot(
+                          controller: screenshotController,
+                          child: EndDayCard(
+                            cashierName: state.params.cashUser.toString(),
+                            totalSales: state.params.cashGrandTotal,
+                            totalTax: state.params.cashTaxTotal,
+                            totalDiscount: state.params.cashDiscountTotal,
+                            cashAmount: state.params.cashCustomerPayment,
+                            paymentMethods: state.payments,
+                          ),
                         ),
-                        TextButton(
-                          onPressed: () {
-                            screenshotController.capture().then((image) {
-                              if (image != null) {
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            TextButton(
+                              onPressed: () {
                                 if (isEndDay) {
                                   context.pop(ctx);
                                   context.pop();
@@ -111,19 +99,33 @@ class CloseCashboxScreen extends StatelessWidget {
                                   storage.clearAuthTokenState();
                                   context.go(AppRoutes.login);
                                 }
-                                context.read<PrintingCubit>().handlePrint(
-                                    settings, context,
-                                    image: image);
-                              }
-                            });
-                          },
-                          child: Text(StringEnums.print.name.tr()),
+                              },
+                              child: Text(StringEnums.cancel.name.tr()),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                screenshotController.capture().then((image) {
+                                  if (image != null) {
+                                    context.pop(ctx);
+                                    context.read<PrintingCubit>().handlePrint(
+                                        settings, context, onPrint: () {
+                                      if (isEndDay) {
+                                        context.pop();
+                                      } else {
+                                        storage.clearAuthTokenState();
+                                        context.go(AppRoutes.login);
+                                      }
+                                    }, image: image);
+                                  }
+                                });
+                              },
+                              child: Text(StringEnums.print.name.tr()),
+                            )
+                          ],
                         )
                       ],
-                    )
-                  ],
-                ),
-              )));
+                    ),
+                  )));
         } else if (state is CloseCashboxError) {
           context.handleState(StateEnum.error, state.message);
         } else if (state is CloseCashboxLoading) {
