@@ -14,11 +14,10 @@ import 'network_printer_service.dart';
 import 'usb_printer_service.dart';
 
 abstract class PrintingService {
-  Future<bool> printImage(Uint8List imageData, PrinterType printerType,
-      {String ipAddress = '', int port = 9100, PrinterDevice? printer});
+  Future<bool> printImage(
+      Uint8List imageData, PrinterType printerType, PrinterDevice? printer);
   Stream<List<PrinterDevice>> getDevices(PrinterType printerType);
-  Future<bool> connect(PrinterType printerType, PrinterDevice printer,
-      {String? ipAddress, int? port});
+  Future<bool> connect(PrinterType printerType, PrinterDevice printer);
   Future<bool> disconnect(PrinterType printerType);
   bool checkConnection(PrinterType printerType);
   Future<Uint8List> generateTestImage();
@@ -74,30 +73,52 @@ class PrintingServiceImpl implements PrintingService {
   @override
   Future<bool> printImage(
     Uint8List imageData,
-    PrinterType printerType, {
-    String ipAddress = '',
-    int port = 9100,
+    PrinterType printerType,
+    PrinterDevice? printer,
+  ) async {
+    try {
+      if (printerType != PrinterType.imin && printer == null) {
+        return false;
+      }
+      bool isConnected = printerType == PrinterType.imin
+          ? true
+          : await _ensureConnection(printerType, printer!);
+
+      if (!isConnected) return false;
+      return await _delegatePrintJob(
+        imageData: imageData,
+        printerType: printerType,
+        printer: printer,
+      );
+    } catch (e) {
+      debugPrint('Print error: $e');
+      return false;
+    }
+  }
+
+  Future<bool> _ensureConnection(
+      PrinterType type, PrinterDevice printer) async {
+    return checkConnection(type) || await connect(type, printer);
+  }
+
+  Future<bool> _delegatePrintJob({
+    required Uint8List imageData,
+    required PrinterType printerType,
     PrinterDevice? printer,
   }) async {
-    bool check = checkConnection(printerType);
-    if (printerType != PrinterType.imin) {
-      if (!checkConnection(printerType)) {
-        check = await connect(printerType, printer!);
-      }
+    switch (printerType) {
+      case PrinterType.bluetooth:
+        return await _bluetoothPrinterService.printImage(imageData, printer!);
+      case PrinterType.usb:
+        return await _usbPrinterService.printImage(imageData, printer!);
+      case PrinterType.network:
+        return await _networkPrinterService.printImage(
+          imageData,
+          printer!,
+        );
+      case PrinterType.imin:
+        return await _iminPrinterService.printImage(imageData);
     }
-    if (check) {
-      switch (printerType) {
-        case PrinterType.bluetooth:
-          return await _bluetoothPrinterService.printImage(imageData, printer!);
-        case PrinterType.usb:
-          return await _usbPrinterService.printImage(imageData, printer!);
-        case PrinterType.network:
-          return await _networkPrinterService.printImage(imageData, printer!);
-        case PrinterType.imin:
-          return await _iminPrinterService.printImage(imageData);
-      }
-    }
-    return check;
   }
 
   @override

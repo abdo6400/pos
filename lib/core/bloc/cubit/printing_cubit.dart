@@ -61,23 +61,17 @@ class PrintingCubit extends Cubit<StateEnum> {
         break;
 
       case PrinterType.network:
-        if (settings.netPrinter != null ||
-            (settings.printerCashIp.isNotEmpty &&
-                settings.portCash.isNotEmpty)) {
-          final port = int.tryParse(settings.portCash) ?? 0;
+        final printer = settings.netPrinter;
+        if (printer != null) {
           isTest
               ? printTest(
                   settings.printerType,
-                  ipAddress: settings.printerCashIp,
-                  port: port,
-                  printer: settings.netPrinter,
+                  printer: printer,
                 )
               : print(settings.printerType,
                   widget: widget,
                   image: image,
-                  printer: settings.netPrinter,
-                  ipAddress: settings.printerCashIp,
-                  port: port,
+                  printer: printer,
                   onPrint: onPrint);
         } else {
           context.showMessageToast(msg: "Please enter printer ip and port");
@@ -88,14 +82,12 @@ class PrintingCubit extends Cubit<StateEnum> {
 
   Future<void> printTest(
     PrinterType printerType, {
-    String ipAddress = '',
-    int port = 9100,
     PrinterDevice? printer,
   }) async {
     emit(StateEnum.loading);
     Uint8List imageData = await _printingService.generateTestImage();
-    bool result = await _printingService.printImage(imageData, printerType,
-        ipAddress: ipAddress, port: port, printer: printer);
+    bool result =
+        await _printingService.printImage(imageData, printerType, printer);
     if (result) {
       emit(StateEnum.success);
     } else {
@@ -105,8 +97,6 @@ class PrintingCubit extends Cubit<StateEnum> {
 
   Future<void> print(
     PrinterType printerType, {
-    String ipAddress = '',
-    int port = 9100,
     Uint8List? image,
     Widget? widget,
     PrinterDevice? printer,
@@ -115,8 +105,8 @@ class PrintingCubit extends Cubit<StateEnum> {
     emit(StateEnum.loading);
     Uint8List imageData =
         widget != null ? await _printingService.generateImage(widget) : image!;
-    bool result = await _printingService.printImage(imageData, printerType,
-        ipAddress: ipAddress, port: port, printer: printer);
+    bool result =
+        await _printingService.printImage(imageData, printerType, printer);
     if (result) {
       emit(StateEnum.success);
     } else {
@@ -126,18 +116,16 @@ class PrintingCubit extends Cubit<StateEnum> {
   }
 
   Future<void> connectPrinter(
-    PrinterType printerType,
-    PrinterDevice printer, {
-    String? ipAddress,
-    int? port,
-  }) async {
+      PrinterType printerType, PrinterDevice printer) async {
     emit(StateEnum.loading);
     if (_printingService.checkConnection(printerType)) {
       emit(StateEnum.success);
       return;
     }
-    bool result = await _printingService.connect(printerType, printer,
-        ipAddress: ipAddress, port: port);
+    bool result = await _printingService.connect(
+      printerType,
+      printer,
+    );
     if (result) {
       emit(StateEnum.success);
     } else {
