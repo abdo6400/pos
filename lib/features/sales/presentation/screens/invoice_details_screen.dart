@@ -105,17 +105,23 @@ class InvoiceDetailsScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              bottomNavigationBar:isPrint? Padding(
-                padding:  EdgeInsets.symmetric(horizontal: 300,vertical: 20),
-                child: CustomButton(
-                    buttonLabel: StringEnums.print.name, onSubmit: () {
-                      screenshotController.capture().then((image) {
-                        if (image != null) {
-                          context.read<PrintingCubit>().handlePrint(settings, context,image: image);
-                        }
-                      });
-                    }),
-              ):null,
+              bottomNavigationBar: isPrint
+                  ? Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 300, vertical: 20),
+                      child: CustomButton(
+                          buttonLabel: StringEnums.print.name,
+                          onSubmit: () {
+                            screenshotController.capture().then((image) {
+                              if (image != null) {
+                                context.read<PrintingCubit>().handlePrint(
+                                    settings, context,
+                                    image: image);
+                              }
+                            });
+                          }),
+                    )
+                  : null,
               body: BlocBuilder<InvoiceDetailBloc, InvoiceDetailState>(
                 builder: (context, state) {
                   if (state is InvoiceDetailLoading) {

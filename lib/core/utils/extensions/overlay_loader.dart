@@ -236,40 +236,59 @@ extension OverlayLoader on BuildContext {
       String? text,
       TextStyle? style,
       Color? barrierColor}) {
-    showDialog(
-        barrierDismissible: dismissible,
-        context: this,
-        barrierColor: barrierColor,
-        useRootNavigator: dismissible,
-        builder: (_) => Center(
-                child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                LottieBuilder.asset(
-                  image,
-                  height: height ?? 100,
-                  width: width ?? 100,
-                ),
-                if (text != null)
-                  Text(
-                    text,
-                    style: style ?? Theme.of(this).textTheme.bodyLarge,
-                  )
-              ],
-            )));
+    // Use rootNavigator: true to ensure we always find a valid Navigator
+    // This fixes the "Navigator operation requested with a context that does not include a Navigator" error
+    final BuildContext context = this;
+    try {
+      showDialog(
+          barrierDismissible: dismissible,
+          context: context,
+          barrierColor: barrierColor,
+          useRootNavigator: true, // Always use root navigator to avoid context issues
+          builder: (_) => Center(
+                  child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  LottieBuilder.asset(
+                    image,
+                    height: height ?? 100,
+                    width: width ?? 100,
+                  ),
+                  if (text != null)
+                    Text(
+                      text,
+                      style: style ?? Theme.of(context).textTheme.bodyLarge,
+                    )
+                ],
+              )));
+    } catch (e) {
+      // Handle the case where no Navigator is available
+      print('Error showing overlay loader: $e');
+    }
   }
 
   void showCustomOverlayLoader(Widget child,
       {bool dismissible = false, Color? barrierColor}) {
-    showDialog(
-        barrierDismissible: dismissible,
-        context: this,
-        barrierColor: barrierColor,
-        useRootNavigator: dismissible,
-        builder: (_) => Center(child: child));
+    final BuildContext context = this;
+    try {
+      showDialog(
+          barrierDismissible: dismissible,
+          context: context,
+          barrierColor: barrierColor,
+          useRootNavigator: true, // Always use root navigator to avoid context issues
+          builder: (_) => Center(child: child));
+    } catch (e) {
+      // Handle the case where no Navigator is available
+      print('Error showing custom overlay loader: $e');
+    }
   }
 
   void hideOverlayLoader() {
-    Navigator.pop(this, true);
+    try {
+      Navigator.of(this, rootNavigator: true).pop();
+    } catch (e) {
+      // Handle the case where no Navigator is available
+      print('Error hiding overlay loader: $e');
+    }
   }
 }

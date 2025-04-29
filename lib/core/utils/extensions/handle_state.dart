@@ -12,9 +12,9 @@ extension HandleState on BuildContext {
     }
     this.hideOverlayLoader();
     switch (state) {
-      case StateEnum.added:
+      case StateEnum.added || StateEnum.success:
         this.showMessageToast(
-          msg: "",
+          msg: errorMessage??"",
           backgroundColor: Colors.green,
         );
         break;

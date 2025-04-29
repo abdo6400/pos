@@ -4,8 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
 import '../../../../config/routes/app_routes.dart';
+import '../../../../core/bloc/cubit/printing_cubit.dart';
+import '../../../../core/bloc/cubit/settings_cubit.dart';
+import '../../../../core/entities/settings.dart';
 import '../../../../core/utils/assets.dart';
+import '../../../../core/utils/enums/state_enums.dart';
 import '../../../../core/utils/enums/string_enums.dart';
+import '../../../close_cashbox/presentation/bloc/summary/summary_bloc.dart';
 import '../../../close_cashbox/presentation/screens/close_cashbox_screen.dart';
 import '../../../home/presentation/screens/home_screen.dart';
 import '../../../sales/presentation/screens/sales_summary_screen.dart';
@@ -18,79 +23,96 @@ class MainScreen extends StatelessWidget {
       GlobalKey<AnimatedFloatingActionButtonState>();
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: BlocConsumer<CheckerPointBloc, CheckerPointState>(
-        listener: (context, state) {
-          // Handle loading state
-          if (state is CheckerPointLoading) {
-            context.showLottieOverlayLoader(Assets.loader);
-          }
-          // Handle error state
-          else if (state is CheckerPointError) {
-            context.go(AppRoutes.openPoint);
-          }
-          // Handle success state with navigation logic
-          else if (state is CheckerPointReady) {
-            if (state.mustCloseDay) {
-              context.go(AppRoutes.openedPoints, extra: {
-                StringEnums.mustCloseDay.name: state.mustCloseDay,
-                StringEnums.to_date.name: state.closeTime,
-                StringEnums.from_date.name: state.startDate,
-              });
-            } else if (!state.hasPoint) {
-              context.go(AppRoutes.openPoint);
-            } else {
-              context.hideOverlayLoader();
-            }
-          }
-        },
-        builder: (context, state) {
-          return BlocBuilder<ScreenCubit, int>(
-            builder: (context, index) {
-              return Scaffold(
-                resizeToAvoidBottomInset: false,
-                floatingActionButton: AnimatedFloatingActionButton(
-                  key: menuKey,
-                  fabButtons: <Widget>[
-                    FloatingActionButton(
-                        child: const Icon(Icons.home),
-                        onPressed: () {
-                          context.read<ScreenCubit>().changeScreen(0);
-                        }),
-                    FloatingActionButton(
-                        child: const Icon(Icons.receipt_long),
-                        onPressed: () {
-                          context.read<ScreenCubit>().changeScreen(1);
-                        }),
-                    FloatingActionButton(
-                        child: const Icon(Icons.money),
-                        onPressed: () {
-                          context.read<ScreenCubit>().changeScreen(2);
-                        }),
-                    // FloatingActionButton(
-                    //     child: const Icon(Icons.timeline_rounded),
-                    //     onPressed: () {
-                    //       context.read<ScreenCubit>().changeScreen(3);
-                    //     }),
-                  ],
-                  animatedIconData: AnimatedIcons.menu_close,
-                  colorStartAnimation: Theme.of(context).colorScheme.primary,
-                  colorEndAnimation: Theme.of(context).colorScheme.secondary,
-                ),
-                body: IndexedStack(
-                  index: index,
-                  children: const [
-                    HomeScreen(),
-                    SalesSummaryScreen(),
-                    CloseCashboxScreen(),
-                    // SalesReportScreen()
-                  ],
-                ),
+    return BlocConsumer<PrintingCubit, StateEnum>(
+      listener: (context, state) {
+        if (state == StateEnum.loading) {
+          context.showLottieOverlayLoader(Assets.loader);
+        } else if (state == StateEnum.success) {
+          context.handleState(state, "printing success");
+        } else if (state == StateEnum.error) {
+          context.handleState(state, " printing failed");
+        }
+      },
+      buildWhen: (previous, current) => false,
+      builder: (context, state) {
+        return SafeArea(
+          child: BlocConsumer<CheckerPointBloc, CheckerPointState>(
+            listener: (context, state) {
+              if (state is CheckerPointLoading) {
+                context.showLottieOverlayLoader(Assets.loader);
+              } else if (state is CheckerPointError) {
+                context.go(AppRoutes.openPoint);
+              } else if (state is CheckerPointReady) {
+                if (state.mustCloseDay) {
+                  context.go(AppRoutes.openedPoints, extra: {
+                    StringEnums.mustCloseDay.name: state.mustCloseDay,
+                    StringEnums.to_date.name: state.closeTime,
+                    StringEnums.from_date.name: state.startDate,
+                  });
+                } else if (!state.hasPoint) {
+                  context.go(AppRoutes.openPoint);
+                } else {
+                  context.hideOverlayLoader();
+                }
+              }
+            },
+            builder: (context, state) {
+              return BlocBuilder<ScreenCubit, int>(
+                builder: (context, index) {
+                  return BlocBuilder<SettingsCubit, Settings>(
+                    buildWhen: (previous, current) => false,
+                    builder: (context, settings) {
+                      return Scaffold(
+                        resizeToAvoidBottomInset: false,
+                        floatingActionButton: AnimatedFloatingActionButton(
+                          key: menuKey,
+                          fabButtons: <Widget>[
+                            FloatingActionButton(
+                                child: const Icon(Icons.home),
+                                onPressed: () {
+                                  context.read<ScreenCubit>().changeScreen(0);
+                                }),
+                            FloatingActionButton(
+                                child: const Icon(Icons.receipt_long),
+                                onPressed: () {
+                                  context.read<ScreenCubit>().changeScreen(1);
+                                }),
+                            FloatingActionButton(
+                                child: const Icon(Icons.money),
+                                onPressed: () {
+                                  context.read<SummaryBloc>().add(GetSummaryEvent());
+                                  context.read<ScreenCubit>().changeScreen(2);
+                                }),
+                            // FloatingActionButton(
+                            //     child: const Icon(Icons.timeline_rounded),
+                            //     onPressed: () {
+                            //       context.read<ScreenCubit>().changeScreen(3);
+                            //     }),
+                          ],
+                          animatedIconData: AnimatedIcons.menu_close,
+                          colorStartAnimation:
+                              Theme.of(context).colorScheme.primary,
+                          colorEndAnimation:
+                              Theme.of(context).colorScheme.secondary,
+                        ),
+                        body: IndexedStack(
+                          index: index,
+                          children: [
+                            HomeScreen(settings: settings),
+                            SalesSummaryScreen(settings: settings),
+                            CloseCashboxScreen(settings: settings),
+                            // SalesReportScreen()
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
               );
             },
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

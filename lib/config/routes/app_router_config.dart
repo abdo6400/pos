@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/bloc/cubit/settings_cubit.dart';
+import '../../core/entities/settings.dart';
 import '../../core/utils/constants.dart';
 import '../../core/utils/enums/string_enums.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
@@ -129,9 +131,7 @@ class AppRouterConfig {
                   create: (context) =>
                       locator<PaymentTypesBloc>()..add(GetPaymentTypesEvent())),
               BlocProvider(create: (_) => locator<PayBloc>()),
-              BlocProvider(
-                  create: (_) =>
-                      locator<SummaryBloc>()..add(GetSummaryEvent())),
+              BlocProvider(create: (_) => locator<SummaryBloc>()),
               BlocProvider(create: (_) => locator<CloseCashboxBloc>()),
               BlocProvider(create: (_) => locator<InvoiceBloc>()),
               BlocProvider(
@@ -211,14 +211,23 @@ class AppRouterConfig {
           return _buildPageWithTransition(
             context,
             state,
-            child: MultiBlocProvider(providers: [
-              BlocProvider(create: (_) => locator<CloseCashboxBloc>()),
-              BlocProvider(
-                  create: (_) => locator<SummaryBloc>()
-                    ..add(GetSummaryEvent(
-                        userNo: (state.extra
-                            as Map)[StringEnums.open_point.name]))),
-            ], child: CloseCashboxScreen()),
+            child: MultiBlocProvider(
+                providers: [
+                  BlocProvider(create: (_) => locator<CloseCashboxBloc>()),
+                  BlocProvider(
+                      create: (_) => locator<SummaryBloc>()
+                        ..add(GetSummaryEvent(
+                            userNo: (state.extra
+                                as Map)[StringEnums.open_point.name]))),
+                ],
+                child: BlocBuilder<SettingsCubit, Settings>(
+                  buildWhen: (previous, current) => false,
+                  builder: (context, settings) {
+                    return CloseCashboxScreen(
+                      settings: settings,
+                    );
+                  },
+                )),
           );
         },
       ),

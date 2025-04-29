@@ -5,12 +5,15 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
+import 'package:screenshot/screenshot.dart';
 
 import '../../../../config/routes/app_routes.dart';
+import '../../../../core/bloc/cubit/printing_cubit.dart';
 import '../../../../core/bloc/cubit/user_cubit.dart';
 import '../../../../core/entities/auth_tokens.dart';
 import '../../../../core/entities/field.dart';
 import '../../../../core/entities/form.dart';
+import '../../../../core/entities/settings.dart';
 import '../../../../core/utils/assets.dart';
 import '../../../../core/utils/constants.dart';
 import '../../../../core/utils/enums/field_type_enums.dart';
@@ -23,9 +26,11 @@ import '../../../../core/widgets/numeric_keypad_input.dart';
 import '../../domain/usecases/close_point_usecase.dart';
 import '../bloc/close_cashbox_bloc.dart';
 import '../bloc/summary/summary_bloc.dart';
+import '../widgets/end_day_card.dart';
 
 class CloseCashboxScreen extends StatelessWidget {
-  const CloseCashboxScreen({super.key});
+  const CloseCashboxScreen({super.key, required this.settings});
+  final Settings settings;
   static GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
   Widget _buildRow(String title, String value, BuildContext context) => Card(
@@ -58,24 +63,75 @@ class CloseCashboxScreen extends StatelessWidget {
     final bool isEndDay = ModalRoute.of(context)!.settings.arguments != null;
     final cash = (ModalRoute.of(context)!.settings.arguments as Map?);
 
-    return BlocListener<CloseCashboxBloc, CloseCashboxState>(
+    return BlocConsumer<CloseCashboxBloc, CloseCashboxState>(
       listener: (context, state) {
         if (state is CloseCashboxSuccess) {
-          if (isEndDay) {
-            context.hideOverlayLoader();
-            context.pop();
-          } else {
-            storage.clearAuthTokenState();
-            context.go(AppRoutes.login);
-            
-          }
+          context.hideOverlayLoader();
+          ScreenshotController screenshotController = ScreenshotController();
+          ;
+          showDialog(context: context, builder: (ctx) => Dialog(
+              backgroundColor: Colors.transparent,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Screenshot(
+                      controller: screenshotController,
+                      child: EndDayCard(
+                        cashierName: state.params.cashUser.toString(),
+                        totalSales: state.params.cashGrandTotal,
+                        totalTax: state.params.cashTaxTotal,
+                        totalDiscount: state.params.cashDiscountTotal,
+                        cashAmount: state.params.cashCustomerPayment,
+                        paymentMethods: state.payments,
+                      ),
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            if (isEndDay) {
+                              context.pop(ctx);
+                              context.pop();
+                            } else {
+                              storage.clearAuthTokenState();
+                              context.go(AppRoutes.login);
+                            }
+                          },
+                          child: Text(StringEnums.cancel.name.tr()),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            screenshotController.capture().then((image) {
+                              if (image != null) {
+                                if (isEndDay) {
+                                  context.pop(ctx);
+                                  context.pop();
+                                } else {
+                                  storage.clearAuthTokenState();
+                                  context.go(AppRoutes.login);
+                                }
+                                context.read<PrintingCubit>().handlePrint(
+                                    settings, context,
+                                    image: image);
+                              }
+                            });
+                          },
+                          child: Text(StringEnums.print.name.tr()),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              )));
         } else if (state is CloseCashboxError) {
           context.handleState(StateEnum.error, state.message);
         } else if (state is CloseCashboxLoading) {
           context.showLottieOverlayLoader(Assets.loader);
         }
       },
-      child: Card(
+      buildWhen: (previous, current) => false,
+      builder: (context, state) => Card(
         child: Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
@@ -214,8 +270,10 @@ class CloseCashboxScreen extends StatelessWidget {
                                           //                 .amount.name]) ??
                                           //         0)) {
 
-                                          locator<CloseCashboxBloc>().add(
+                                          context.read<CloseCashboxBloc>().add(
                                               ClosePointEvent(
+                                                  payments:
+                                                      state.paymentsSummary,
                                                   closePointParams:
                                                       ClosePointParams(
                                                           cashNo: state

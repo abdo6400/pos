@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../domain/entities/payment_summary.dart';
 import '../../domain/usecases/close_point_usecase.dart';
 
 part 'close_cashbox_event.dart';
@@ -12,8 +13,10 @@ class CloseCashboxBloc extends Bloc<CloseCashboxEvent, CloseCashboxState> {
     on<ClosePointEvent>((event, emit) async {
       emit(CloseCashboxLoading());
       final result = await _closePointUsecase(event.closePointParams);
-      result.fold((l) => emit(CloseCashboxError(message: l.message)),
-          (r) => emit(CloseCashboxSuccess()));
+      result.fold(
+          (l) => emit(CloseCashboxError(message: l.message)),
+          (r) => emit(CloseCashboxSuccess(
+              params: event.closePointParams, payments: event.payments)));
     });
   }
 }
