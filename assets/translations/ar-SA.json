@@ -257,7 +257,9 @@
   "printer_kitchen_port3": "منفذ المطبخ 3",
   "printer_kitchen_ip4": "عنوان IP للمطبخ 4",
   "printer_kitchen_port4": "منفذ المطبخ 4",
-  "no_printer_selected":"لا توجد طابعة محددة",
-  "test_print":"تجربة الطابعة",
-  "addCustomAddresses":"اضافة عناوين مخصصة"
+  "no_printer_selected": "لا توجد طابعة محددة",
+  "test_print": "تجربة الطابعة",
+  "addCustomAddresses": "اضافة عناوين مخصصة",
+  "printed": "تم الطباعة بنجاح",
+  "printer_connected": " تم الاتصال بالطابعة بنجاح"
 }

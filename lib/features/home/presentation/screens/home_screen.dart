@@ -67,7 +67,7 @@ class HomeScreen extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               TextButton(
-                                onPressed: () => Navigator.pop(context),
+                                onPressed: () => Navigator.pop(ctx),
                                 child: Text(StringEnums.cancel.name.tr()),
                               ),
                               TextButton(

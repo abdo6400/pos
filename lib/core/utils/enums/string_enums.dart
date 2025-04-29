@@ -209,5 +209,11 @@ enum StringEnums {
   printer_kitchen_ip3,
   printer_kitchen_port3,
   printer_kitchen_ip4,
-  printer_kitchen_port4, no_printer_selected, test_print, addCustomAddresses, isPrint,
+  printer_kitchen_port4,
+  no_printer_selected,
+  test_print,
+  addCustomAddresses,
+  isPrint,
+  printed,
+  printer_connected,
 }

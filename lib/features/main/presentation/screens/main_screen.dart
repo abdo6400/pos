@@ -1,4 +1,5 @@
 import 'package:animated_float_action_button/animated_floating_action_button.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -8,7 +9,7 @@ import '../../../../core/bloc/cubit/printing_cubit.dart';
 import '../../../../core/bloc/cubit/settings_cubit.dart';
 import '../../../../core/entities/settings.dart';
 import '../../../../core/utils/assets.dart';
-import '../../../../core/utils/enums/state_enums.dart';
+import '../../../../core/utils/enums/printing_status_enums.dart';
 import '../../../../core/utils/enums/string_enums.dart';
 import '../../../close_cashbox/presentation/bloc/summary/summary_bloc.dart';
 import '../../../close_cashbox/presentation/screens/close_cashbox_screen.dart';
@@ -23,14 +24,20 @@ class MainScreen extends StatelessWidget {
       GlobalKey<AnimatedFloatingActionButtonState>();
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<PrintingCubit, StateEnum>(
+    return BlocConsumer<PrintingCubit, PrintingStatusEnums>(
       listener: (context, state) {
-        if (state == StateEnum.loading) {
+        if (state == PrintingStatusEnums.connecting ||
+            state == PrintingStatusEnums.printing) {
           context.showLottieOverlayLoader(Assets.loader);
-        } else if (state == StateEnum.success) {
-          context.handleState(state, "printing success");
-        } else if (state == StateEnum.error) {
-          context.handleState(state, " printing failed");
+        } else if (state == PrintingStatusEnums.printed) {
+          context.hideOverlayLoader();
+          context.showMessageToast(msg: StringEnums.printed.name.tr());
+        } else if (state == PrintingStatusEnums.connected) {
+          context.hideOverlayLoader();
+          context.showMessageToast(msg: StringEnums.printer_connected.name.tr());
+        } else if (state == PrintingStatusEnums.error) {
+          context.hideOverlayLoader();
+          context.showMessageToast(msg: StringEnums.error.name.tr());
         }
       },
       buildWhen: (previous, current) => false,
@@ -80,7 +87,9 @@ class MainScreen extends StatelessWidget {
                             FloatingActionButton(
                                 child: const Icon(Icons.money),
                                 onPressed: () {
-                                  context.read<SummaryBloc>().add(GetSummaryEvent());
+                                  context
+                                      .read<SummaryBloc>()
+                                      .add(GetSummaryEvent());
                                   context.read<ScreenCubit>().changeScreen(2);
                                 }),
                             // FloatingActionButton(

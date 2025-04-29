@@ -4,15 +4,14 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
 import 'package:printer_service/thermal_printer.dart' show PrinterDevice;
 import 'package:retail/core/utils/extensions/extensions.dart';
-
 import '../../../config/services/printing_service.dart';
 import '../../entities/settings.dart';
 import '../../utils/enums/printer_type_enums.dart';
-import '../../utils/enums/state_enums.dart';
+import '../../utils/enums/printing_status_enums.dart';
 
-class PrintingCubit extends Cubit<StateEnum> {
+class PrintingCubit extends Cubit<PrintingStatusEnums> {
   final PrintingService _printingService;
-  PrintingCubit(this._printingService) : super(StateEnum.initial);
+  PrintingCubit(this._printingService) : super(PrintingStatusEnums.none);
 
   Stream<List<PrinterDevice>> getPrinters(
     PrinterType printerType,
@@ -84,14 +83,14 @@ class PrintingCubit extends Cubit<StateEnum> {
     PrinterType printerType, {
     PrinterDevice? printer,
   }) async {
-    emit(StateEnum.loading);
+    emit(PrintingStatusEnums.printing);
     Uint8List imageData = await _printingService.generateTestImage();
     bool result =
         await _printingService.printImage(imageData, printerType, printer);
     if (result) {
-      emit(StateEnum.success);
+      emit(PrintingStatusEnums.printed);
     } else {
-      emit(StateEnum.error);
+      emit(PrintingStatusEnums.error);
     }
   }
 
@@ -102,24 +101,24 @@ class PrintingCubit extends Cubit<StateEnum> {
     PrinterDevice? printer,
     Function? onPrint,
   }) async {
-    emit(StateEnum.loading);
+    emit(PrintingStatusEnums.printing);
     Uint8List imageData =
         widget != null ? await _printingService.generateImage(widget) : image!;
     bool result =
         await _printingService.printImage(imageData, printerType, printer);
     if (result) {
-      emit(StateEnum.success);
+      emit(PrintingStatusEnums.printed);
     } else {
-      emit(StateEnum.error);
+      emit(PrintingStatusEnums.error);
     }
     onPrint?.call();
   }
 
   Future<void> connectPrinter(
       PrinterType printerType, PrinterDevice printer) async {
-    emit(StateEnum.loading);
+    emit(PrintingStatusEnums.connecting);
     if (_printingService.checkConnection(printerType)) {
-      emit(StateEnum.success);
+      emit(PrintingStatusEnums.connected);
       return;
     }
     bool result = await _printingService.connect(
@@ -127,9 +126,9 @@ class PrintingCubit extends Cubit<StateEnum> {
       printer,
     );
     if (result) {
-      emit(StateEnum.success);
+      emit(PrintingStatusEnums.connected);
     } else {
-      emit(StateEnum.error);
+      emit(PrintingStatusEnums.error);
     }
   }
 }

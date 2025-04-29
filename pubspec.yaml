@@ -51,6 +51,7 @@ dependencies:
   printer_service: ^2.0.3
   image: 
   screenshot: ^3.0.0
+  dotted_line: ^3.2.3
 dev_dependencies:
   flutter_test:
     sdk: flutter

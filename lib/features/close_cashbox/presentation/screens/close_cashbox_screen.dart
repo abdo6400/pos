@@ -27,6 +27,7 @@ import '../../domain/usecases/close_point_usecase.dart';
 import '../bloc/close_cashbox_bloc.dart';
 import '../bloc/summary/summary_bloc.dart';
 import '../widgets/end_day_card.dart';
+import '../widgets/end_shift_card.dart';
 
 class CloseCashboxScreen extends StatelessWidget {
   const CloseCashboxScreen({super.key, required this.settings});
@@ -78,14 +79,23 @@ class CloseCashboxScreen extends StatelessWidget {
                       children: [
                         Screenshot(
                           controller: screenshotController,
-                          child: EndDayCard(
-                            cashierName: state.params.cashUser.toString(),
-                            totalSales: state.params.cashGrandTotal,
-                            totalTax: state.params.cashTaxTotal,
-                            totalDiscount: state.params.cashDiscountTotal,
-                            cashAmount: state.params.cashCustomerPayment,
-                            paymentMethods: state.payments,
-                          ),
+                          child: isEndDay
+                              ? EndDayCard(
+                                  cashierName: state.params.cashUser.toString(),
+                                  totalSales: state.params.cashGrandTotal,
+                                  totalTax: state.params.cashTaxTotal,
+                                  totalDiscount: state.params.cashDiscountTotal,
+                                  cashAmount: state.params.cashCustomerPayment,
+                                  paymentMethods: state.payments,
+                                )
+                              : EndShiftCard(
+                                  cashierName: state.params.cashUser.toString(),
+                                  totalSales: state.params.cashGrandTotal,
+                                  totalTax: state.params.cashTaxTotal,
+                                  totalDiscount: state.params.cashDiscountTotal,
+                                  cashAmount: state.params.cashCustomerPayment,
+                                  paymentMethods: state.payments,
+                                ),
                         ),
                         Row(
                           mainAxisSize: MainAxisSize.min,
