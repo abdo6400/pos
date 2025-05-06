@@ -6,7 +6,6 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
 import 'package:screenshot/screenshot.dart';
-
 import '../../../../config/routes/app_routes.dart';
 import '../../../../core/bloc/cubit/printing_cubit.dart';
 import '../../../../core/bloc/cubit/user_cubit.dart';
@@ -69,7 +68,6 @@ class CloseCashboxScreen extends StatelessWidget {
         if (state is CloseCashboxSuccess) {
           context.hideOverlayLoader();
           ScreenshotController screenshotController = ScreenshotController();
-          ;
           showDialog(
               context: context,
               builder: (ctx) => Dialog(
@@ -87,14 +85,24 @@ class CloseCashboxScreen extends StatelessWidget {
                                   totalDiscount: state.params.cashDiscountTotal,
                                   cashAmount: state.params.cashCustomerPayment,
                                   paymentMethods: state.payments,
+                                  zID:state.saleDate.id
                                 )
                               : EndShiftCard(
+                                  cashNo:state.params.cashNo.toString(),
                                   cashierName: state.params.cashUser.toString(),
                                   totalSales: state.params.cashGrandTotal,
                                   totalTax: state.params.cashTaxTotal,
                                   totalDiscount: state.params.cashDiscountTotal,
                                   cashAmount: state.params.cashCustomerPayment,
                                   paymentMethods: state.payments,
+                                  requiredCash:state.params.requiredCash,
+                                  availableCash:state.params.availableCash,
+                                  orderReturn: state.cashSaleSummary.orderReturn,
+                                  CashSales:state.cashSaleSummary.cashSales,
+                                 cashCustody:state.cashSaleSummary.cashCustody
+                                 // CashStartDate:cashStartDate;
+                                 //cashCustody:state.cashSaleSummary.cashCustody
+
                                 ),
                         ),
                         Row(
@@ -286,6 +294,8 @@ class CloseCashboxScreen extends StatelessWidget {
                                               ClosePointEvent(
                                                   payments:
                                                       state.paymentsSummary,
+                                                  cashSale: state.cashSaleSummary,
+                                                  saleDate: state.saleDate,
                                                   closePointParams:
                                                       ClosePointParams(
                                                           cashNo: state
@@ -317,7 +327,7 @@ class CloseCashboxScreen extends StatelessWidget {
                                                           cashServiceTotal: 0,
                                                           voidBefore: 0,
                                                           availableCash:
-                                                              double.tryParse(_formKey.currentState!.value[StringEnums.amount.name]) ?? 0,
+                                                          double.tryParse(_formKey.currentState!.value[StringEnums.amount.name]) ?? 0,
                                                           requiredCash: (state.cashSaleSummary.cashSales + state.cashSaleSummary.cashCustody) - state.cashSaleSummary.orderReturn,
                                                           illegalOpenCashDrawer: 0,
                                                           cashSubTotal: state.salesSummary.isNotEmpty ? state.salesSummary.first.subTotal : 0,
@@ -325,7 +335,9 @@ class CloseCashboxScreen extends StatelessWidget {
                                                           cashDiscountTotal: state.salesSummary.isNotEmpty ? state.salesSummary.first.discount : 0,
                                                           cashTaxTotal: state.salesSummary.isNotEmpty ? state.salesSummary.first.tax : 0,
                                                           cashCustomerPayment: state.cashSaleSummary.cashSales,
-                                                          voidAfter: state.cashSaleSummary.orderReturn)));
+                                                          voidAfter: state.cashSaleSummary.orderReturn) )
+
+                                          );
                                           // } else {
                                           //   context.showMessageToast(
                                           //       msg:

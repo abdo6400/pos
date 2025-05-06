@@ -10,6 +10,7 @@ abstract class CloseCashboxEvent extends Equatable {
 class ClosePointEvent extends CloseCashboxEvent {
   final ClosePointParams closePointParams;
   final List<PaymentSummary> payments;
-
-  const ClosePointEvent({required this.closePointParams, required this.payments});
+  final CashSale cashSale;
+  final SaleDate saleDate;
+  const ClosePointEvent({required this.closePointParams, required this.payments,required this.cashSale,required this.saleDate});
 }

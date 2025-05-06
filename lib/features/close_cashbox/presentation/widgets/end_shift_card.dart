@@ -5,11 +5,18 @@ import '../../domain/entities/payment_summary.dart';
 
 class EndShiftCard extends StatelessWidget {
   final String cashierName;
+  final String cashNo;
   final double totalSales;
   final double totalTax;
   final double totalDiscount;
   final double cashAmount;
+  final double requiredCash;
+  final double availableCash;
   final List<PaymentSummary> paymentMethods;
+  final double orderReturn;
+  final double CashSales;
+  final double cashCustody;
+
 
   const EndShiftCard({
     required this.cashierName,
@@ -18,6 +25,12 @@ class EndShiftCard extends StatelessWidget {
     required this.totalDiscount,
     required this.cashAmount,
     required this.paymentMethods,
+    required this.requiredCash,
+    required this.availableCash,
+    required this.cashNo,
+    required this.orderReturn,
+    required this.CashSales,
+    required this.cashCustody
   });
 
   @override
@@ -44,7 +57,7 @@ class EndShiftCard extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(vertical: 3),
             child: Text(
-              "X",
+              "X $cashNo",
               style: TextStyle(
                 fontFamily: 'ARIAL',
                 fontSize: 16,
@@ -128,7 +141,7 @@ class EndShiftCard extends StatelessWidget {
                 ),
                 Expanded(
                   flex: 12,
-                  child: Text('EndDays.toString()', style: smallTextStyle1),
+                  child: Text('${(DateTime.now()).toString().substring(0,16)}', style: smallTextStyle1),
                 ),
               ],
             ),
@@ -150,9 +163,8 @@ class EndShiftCard extends StatelessWidget {
           Divider(color: Colors.black, height: 2, thickness: 2),
 
           // Totals
-          _buildSummaryRow("Subtotal", totalSales),
+          _buildSummaryRow("Subtotal", totalSales-totalTax),
           _buildSummaryRow("Discount", totalDiscount),
-          _buildSummaryRow("Subtotal+Discount", totalSales-totalTax),
           _buildSummaryRow("Tax", totalTax),
           _buildSummaryRow("Total", totalSales),
 
@@ -216,9 +228,9 @@ class EndShiftCard extends StatelessWidget {
           Divider(color: Colors.black, height: 1),
 
           // General Summary
-          _buildSummaryRow("Cash Payment", cashAmount),
-          _buildSummaryRow("Return Payment", 4),
-          _buildSummaryRow("Opening Balance", 5),
+          _buildSummaryRow("Cash Payment", CashSales),
+          _buildSummaryRow("Return Payment", orderReturn),
+          _buildSummaryRow("Opening Balance", cashCustody),
 
           // Footer
           Divider(color: Colors.black, height: 1),
@@ -226,22 +238,14 @@ class EndShiftCard extends StatelessWidget {
             color: Colors.black,
             child: Column(
               children: [
-                _buildFooterRow("Available Cash", '5'),
-                _buildFooterRow("Required Cash", '5'),
-                _buildFooterRow("Difference", '5'),
+                _buildFooterRow("Available Cash", availableCash.toString()),
+                _buildFooterRow("Required Cash", requiredCash.toString()),
+                _buildFooterRow("Difference", (requiredCash-availableCash).toString()),
               ],
             ),
           ),
           Divider(color: Colors.black, height: 1),
 
-          // Print Button
-          MaterialButton(
-            onPressed: () {
-              // Utils.capture(myKey, context);
-            },
-            color: Colors.blueAccent,
-            child: Text("Print"),
-          ),
         ],
       ),
 

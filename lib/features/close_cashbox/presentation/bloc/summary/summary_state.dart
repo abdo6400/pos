@@ -15,11 +15,16 @@ class SummarySuccess extends SummaryState {
   final CashSale cashSaleSummary;
   final List<SaleSummary> salesSummary;
   final List<PaymentSummary> paymentsSummary;
+  final SaleDate saleDate;
 
   SummarySuccess(
       {required this.cashSaleSummary,
       required this.salesSummary,
-      required this.paymentsSummary});
+      required this.paymentsSummary,
+      required this.saleDate,
+
+
+      });
 }
 
 class SummaryError extends SummaryState {

@@ -117,7 +117,7 @@ class PrintingCubit extends Cubit<PrintingStatusEnums> {
   Future<void> connectPrinter(
       PrinterType printerType, PrinterDevice printer) async {
     emit(PrintingStatusEnums.connecting);
-    if (_printingService.checkConnection(printerType)) {
+    if (await _printingService.checkConnection(printerType,printer)) {
       emit(PrintingStatusEnums.connected);
       return;
     }

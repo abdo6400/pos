@@ -19,7 +19,7 @@ abstract class PrintingService {
   Stream<List<PrinterDevice>> getDevices(PrinterType printerType);
   Future<bool> connect(PrinterType printerType, PrinterDevice printer);
   Future<bool> disconnect(PrinterType printerType);
-  bool checkConnection(PrinterType printerType);
+  Future<bool> checkConnection(PrinterType printerType,PrinterDevice printer);
   Future<Uint8List> generateTestImage();
   Future<Uint8List> generateImage(Widget widget);
 }
@@ -98,7 +98,7 @@ class PrintingServiceImpl implements PrintingService {
 
   Future<bool> _ensureConnection(
       PrinterType type, PrinterDevice printer) async {
-    return checkConnection(type) || await connect(type, printer);
+    return await checkConnection(type,printer) || await connect(type, printer);
   }
 
   Future<bool> _delegatePrintJob({
@@ -155,16 +155,16 @@ class PrintingServiceImpl implements PrintingService {
   }
 
   @override
-  bool checkConnection(PrinterType printerType) {
+  Future<bool> checkConnection(PrinterType printerType,PrinterDevice printer) async{
     switch (printerType) {
       case PrinterType.bluetooth:
-        return _bluetoothPrinterService.checkConnection();
+        return await _bluetoothPrinterService.checkConnection(printer);
       case PrinterType.usb:
-        return _usbPrinterService.checkConnection();
-      case PrinterType.network:
-        return _networkPrinterService.checkConnection();
+        return await _usbPrinterService.checkConnection();
+      case  PrinterType.network:
+        return await _networkPrinterService.checkConnection();
       case PrinterType.imin:
-        return true;
+        return Future.value(true);
     }
   }
 

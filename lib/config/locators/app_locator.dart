@@ -9,7 +9,7 @@ import '../../features/close_cashbox/data/datasources/close_point_remote_data_so
 import '../../features/close_cashbox/data/repositories/close_point_repository_impl.dart';
 import '../../features/close_cashbox/domain/repositories/close_point_repository.dart';
 import '../../features/close_cashbox/domain/usecases/get_cash_sale_summary_usecase.dart';
-import '../../features/close_cashbox/domain/usecases/get_payments_summary.dart';
+import '../../features/close_cashbox/domain/usecases/get_payments_summary_usecase.dart';
 import '../../features/close_cashbox/domain/usecases/get_sales_summary_usecase.dart';
 import '../../features/close_cashbox/presentation/bloc/close_cashbox_bloc.dart';
 import '../../features/close_cashbox/presentation/bloc/summary/summary_bloc.dart';
@@ -193,7 +193,7 @@ class AppLocator {
 
     //close point
     locator.registerFactory<SummaryBloc>(
-        () => SummaryBloc(locator(), locator(), locator()));
+        () => SummaryBloc(locator(), locator(), locator(),locator()));
     locator
         .registerFactory<CloseCashboxBloc>(() => CloseCashboxBloc(locator()));
     locator.registerLazySingleton<GetPaymentsSummaryUseCase>(

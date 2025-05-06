@@ -14,7 +14,10 @@ class CloseCashboxLoading extends CloseCashboxState {}
 class CloseCashboxSuccess extends CloseCashboxState {
   final ClosePointParams params;
   final List<PaymentSummary> payments;
-  const CloseCashboxSuccess({required this.params, required this.payments});
+  final CashSale cashSaleSummary;
+  final SaleDate saleDate;
+
+  const CloseCashboxSuccess({required this.params, required this.payments,required this.cashSaleSummary,required this.saleDate});
 }
 
 class CloseCashboxError extends CloseCashboxState {

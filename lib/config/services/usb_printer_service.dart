@@ -48,7 +48,7 @@ class UsbPrinterService {
       List<int> bytes = [];
       final image = decodeImage(imageData);
       if (image != null) {
-        bytes += generator.image(image);
+        bytes += generator.imageRaster(image);
       }
       bytes += generator.cut();
       final bool result =

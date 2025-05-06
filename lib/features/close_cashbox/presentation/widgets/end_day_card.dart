@@ -10,6 +10,7 @@ class EndDayCard extends StatelessWidget {
   final double totalDiscount;
   final double cashAmount;
   final List<PaymentSummary> paymentMethods;
+  final int zID;
 
   const EndDayCard({
     required this.cashierName,
@@ -18,6 +19,7 @@ class EndDayCard extends StatelessWidget {
     required this.totalDiscount,
     required this.cashAmount,
     required this.paymentMethods,
+    required this.zID
   });
 
   @override
@@ -43,8 +45,46 @@ class EndDayCard extends StatelessWidget {
                 Text("END OF DAY REPORT",
                     style:
                         TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                Text("Cashier: $cashierName"),
-                Text("Date: ${DateTime.now().toLocal()}"),
+                Text(
+                  'Z $zID',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(DateTime.now().toString().substring(0, 10),
+                        style: TextStyle(
+                          color: Colors.black,
+                        )),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      'Date',
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text('Restaurant Name',
+                        style: TextStyle(
+                          color: Colors.black,
+                        )),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text('Branch',
+                        style: TextStyle(
+                          color: Colors.black,
+                        )),
+                  ],
+                ),
                 Divider(thickness: 2),
               ],
             ),

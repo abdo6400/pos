@@ -277,4 +277,14 @@ class ApiKeys {
   static const String companyID ="CompanyID";
 
   static const String stationID ="StationID";
+
+ // ZReport keys
+  static const String zCashNo ="zCashNo";
+  static const String casher ="casher";
+  static const String zStartDate ="zStartDate";
+  static const String zRealTime ="zRealTime";
+  static const String zEndDate ="zEndDate";
+  static const String zSales ="zSales";
+  static const String zReturn ="zReturn";
+  static const String zPayments ="zPayments";
 }

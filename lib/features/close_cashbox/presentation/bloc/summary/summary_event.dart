@@ -11,3 +11,7 @@ class GetSummaryEvent extends SummaryEvent {
   final int? userNo;
   const GetSummaryEvent({this.userNo});
 }
+class CashSaleSummaryEvent extends SummaryEvent {
+  final String cashNo;
+  CashSaleSummaryEvent(this.cashNo);
+}

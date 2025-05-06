@@ -3,6 +3,7 @@ import '../../../../config/database/api/api_keys.dart';
 import '../../../../config/database/api/end_points.dart';
 import '../../../../core/models/cash_model.dart';
 import '../models/cash_sale_model.dart';
+import '../models/endDay_report_model.dart';
 import '../models/payment_summary_model.dart';
 import '../models/sale_summary_model.dart';
 
@@ -13,6 +14,7 @@ abstract class ClosePointRemoteDataSource {
   Future<CashSaleModel> getCashSaleSummary(String cashNo);
   Future<List<SaleSummaryModel>> getSalesSummary(String cashNo);
   Future<CashModel> getCash(int userNo);
+  Future<ZRepModel> getEndDayReport(int branchId ,String lineDate);
 }
 
 class ClosePointRemoteDataSourceImpl extends ClosePointRemoteDataSource {
@@ -59,5 +61,11 @@ class ClosePointRemoteDataSourceImpl extends ClosePointRemoteDataSource {
     final result = await _apiConsumer.get(EndPoints.getSalesByUser,
         queryParameters: {ApiKeys.cashUser: userNo});
     return CashModel.fromJson(result[EndPoints.response]);
+  }
+  @override
+  Future<ZRepModel> getEndDayReport(int branchId ,String lineDate) async {
+    final result = await _apiConsumer.get(EndPoints.getSalesByWarehouse,
+        queryParameters: {ApiKeys.warehouse: branchId,ApiKeys.lineDate:lineDate});
+    return ZRepModel.fromJson(result[EndPoints.response]);
   }
 }

@@ -96,6 +96,14 @@ class MainActivity: FlutterActivity() {
                         PrinterManager.printImg(imgPath)
                     }
                 }
+                PrinterStrings.checkConnection -> {
+                    val mac = call.argument<String>(PrinterStrings.macArg)
+                    if (mac != null) {
+                        val status = PrinterManager.checkConnection()
+                        result.success(status)
+                    }
+                }
+
             }
         }
     }
@@ -111,6 +119,7 @@ class PrinterStrings {
         // arguments
         const val macArg = "printer_mac"
         const val imgPathArg = "img_path"
+        const val checkConnection = "printer_check_connection";
     }
 }
 
@@ -168,6 +177,10 @@ class PrinterManager {
                     openPortWithDevice(dev)
                 }
             }
+        }
+
+        fun checkConnection(): Int {
+            return rtPrinter?.connectState?.ordinal?: -1
         }
 
         fun printImg(imgPath: String) {
