@@ -3,6 +3,7 @@ import '../../../../config/database/api/api_keys.dart';
 import '../../../../config/database/api/end_points.dart';
 import '../../../../core/models/cash_model.dart';
 import '../../../../core/models/sale_date_model.dart';
+import '../models/end_day_report_model.dart';
 import '../models/setting_model.dart';
 
 abstract class SettingsRemoteDataSource {
@@ -14,6 +15,8 @@ abstract class SettingsRemoteDataSource {
   Future<void> openPointByParameters(Map<String, dynamic> data);
   Future<void> endDay(Map<String, dynamic> data);
   Future<void> insertByParameters(Map<String, dynamic> data);
+  Future<List<EndDayReportModel>> getEndDayReport(
+      int branchId, String lineDate);
 }
 
 class SettingsRemoteDataSourceImpl implements SettingsRemoteDataSource {
@@ -46,7 +49,8 @@ class SettingsRemoteDataSourceImpl implements SettingsRemoteDataSource {
 
   @override
   Future<void> openPointByParameters(Map<String, dynamic> data) async {
-    await _apiConsumer.post(EndPoints.openPointByParameters, queryParameters: data);
+    await _apiConsumer.post(EndPoints.openPointByParameters,
+        queryParameters: data);
   }
 
   @override
@@ -68,7 +72,22 @@ class SettingsRemoteDataSourceImpl implements SettingsRemoteDataSource {
   }
 
   @override
-  Future<void> insertByParameters(Map<String, dynamic> data) async{
-    await _apiConsumer.post(EndPoints.insertByParameters, queryParameters: data);
+  Future<void> insertByParameters(Map<String, dynamic> data) async {
+    await _apiConsumer.post(EndPoints.insertByParameters,
+        queryParameters: data);
+  }
+
+  @override
+  Future<List<EndDayReportModel>> getEndDayReport(
+      int branchId, String lineDate) async {
+    final result = await _apiConsumer.get(EndPoints.getSalesZReport,
+        queryParameters: {
+          ApiKeys.warehouse: branchId,
+          ApiKeys.lineDate: lineDate
+        });
+    return result[EndPoints.response]
+        .map<EndDayReportModel>(
+            (x) => EndDayReportModel.fromJson(x[ApiKeys.zReport]))
+        .toList();
   }
 }

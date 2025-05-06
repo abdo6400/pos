@@ -125,6 +125,7 @@ class PrintingCubit extends Cubit<PrintingStatusEnums> {
       printerType,
       printer,
     );
+    debugPrint( "connectmm"+result.toString());
     if (result) {
       emit(PrintingStatusEnums.connected);
     } else {

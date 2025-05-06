@@ -11,7 +11,12 @@ class EndDayInitial extends EndDayState {}
 
 class EndDayLoading extends EndDayState {}
 
-class EndDaySuccess extends EndDayState {}
+class EndDaySuccess extends EndDayState {
+  final List<EndDayReport> endDayReports;
+  const EndDaySuccess({required this.endDayReports});
+  @override
+  List<Object> get props => [endDayReports];
+}
 
 class EndDayFailure extends EndDayState {
   final String error;

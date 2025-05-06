@@ -29,7 +29,7 @@ class BluetoothPrinterService {
 
   Future<bool> connect(PrinterDevice printer) async {
     try {
-      _PrinterManagerBluetooth.connect(printer.address!);
+    final result=  await _PrinterManagerBluetooth.connect(printer.address!);
       // final bool result = await _printerManager.connect(
       //     type: PrinterType.bluetooth,
       //     model: BluetoothPrinterInput(
@@ -37,7 +37,7 @@ class BluetoothPrinterService {
       //         autoConnect: true,
       //         address: printer.address!,
       //         name: printer.name));
-      return true;
+      return result;
     } catch (e) {
       return false;
     }
@@ -45,18 +45,19 @@ class BluetoothPrinterService {
 
   Future<bool> printImage(Uint8List imageData, PrinterDevice printer) async {
     try {
-      final profile = await CapabilityProfile.load();
-      final generator = Generator(PaperSize.mm80, profile);
-      List<int> bytes = [];
-      final image = decodeImage(imageData);
-      if (image != null) {
-        bytes += generator.imageRaster(image);
-      }
-      bytes += generator.cut();
+      // final profile = await CapabilityProfile.load();
+      // final generator = Generator(PaperSize.mm80, profile);
+      // List<int> bytes = [];
+      // final image = decodeImage(imageData);
+      // if (image != null) {
+      //   bytes += generator.image(image);
+      // }
+      // bytes += generator.cut();
       String path = (await getTemporaryDirectory()).path;
       final imgFile = File("$path/invoice_summary.png");
-      await imgFile.writeAsBytes(bytes);
-      _PrinterManagerBluetooth.printImg(imgFile.path);
+      await imgFile.writeAsBytes(imageData.buffer.asUint8List());
+      print(imgFile.path);
+     await _PrinterManagerBluetooth.printImg(imgFile.path);
       // final bool result =
       //     await _printerManager.send(bytes: bytes, type: PrinterType.bluetooth);
       return true;
@@ -86,20 +87,37 @@ class BluetoothPrinterService {
 
 class _PrinterManagerBluetooth {
   static const platform = MethodChannel(_PrinterStrings.channel);
-  static connect(String mac) async {
-    platform.invokeMethod(
-        _PrinterStrings.connectCommand, {_PrinterStrings.macArg: mac});
+  static Future<bool> connect(String mac) async {
+    try{
+    final result=await  platform.invokeMethod(
+          _PrinterStrings.connectCommand, {_PrinterStrings.macArg: mac});
+    return result !=-1;
+    }catch(e){
+      return false;
+    }
+
   }
 
   static printImg(String imgPath) async {
-    platform.invokeMethod(
-        _PrinterStrings.printCommand, {_PrinterStrings.imgPathArg: imgPath});
+    try{
+      platform.invokeMethod(
+          _PrinterStrings.printCommand, {_PrinterStrings.imgPathArg: imgPath});
+    }catch(e){
+      print("bluethooPrint error $e");
+    }
+
   }
 
   static Future<bool> checkConnection(String mac) async {
-    final result = await platform.invokeMethod(
-        _PrinterStrings.checkConnection, {_PrinterStrings.macArg: mac});
-    return result != -1;
+    try{
+      final result = await platform.invokeMethod(
+          _PrinterStrings.checkConnection, {_PrinterStrings.macArg: mac});
+      return result !=-1;
+    }catch(e){
+      return false;
+    }
+
+
   }
 }
 

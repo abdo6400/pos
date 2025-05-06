@@ -25,7 +25,6 @@ import '../../../../core/widgets/numeric_keypad_input.dart';
 import '../../domain/usecases/close_point_usecase.dart';
 import '../bloc/close_cashbox_bloc.dart';
 import '../bloc/summary/summary_bloc.dart';
-import '../widgets/end_day_card.dart';
 import '../widgets/end_shift_card.dart';
 
 class CloseCashboxScreen extends StatelessWidget {
@@ -60,7 +59,7 @@ class CloseCashboxScreen extends StatelessWidget {
       );
   @override
   Widget build(BuildContext context) {
-    final bool isEndDay = ModalRoute.of(context)!.settings.arguments != null;
+    final bool isEndDay = ModalRoute.of(context)!.settings.arguments != null; 
     final cash = (ModalRoute.of(context)!.settings.arguments as Map?);
 
     return BlocConsumer<CloseCashboxBloc, CloseCashboxState>(
@@ -77,17 +76,7 @@ class CloseCashboxScreen extends StatelessWidget {
                       children: [
                         Screenshot(
                           controller: screenshotController,
-                          child: isEndDay
-                              ? EndDayCard(
-                                  cashierName: state.params.cashUser.toString(),
-                                  totalSales: state.params.cashGrandTotal,
-                                  totalTax: state.params.cashTaxTotal,
-                                  totalDiscount: state.params.cashDiscountTotal,
-                                  cashAmount: state.params.cashCustomerPayment,
-                                  paymentMethods: state.payments,
-                                  zID:state.saleDate.id
-                                )
-                              : EndShiftCard(
+                          child: EndShiftCard(
                                   cashNo:state.params.cashNo.toString(),
                                   cashierName: state.params.cashUser.toString(),
                                   totalSales: state.params.cashGrandTotal,
@@ -99,10 +88,7 @@ class CloseCashboxScreen extends StatelessWidget {
                                   availableCash:state.params.availableCash,
                                   orderReturn: state.cashSaleSummary.orderReturn,
                                   CashSales:state.cashSaleSummary.cashSales,
-                                 cashCustody:state.cashSaleSummary.cashCustody
-                                 // CashStartDate:cashStartDate;
-                                 //cashCustody:state.cashSaleSummary.cashCustody
-
+                                  cashCustody:state.cashSaleSummary.cashCustody
                                 ),
                         ),
                         Row(

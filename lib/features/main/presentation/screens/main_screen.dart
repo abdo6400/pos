@@ -34,7 +34,8 @@ class MainScreen extends StatelessWidget {
           context.showMessageToast(msg: StringEnums.printed.name.tr());
         } else if (state == PrintingStatusEnums.connected) {
           context.hideOverlayLoader();
-          context.showMessageToast(msg: StringEnums.printer_connected.name.tr());
+          context.showMessageToast(
+              msg: StringEnums.printer_connected.name.tr());
         } else if (state == PrintingStatusEnums.error) {
           context.hideOverlayLoader();
           context.showMessageToast(msg: StringEnums.error.name.tr());
@@ -42,33 +43,34 @@ class MainScreen extends StatelessWidget {
       },
       buildWhen: (previous, current) => false,
       builder: (context, state) {
-        return SafeArea(
-          child: BlocConsumer<CheckerPointBloc, CheckerPointState>(
-            listener: (context, state) {
-              if (state is CheckerPointLoading) {
-                context.showLottieOverlayLoader(Assets.loader);
-              } else if (state is CheckerPointError) {
-                context.go(AppRoutes.openPoint);
-              } else if (state is CheckerPointReady) {
-                if (state.mustCloseDay) {
-                  context.go(AppRoutes.openedPoints, extra: {
-                    StringEnums.mustCloseDay.name: state.mustCloseDay,
-                    StringEnums.to_date.name: state.closeTime,
-                    StringEnums.from_date.name: state.startDate,
-                  });
-                } else if (!state.hasPoint) {
-                  context.go(AppRoutes.openPoint);
-                } else {
-                  context.hideOverlayLoader();
-                }
-              }
-            },
-            builder: (context, state) {
-              return BlocBuilder<ScreenCubit, int>(
-                builder: (context, index) {
-                  return BlocBuilder<SettingsCubit, Settings>(
-                    buildWhen: (previous, current) => false,
-                    builder: (context, settings) {
+        return BlocBuilder<SettingsCubit, Settings>(
+          buildWhen: (previous, current) => false,
+          builder: (context, settings) {
+            return SafeArea(
+              child: BlocConsumer<CheckerPointBloc, CheckerPointState>(
+                listener: (context, state) {
+                  if (state is CheckerPointLoading) {
+                    context.showLottieOverlayLoader(Assets.loader);
+                  } else if (state is CheckerPointError) {
+                    context.go(AppRoutes.openPoint);
+                  } else if (state is CheckerPointReady) {
+                    if (state.mustCloseDay) {
+                      context.go(AppRoutes.openedPoints, extra: {
+                        StringEnums.mustCloseDay.name: state.mustCloseDay,
+                        StringEnums.to_date.name: state.closeTime,
+                        StringEnums.from_date.name: state.startDate,
+                        StringEnums.settings.name: settings
+                      });
+                    } else if (!state.hasPoint) {
+                      context.go(AppRoutes.openPoint);
+                    } else {
+                      context.hideOverlayLoader();
+                    }
+                  }
+                },
+                builder: (context, state) {
+                  return BlocBuilder<ScreenCubit, int>(
+                    builder: (context, index) {
                       return Scaffold(
                         resizeToAvoidBottomInset: false,
                         floatingActionButton: AnimatedFloatingActionButton(
@@ -117,9 +119,9 @@ class MainScreen extends StatelessWidget {
                     },
                   );
                 },
-              );
-            },
-          ),
+              ),
+            );
+          },
         );
       },
     );

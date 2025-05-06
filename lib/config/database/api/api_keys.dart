@@ -274,17 +274,24 @@ class ApiKeys {
   static const String taxValue = "TaxValue";
   static const String posted = "Posted";
 
-  static const String companyID ="CompanyID";
+  static const String companyID = "CompanyID";
 
-  static const String stationID ="StationID";
+  static const String stationID = "StationID";
 
- // ZReport keys
-  static const String zCashNo ="zCashNo";
-  static const String casher ="casher";
-  static const String zStartDate ="zStartDate";
-  static const String zRealTime ="zRealTime";
-  static const String zEndDate ="zEndDate";
-  static const String zSales ="zSales";
-  static const String zReturn ="zReturn";
-  static const String zPayments ="zPayments";
+  // ZReport keys
+  static const String zCashNo = "ZCashNo";
+  static const String casher = "Casher";
+  static const String zStartDate = "ZStartDate";
+  static const String zRealTime = "ZRealTime";
+  static const String zEndDate = "ZEndDate";
+  static const String zSales = "ZSales";
+  static const String zReturn = "ZReturn";
+  static const String zPayments = "Zpayments";
+  static const String zReport = "zRep";
+
+  static const String typeArDesc ="TypeArDesc";
+  static const String typeEnDesc="TypeEnDesc";
+  static const String payments="Payments";
+  static const String invoicesCount="InvoicesCount";
+  static const String zType ="Type";
 }
