@@ -4,6 +4,7 @@ import '../../../../config/database/api/end_points.dart';
 import '../../../../core/models/cash_model.dart';
 import '../../../../core/models/sale_date_model.dart';
 import '../models/end_day_report_model.dart';
+import '../models/report_summary_model.dart';
 import '../models/setting_model.dart';
 
 abstract class SettingsRemoteDataSource {
@@ -16,6 +17,8 @@ abstract class SettingsRemoteDataSource {
   Future<void> endDay(Map<String, dynamic> data);
   Future<void> insertByParameters(Map<String, dynamic> data);
   Future<List<EndDayReportModel>> getEndDayReport(
+      int branchId, String lineDate);
+  Future<List<ReportSummaryModel>> getSummaryByLineId(
       int branchId, String lineDate);
 }
 
@@ -88,6 +91,19 @@ class SettingsRemoteDataSourceImpl implements SettingsRemoteDataSource {
     return result[EndPoints.response]
         .map<EndDayReportModel>(
             (x) => EndDayReportModel.fromJson(x[ApiKeys.zReport]))
+        .toList();
+  }
+
+  @override
+  Future<List<ReportSummaryModel>> getSummaryByLineId(
+      int branchId, String lineDate) async {
+    final result = await _apiConsumer.get(EndPoints.getSummaryByLineId,
+        queryParameters: {
+          ApiKeys.warehouse: branchId,
+          ApiKeys.lineDate: lineDate
+        });
+    return result[EndPoints.response]
+        .map<ReportSummaryModel>((x) => ReportSummaryModel.fromJson(x))
         .toList();
   }
 }

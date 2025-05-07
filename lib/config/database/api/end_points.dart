@@ -35,7 +35,8 @@ class EndPoints {
   // Sales Endpoints
   static const String getSalesByWarehouse =
       'RestaurantSalesDay/v1.0/AppGetByWarehouse';
-  static const String getSalesZReport ="RestaurantSalesDay/v1.0/AppGetZByLineDate";
+  static const String getSalesZReport =
+      "RestaurantSalesDay/v1.0/AppGetZByLineDate";
   static const String getSalesByUser = 'RestaurantSales/v1.0/AppGetByUser';
   static const String openPointByParameters =
       'RestaurantSales/v1.0/OpenPointByParameters';
@@ -55,6 +56,6 @@ class EndPoints {
   static const String insertReturn = 'Return/v1.0/ReturnInsert';
   static const String getReturnedInvoices = 'Return/v1.0/AppGetByUser';
   static const String getReturnedInvoiceDetail = "Return/v1.0/GetById";
-
-  
+  static const String getSummaryByLineId =
+      "RestaurantSalesDay/v1.0/AppGetSummaryByLineDate";
 }

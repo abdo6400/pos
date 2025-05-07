@@ -25,6 +25,7 @@ class OpenedPointsScreen extends StatelessWidget {
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final mustCloseDay = data[StringEnums.mustCloseDay.name] as bool;
     final settings = data[StringEnums.settings.name] as Settings;
+
     return PopScope(
       canPop: !mustCloseDay,
       onPopInvokedWithResult: (value, _) {
@@ -48,6 +49,7 @@ class OpenedPointsScreen extends StatelessWidget {
                             controller: screenshotController,
                             child: EndDayCard(
                               reports: state.endDayReports,
+                              summaries: state.reportSummaries,
                             ),
                           ),
                           Row(

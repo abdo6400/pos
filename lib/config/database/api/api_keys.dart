@@ -294,4 +294,6 @@ class ApiKeys {
   static const String payments="Payments";
   static const String invoicesCount="InvoicesCount";
   static const String zType ="Type";
+
+  static const String iD ="ID";
 }

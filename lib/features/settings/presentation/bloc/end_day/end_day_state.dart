@@ -13,7 +13,10 @@ class EndDayLoading extends EndDayState {}
 
 class EndDaySuccess extends EndDayState {
   final List<EndDayReport> endDayReports;
-  const EndDaySuccess({required this.endDayReports});
+  final List<ReportSummary> reportSummaries;
+
+  const EndDaySuccess(
+      {required this.endDayReports, required this.reportSummaries});
   @override
   List<Object> get props => [endDayReports];
 }

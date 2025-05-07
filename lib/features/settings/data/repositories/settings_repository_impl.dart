@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 
 import 'package:retail/config/database/error/failures.dart';
 import 'package:retail/features/settings/domain/entities/end_day_report.dart';
+import 'package:retail/features/settings/domain/entities/report_summary.dart';
 
 import 'package:retail/features/settings/domain/entities/setting.dart';
 
@@ -113,6 +114,20 @@ class SettingsRepositoryImpl implements SettingsRepository {
     try {
       final response =
           await _settingsRemoteDataSource.getEndDayReport(branchId, lineDate);
+      return Right(response);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<ReportSummary>>> getSummaryByLineId(
+      int branchId, String lineDate) async {
+    try {
+      final response = await _settingsRemoteDataSource.getSummaryByLineId(
+          branchId, lineDate);
       return Right(response);
     } on ServerException catch (e) {
       return Left(ServerFailure(message: e.message));

@@ -118,7 +118,7 @@ class AppLocator {
 
     //settings
     locator.registerFactory<SettingsBloc>(() => SettingsBloc(locator()));
-    locator.registerFactory<EndDayBloc>(() => EndDayBloc(locator(),locator()));
+    locator.registerFactory<EndDayBloc>(() => EndDayBloc(locator(),locator(),locator()));
     locator
         .registerFactory<OpenedPointsBloc>(() => OpenedPointsBloc(locator()));
     locator.registerFactory<GetSalesByUserBloc>(

@@ -11,6 +11,7 @@ class EndDayRequested extends EndDayEvent {
   final String lineDate;
   final String closeTime;
 
+
   const EndDayRequested({required this.lineDate, required this.closeTime});
 
   @override
