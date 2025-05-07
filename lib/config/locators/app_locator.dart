@@ -60,6 +60,7 @@ import '../../features/settings/domain/usecases/get_opened_points_usecase.dart';
 import '../../features/settings/domain/usecases/get_sales_by_user_usecase.dart';
 import '../../features/settings/domain/usecases/get_sales_by_warehouse_usecase.dart';
 import '../../features/settings/domain/usecases/get_settings_usecase.dart';
+import '../../features/settings/domain/usecases/get_summary_by_line_id_usecase.dart';
 import '../../features/settings/domain/usecases/get_z_report_usecase.dart';
 import '../../features/settings/domain/usecases/open_point_by_parameters_usecase.dart';
 import '../../features/settings/presentation/bloc/checker_point/checker_point_bloc.dart';
@@ -121,6 +122,7 @@ class AppLocator {
     locator.registerFactory<EndDayBloc>(() => EndDayBloc(locator(),locator(),locator()));
     locator
         .registerFactory<OpenedPointsBloc>(() => OpenedPointsBloc(locator()));
+
     locator.registerFactory<GetSalesByUserBloc>(
         () => GetSalesByUserBloc(locator()));
     locator.registerFactory<GetSalesByWarehouseBloc>(
@@ -128,6 +130,8 @@ class AppLocator {
     locator.registerFactory<OpenPointBloc>(() => OpenPointBloc(locator()));
     locator.registerLazySingleton<GetOpenedPointsUsecase>(
         () => GetOpenedPointsUsecase(locator()));
+        locator.registerLazySingleton<GetSummaryByLineIdUsecase>(
+        () => GetSummaryByLineIdUsecase(locator()));
     locator.registerLazySingleton<GetZReportUsecase>(
         () => GetZReportUsecase(locator()));
     locator.registerLazySingleton<GetSettingsUsecase>(
