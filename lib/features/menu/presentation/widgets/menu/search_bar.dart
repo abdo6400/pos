@@ -9,6 +9,7 @@ import '../../bloc/cubit/category_selection_cubit.dart';
 import '../../bloc/cubit/offer_selection_cubit.dart';
 import '../../bloc/cubit/search_cubit.dart';
 import '../../bloc/product/product_bloc.dart';
+import 'barcode_reader.dart';
 
 class SearchAppBar extends StatelessWidget {
   const SearchAppBar({super.key});
@@ -29,7 +30,7 @@ class SearchAppBar extends StatelessWidget {
               shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               )),
-              leading: Icon(Icons.barcode_reader,color: Theme.of(context).colorScheme.secondary,),
+              leading: BarcodeReader(),
               textStyle: WidgetStatePropertyAll(Theme.of(context)
                   .textTheme
                   .bodyLarge!

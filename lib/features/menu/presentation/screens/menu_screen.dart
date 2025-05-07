@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
 import 'package:retail/features/menu/presentation/bloc/cubit/category_selection_cubit.dart';
+import '../bloc/cubit/barcode_reader_cubit.dart';
 import '../bloc/cubit/offer_selection_cubit.dart';
 import '../bloc/cubit/search_cubit.dart';
 import '../widgets/menu/categories_list.dart';
@@ -18,6 +19,7 @@ class MenuScreen extends StatelessWidget {
         BlocProvider(create: (_) => CategorySelectionCubit()),
         BlocProvider(create: (_) => SearchCubit()),
         BlocProvider(create: (_) => OfferSelectionCubit()),
+        BlocProvider(create: (_) => BarcodeReaderCubit()),
       ],
       child: Column(
         spacing: 5,
