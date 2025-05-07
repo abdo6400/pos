@@ -58,13 +58,11 @@ class CheckerPointBloc extends Bloc<CheckerPointEvent, CheckerPointState> {
       emit(state.copyWith(settings: settings));
       // Step 3: Get user sales
       final userSalesEither = await getSalesByUser(user?.userNo ?? 0);
-      if (userSalesEither.isLeft()) {
-        emit(CheckerPointError(
-          errorMessage: (userSalesEither as Left).value.toString(),
-        ));
-        return;
+      Cash? userSales;
+      if (userSalesEither.isRight()) {
+         userSales = (userSalesEither as Right).value;
       }
-      final userSales = (userSalesEither as Right).value;
+      //we have all data we need to check which screen we ? yes?
       // Calculate derived values
       final mustCloseDay = _calculateMustCloseDay(
         warehouseSales.lineDate,

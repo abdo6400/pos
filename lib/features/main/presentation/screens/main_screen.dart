@@ -54,16 +54,17 @@ class MainScreen extends StatelessWidget {
                   } else if (state is CheckerPointError) {
                     context.go(AppRoutes.openPoint);
                   } else if (state is CheckerPointReady) {
-                    if (state.mustCloseDay) {
+                    if (!state.hasPoint && (!state.mustCloseDay)) {
+                      context.go(AppRoutes.openPoint);
+                    }
+                    else  if (state.mustCloseDay) {
                       context.go(AppRoutes.openedPoints, extra: {
                         StringEnums.mustCloseDay.name: state.mustCloseDay,
                         StringEnums.to_date.name: state.closeTime,
                         StringEnums.from_date.name: state.startDate,
                         StringEnums.settings.name: settings
                       });
-                    } else if (!state.hasPoint) {
-                      context.go(AppRoutes.openPoint);
-                    } else {
+                    }   else {
                       context.hideOverlayLoader();
                     }
                   }

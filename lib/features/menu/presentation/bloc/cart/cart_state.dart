@@ -64,6 +64,7 @@ class CartState extends Equatable {
     bool isPrinted = false,
     bool addQrCode = false,
     required Map<int, double> payments,
+
   }) {
     final total = calculateTotalPrice(
         deliveryCategory: deliveryCategory,
@@ -120,6 +121,8 @@ class CartState extends Equatable {
           return InvoiceDtl(
               item: cartItem.product.proId,
               qty: cartItem.quantity,
+              proArName: cartItem.product.proArName,
+              proEnName: cartItem.product.proEnName,
               price: cartItem.getPrice(
                   cartItem.product.price,
                   cartItem.product.price2,

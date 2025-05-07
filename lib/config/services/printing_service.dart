@@ -169,8 +169,10 @@ class PrintingServiceImpl implements PrintingService {
   }
 
   @override
-  Future<Uint8List> generateImage(Widget widget) {
+  Future<Uint8List> generateImage(Widget widget) async{
     ScreenshotController screenshotController = ScreenshotController();
-    return screenshotController.captureFromLongWidget(widget);
+    return await  screenshotController.captureFromLongWidget(
+      widget
+    );
   }
 }

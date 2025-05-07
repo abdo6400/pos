@@ -79,7 +79,7 @@ final class CheckerPointReady extends CheckerPointState {
   const CheckerPointReady({
     required SaleDate warehouseSales,
     required List<Setting> settings,
-    required Cash userSales,
+    required Cash? userSales,
     required bool mustCloseDay,
     required bool hasPoint,
     required String startDate,

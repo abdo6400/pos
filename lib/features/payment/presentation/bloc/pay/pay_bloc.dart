@@ -14,7 +14,7 @@ class PayBloc extends Bloc<PayEvent, PayState> {
       result.fold(
           (failure) => emit(PayError(message: failure.message)),
           (invoice) =>
-              emit(PaySuccess(isPrint: event.isPrint, invoice: event.invoiceParams,invoiceNo: invoice)));
+              emit(PaySuccess(isPrint: event.isPrint, invoice: event.invoiceParams,invoiceNo: invoice,exChangeAmount: event.exchangeAmount)));
     });
   }
 }

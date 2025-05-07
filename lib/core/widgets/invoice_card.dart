@@ -1,9 +1,10 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
-import 'package:retail/core/utils/extensions/responsive.dart';
+
 
 class InvoiceCard extends StatelessWidget {
   final String invoiceNumber;
+  final double exChangeAmount;
   final String cashierName;
   final List<Map<String, dynamic>> items;
   final double subtotal;
@@ -14,6 +15,7 @@ class InvoiceCard extends StatelessWidget {
   final bool isReprint;
 
   const InvoiceCard({
+    required this.exChangeAmount,
     required this.invoiceNumber,
     required this.cashierName,
     required this.items,
@@ -30,13 +32,11 @@ class InvoiceCard extends StatelessWidget {
     return Container(
         width: 500,
         padding: EdgeInsets.symmetric(
-          horizontal: context.AppResponsiveValue(20,
-              mobile: 20, tablet: 20, desktop: 20),
+          horizontal: 20,
           vertical: 20,
         ),
         color: Colors.white,
-        child: SingleChildScrollView(
-          child: Column(
+        child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 10,
             children: [
@@ -153,9 +153,7 @@ class InvoiceCard extends StatelessWidget {
                             child: Text(
                               item['name'],
                               style: TextStyle(
-                                color: item['isReturned'] == true
-                                    ? Colors.red
-                                    : null,
+                                color: Colors.black,
                                 fontWeight: item['isReturned'] == true
                                     ? FontWeight.bold
                                     : null,
@@ -167,9 +165,7 @@ class InvoiceCard extends StatelessWidget {
                             child: Text(
                               item['qty'].toString(),
                               style: TextStyle(
-                                color: item['isReturned'] == true
-                                    ? Colors.red
-                                    : null,
+                                color: Colors.black,
                                 fontSize: 20,
                               ),
                             ),
@@ -178,9 +174,7 @@ class InvoiceCard extends StatelessWidget {
                             child: Text(
                               "${item['price'].toStringAsFixed(2)}",
                               style: TextStyle(
-                                color: item['isReturned'] == true
-                                    ? Colors.red
-                                    : null,
+                                color: Colors.black,
                                 fontSize: 20,
                               ),
                             ),
@@ -189,9 +183,7 @@ class InvoiceCard extends StatelessWidget {
                             child: Text(
                               "${item['total'].toStringAsFixed(2)}",
                               style: TextStyle(
-                                color: item['isReturned'] == true
-                                    ? Colors.red
-                                    : null,
+                              color: Colors.black,
                                 fontSize: 20,
                               ),
                             ),
@@ -321,6 +313,6 @@ class InvoiceCard extends StatelessWidget {
               ),
             ],
           ),
-        ));
+        );
   }
 }

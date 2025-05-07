@@ -16,14 +16,14 @@ class EndDayReportModel extends EndDayReport {
     return EndDayReportModel(
       zCashNo: json[ApiKeys.zCashNo],
       casher: json[ApiKeys.casher],
-      zStartDate: json[ApiKeys.zStartDate],
-      zRealTime: json[ApiKeys.zRealTime],
-      zEndDate: json[ApiKeys.zEndDate],
+      zStartDate: DateTime.parse(json[ApiKeys.zStartDate]),
+      zRealTime: DateTime.parse(json[ApiKeys.zRealTime]),
+      zEndDate: DateTime.parse(json[ApiKeys.zEndDate]),
       zSales: json[ApiKeys.zSales],
       zReturn: json[ApiKeys.zReturn],
-      zPayments: json[ApiKeys.zPayments]
-          .map<Zpayment>((e) => ZpaymentModel.fromJson(e)),
-    );
+      zPayments: List<ZpaymentModel>.from(
+          json[ApiKeys.zPayments].map((x) => ZpaymentModel.fromJson(x)
+    )));
   }
 }
 

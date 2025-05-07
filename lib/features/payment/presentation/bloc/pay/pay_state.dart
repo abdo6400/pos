@@ -14,8 +14,13 @@ class PayLoading extends PayState {}
 class PaySuccess extends PayState {
   final bool isPrint;
   final String invoiceNo;
+  final double exChangeAmount;
   final InvoiceParams invoice;
-  const PaySuccess({required this.isPrint, required this.invoice,required this.invoiceNo});
+  const PaySuccess(
+      {required this.exChangeAmount,
+      required this.isPrint,
+      required this.invoice,
+      required this.invoiceNo});
 }
 
 class PayError extends PayState {

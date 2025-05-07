@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
 import 'package:printer_service/thermal_printer.dart' show PrinterDevice;
@@ -117,7 +116,7 @@ class PrintingCubit extends Cubit<PrintingStatusEnums> {
   Future<void> connectPrinter(
       PrinterType printerType, PrinterDevice printer) async {
     emit(PrintingStatusEnums.connecting);
-    if (await _printingService.checkConnection(printerType,printer)) {
+    if (await _printingService.checkConnection(printerType, printer)) {
       emit(PrintingStatusEnums.connected);
       return;
     }
@@ -125,7 +124,7 @@ class PrintingCubit extends Cubit<PrintingStatusEnums> {
       printerType,
       printer,
     );
-    debugPrint( "connectmm"+result.toString());
+    debugPrint("connectmm" + result.toString());
     if (result) {
       emit(PrintingStatusEnums.connected);
     } else {

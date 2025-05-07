@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
-import 'package:screenshot/screenshot.dart';
 import '../../../../core/bloc/cubit/printing_cubit.dart';
 import '../../../../core/entities/settings.dart';
 import '../../../../core/utils/assets.dart';
@@ -25,72 +24,33 @@ class HomeScreen extends StatelessWidget {
           if (state is PaySuccess) {
             context.read<CartBloc>().add(ClearCartEvent());
             context.handleState(
-                StateEnum.success, StringEnums.payment_success.name);
+                StateEnum.success, StringEnums.payment_success.name.tr());
             if (state.isPrint) {
-              ScreenshotController screenshotController =
-                  ScreenshotController();
-              showDialog(
-                context: context,
-                builder: (ctx) => Dialog(
-                  backgroundColor: Colors.transparent,
-                  child: Center(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Screenshot(
-                            controller: screenshotController,
-                            child: InvoiceCard(
-                              invoiceNumber: state.invoiceNo,
-                              cashierName: state.invoice.invoices.takerName,
-                              items: state.invoice.invoiceDtl
-                                  .map((e) => {
-                                        'name': e.item,
-                                        'qty': e.qty,
-                                        'price': e.price,
-                                        'isReturned': false,
-                                        'total': e.grandTotal,
-                                      })
-                                  .toList(),
-                              subtotal: state.invoice.invoices.invoiceSubTotal,
-                              tax: state.invoice.invoices.invoiceTaxTotal,
-                              discount:
-                                  state.invoice.invoices.invoiceDiscountTotal,
-                              total: state.invoice.invoices.invoiceGrandTotal,
-                              cashChange: state.invoice.invoices.cashPayment,
-                              isReprint: false,
-                            ),
-                          ),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(ctx),
-                                child: Text(StringEnums.cancel.name.tr()),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  screenshotController.capture().then((image) {
-                                    if (image != null) {
-                                      Navigator.pop(ctx);
-                                      context.read<PrintingCubit>().handlePrint(
-                                          settings, context,
-                                          image: image);
-                                    }
-                                  });
-                                },
-                                child: Text(StringEnums.print.name.tr()),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
+              context.read<PrintingCubit>().handlePrint(
+                    settings,
+                    context,
+                    widget: InvoiceCard(
+                      exChangeAmount: state.exChangeAmount,
+                      invoiceNumber: state.invoiceNo,
+                      cashierName: state.invoice.invoices.takerName,
+                      items: state.invoice.invoiceDtl
+                          .map((e) => {
+                                'name':
+                                    context.trValue(e.proArName, e.proEnName),
+                                'qty': e.qty,
+                                'price': e.price,
+                                'isReturned': false,
+                                'total': e.grandTotal,
+                              })
+                          .toList(),
+                      subtotal: state.invoice.invoices.invoiceSubTotal,
+                      tax: state.invoice.invoices.invoiceTaxTotal,
+                      discount: state.invoice.invoices.invoiceDiscountTotal,
+                      total: state.invoice.invoices.invoiceGrandTotal,
+                      cashChange: state.invoice.invoices.cashPayment,
+                      isReprint: false,
                     ),
-                  ),
-                ),
-              );
+                  );
             }
           } else if (state is PayError) {
             context.handleState(StateEnum.error, state.message);

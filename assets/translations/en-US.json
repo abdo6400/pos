@@ -288,5 +288,6 @@
   "test_print":"Test Print",
   "addCustomAddresses":"Add Custom Addresses",
   "printed":"Printed Successfully",
-  "printer_connected":" Printer Connected Successfully"
+  "printer_connected":" Printer Connected Successfully",
+  "please_enter_amount":"Please enter amount"
 }

@@ -17,12 +17,7 @@ class EndDayCard extends StatelessWidget {
     return Container(
       width: 300,
       padding: EdgeInsets.symmetric(
-          horizontal: context.AppResponsiveValue(
-            20,
-            mobile: 20,
-            tablet: 20,
-            desktop: 20,
-          ),
+          horizontal:20,
           vertical: 20),
       color: Colors.white,
       child: Column(
@@ -35,7 +30,7 @@ class EndDayCard extends StatelessWidget {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                 if (reports.isNotEmpty) ...[
                   Text(
-                    'Z ${reports[0].casher}', // Safely access reports[0]
+                    'Z ${summaries[0].id}', // Safely access reports[0]
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 24,
@@ -236,54 +231,62 @@ class EndDayCard extends StatelessWidget {
                                                 ),
                                                 Padding(
                                                   padding: EdgeInsets.all(4),
-                                                  child: IntrinsicHeight(
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                      children: [
-                                                        Text(
-                                                            reports[index].zSales
-                                                                .toString(),
-                                                            style: TextStyle(
-                                                              color: Colors
-                                                                  .black,
-                                                            )),
-                                                        SizedBox(
-                                                          width: 15,
-                                                        ),
-                                                        VerticalDivider(),
-                                                        Text('المجموع',
-                                                            style: TextStyle(
-                                                              color: Colors
-                                                                  .black,
-                                                            )),
-                                                      ],
-                                                    ),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                    children: [
+                                                      Text(summaries[0].subTotal.toString(),
+                                                          style: TextStyle(
+                                                            color: Colors.black,
+                                                          )),
+                                                      SizedBox(
+                                                        width: 15,
+                                                      ),
+                                                      Text('مجموع المبيعات قبل ض',
+                                                          style: TextStyle(
+                                                            color: Colors.black,
+                                                          )),
+                                                    ],
                                                   ),
                                                 ),
                                                 Padding(
                                                   padding: EdgeInsets.all(4),
-                                                  child: IntrinsicHeight(
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                      children: [
-                                                        Text((reports[index].zSales  - reports[index].zReturn).toString(),
-                                                            style: TextStyle(
-                                                              color: Colors
-                                                                  .black,
-                                                            )),
-                                                        VerticalDivider(),
-                                                        Text(
-                                                            ' المجموع النهائي',
-                                                            style: TextStyle(
-                                                              color: Colors
-                                                                  .black,
-                                                            )),
-                                                      ],
-                                                    ),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                    children: [
+                                                      Text(summaries[0].tax.toString(),
+                                                          style: TextStyle(
+                                                            color: Colors.black,
+                                                          )),
+                                                      SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      Text('مجموع الضريبة',
+                                                          style: TextStyle(
+                                                            color: Colors.black,
+                                                          )),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.all(4),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                    children: [
+                                                      Text(summaries[0].grandTotal.toString(),
+                                                          style: TextStyle(
+                                                            color: Colors.black,
+                                                          )),
+                                                      SizedBox(
+                                                        width: 15,
+                                                      ),
+                                                      Text('مجموع النهائي',
+                                                          style: TextStyle(
+                                                            color: Colors.black,
+                                                          )),
+                                                    ],
                                                   ),
                                                 ),
                                               ],

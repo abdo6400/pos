@@ -18,6 +18,7 @@ import '../../domain/usecases/return_invoice_usecase.dart';
 import '../bloc/cubit/return_items_cubit.dart';
 import '../bloc/invoice_detail/invoice_detail_bloc.dart';
 import '../bloc/return_invoice/return_invoice_bloc.dart';
+import '../widgets/return_invoice_card.dart';
 
 class InvoiceDetailsScreen extends StatelessWidget {
   const InvoiceDetailsScreen({super.key});
@@ -40,8 +41,12 @@ class InvoiceDetailsScreen extends StatelessWidget {
           } else if (state is ReturnInvoiceLoaded) {
             context.handleState(
                 StateEnum.success, StringEnums.returnedItems.name.tr());
+
             Future.delayed(Duration(seconds: 1), () {
               Navigator.pop(context);
+              context.read<PrintingCubit>().handlePrint(settings, context,
+                  widget:
+                      ReturnInvoiceCard(returnInvoice: state.returnedInvoice));
             });
           } else if (state is ReturnInvoiceError) {
             context.handleState(StateEnum.error, state.message);
@@ -142,6 +147,7 @@ class InvoiceDetailsScreen extends StatelessWidget {
                             controller: screenshotController,
                             child: InvoiceCard(
                               isReprint: true,
+                              exChangeAmount: 0,
                               cashierName:
                                   state.invoiceDetail.invoices.takerName,
                               cashChange:

@@ -21,7 +21,8 @@ class PaymentScreen extends StatelessWidget {
       List<PaymentType> paymentTypes,
       bool isPrint,
       double grandTotal,
-      Function(Map<int, double>, bool) pay,
+      double exChangeAmount,
+      Function(Map<int, double>, bool, double) pay,
       BuildContext context) {
     if (_formKey.currentState!.saveAndValidate()) {
       final paymentTypeLookup = <String, int>{};
@@ -42,6 +43,14 @@ class PaymentScreen extends StatelessWidget {
           }
         }
       });
+      double totalPaymentsBefore =
+          payments.values.fold(0, (sum, amount) => sum + amount);
+      if (payments.isEmpty || totalPaymentsBefore != grandTotal) {
+        context.showMessageToast(
+          msg: StringEnums.please_enter_amount.name.tr(),
+        );
+        return;
+      }
 
       // Calculate the total of non-cash payments (PayType 1, PayType 2, etc.)
       double nonCashTotal = 0;
@@ -66,11 +75,9 @@ class PaymentScreen extends StatelessWidget {
       // Calculate the total payments
       double totalPayments =
           payments.values.fold(0, (sum, amount) => sum + amount);
-
-      // Check if total payments match the grandTotal
       if (totalPayments >= grandTotal) {
         Navigator.pop(context);
-        pay(payments, isPrint); // Send the payments
+        pay(payments, isPrint, exChangeAmount); // Send the payments
       } else {
         context.showMessageToast(
           msg: StringEnums.amount_less_than_grand_total.name.tr(),
@@ -84,7 +91,7 @@ class PaymentScreen extends StatelessWidget {
     final param = ModalRoute.of(context)!.settings.arguments as List;
     final List<PaymentType> paymentTypes =
         (param[0] as List<PaymentType>).takeWhile((e) => e.isActive).toList();
-    final pay = param[1] as Function(Map<int, double>, bool);
+    final pay = param[1] as Function(Map<int, double>, bool, double);
     final grandTotal = param[2] as double;
 
     return MultiBlocProvider(
@@ -137,34 +144,38 @@ class PaymentScreen extends StatelessWidget {
                   context.AppResponsiveValue(5,
                       mobile: 1, tablet: 30, desktop: 40),
                 ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: CustomButton(
-                        backgroundColor: Colors.red,
-                        buttonLabel: StringEnums.close.name,
-                        onSubmit: () => Navigator.pop(context),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: CustomButton(
-                        backgroundColor: Colors.green,
-                        buttonLabel: StringEnums.save.name,
-                        onSubmit: () => payInvoice(
-                            paymentTypes, false, grandTotal, pay, context),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: CustomButton(
-                        backgroundColor: Colors.blue,
-                        buttonLabel: StringEnums.print.name,
-                        onSubmit: () => payInvoice(
-                            paymentTypes, true, grandTotal, pay, context),
-                      ),
-                    ),
-                  ],
+                child: BlocBuilder<ReturnedAmountCubit, double>(
+                  builder: (context, exChangeAmount) {
+                    return Row(
+                      children: [
+                        Expanded(
+                          child: CustomButton(
+                            backgroundColor: Colors.red,
+                            buttonLabel: StringEnums.close.name,
+                            onSubmit: () => Navigator.pop(context),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: CustomButton(
+                            backgroundColor: Colors.green,
+                            buttonLabel: StringEnums.save.name,
+                            onSubmit: () => payInvoice(paymentTypes, false,
+                                grandTotal, exChangeAmount, pay, context),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: CustomButton(
+                            backgroundColor: Colors.blue,
+                            buttonLabel: StringEnums.print.name,
+                            onSubmit: () => payInvoice(paymentTypes, true,
+                                grandTotal, exChangeAmount, pay, context),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ),
               body: Center(

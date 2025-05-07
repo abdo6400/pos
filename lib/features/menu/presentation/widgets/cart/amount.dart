@@ -46,12 +46,14 @@ class Amount extends StatelessWidget {
       required bool priceIncludesTax,
       required bool taxIncludesDiscount,
       required Discount? discount,
+      required double exChangeAmount,
       required DeliveryWithDiscount? delivery,
       bool addQrCode = false}) async {
     final user = await storage.getUser();
     if (user != null && cart.cart.isNotEmpty) {
       context.read<PayBloc>().add(Pay(
           isPrint: isPrint,
+          exchangeAmount: exChangeAmount,
           invoiceParams: cart.createInvoice(
             trn: user.taxNo,
             remind: user.numbersOfDigits,
@@ -147,8 +149,9 @@ class Amount extends StatelessWidget {
                                   if (paymentTypes is PaymentTypesSuccess) {
                                     payReceipt(context,
                                         cart: cart,
+                                        exChangeAmount: 0,
                                         addQrCode: addQrCode,
-                                        isPrint: false,
+                                        isPrint: true,
                                         payments: {
                                           paymentTypes.paymentTypes.first.ptype:
                                               receipt.grandTotal
@@ -173,10 +176,12 @@ class Amount extends StatelessWidget {
                                     ? () {
                                         context.push(AppRoutes.payment, extra: [
                                           paymentTypes.paymentTypes,
-                                          (payments, bool isPrint) {
+                                          (payments, bool isPrint,
+                                              double exChangeAmount) {
                                             payReceipt(context,
                                                 cart: cart,
                                                 isPrint: isPrint,
+                                                exChangeAmount: exChangeAmount,
                                                 addQrCode: addQrCode,
                                                 payments: payments,
                                                 taxPercentage: taxPercentage,

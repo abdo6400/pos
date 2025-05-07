@@ -9,7 +9,8 @@ sealed class PayEvent extends Equatable {
 
 class Pay extends PayEvent {
   final bool isPrint;
+  final double exchangeAmount;
   final InvoiceParams invoiceParams;
 
-  Pay({required this.isPrint,required this.invoiceParams});
+  Pay({required this.isPrint,required this.invoiceParams,required this.exchangeAmount});
 }

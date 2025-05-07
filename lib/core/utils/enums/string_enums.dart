@@ -215,5 +215,5 @@ enum StringEnums {
   addCustomAddresses,
   isPrint,
   printed,
-  printer_connected,
+  printer_connected, please_enter_amount,
 }

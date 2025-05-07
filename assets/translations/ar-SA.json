@@ -261,5 +261,6 @@
   "test_print": "تجربة الطابعة",
   "addCustomAddresses": "اضافة عناوين مخصصة",
   "printed": "تم الطباعة بنجاح",
-  "printer_connected": " تم الاتصال بالطابعة بنجاح"
+  "printer_connected": " تم الاتصال بالطابعة بنجاح",
+  "please_enter_amount":"الرجاء ادخال المبلغ"
 }

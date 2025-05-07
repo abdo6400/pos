@@ -30,7 +30,7 @@ class ProductSuccess extends ProductState {
                   .toString()
                   .toLowerCase()
                   .contains(name.toLowerCase()) ||
-              x.proEnName.toString().toLowerCase().contains(name.toLowerCase()))
+              x.proEnName.toString().toLowerCase().contains(name.toLowerCase()) ||  x.barcode.toString().toLowerCase().contains(name.toLowerCase()))
           .toList();
     } catch (e) {
       return [];

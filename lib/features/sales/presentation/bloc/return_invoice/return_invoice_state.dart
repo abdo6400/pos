@@ -12,7 +12,8 @@ final class ReturnInvoiceInitial extends ReturnInvoiceState {}
 class ReturnInvoiceLoading extends ReturnInvoiceState {}
 
 class ReturnInvoiceLoaded extends ReturnInvoiceState {
-  const ReturnInvoiceLoaded();
+  final ReturnParams  returnedInvoice;
+  const ReturnInvoiceLoaded(this.returnedInvoice);
 }
 
 class ReturnInvoiceError extends ReturnInvoiceState {

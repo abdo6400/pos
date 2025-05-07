@@ -30,7 +30,7 @@ class SearchAppBar extends StatelessWidget {
               shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               )),
-              leading: BarcodeReader(),
+              leading: BarcodeReader(_controller),
               textStyle: WidgetStatePropertyAll(Theme.of(context)
                   .textTheme
                   .bodyLarge!

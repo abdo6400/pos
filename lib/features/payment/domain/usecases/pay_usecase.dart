@@ -74,6 +74,8 @@ class InvoiceDtl {
   final int warehouse;
   final int offerNo;
   final int lineId;
+  final String proArName;
+  final String proEnName;
 
   InvoiceDtl({
     required this.item,
@@ -90,6 +92,8 @@ class InvoiceDtl {
     required this.warehouse,
     required this.offerNo,
     required this.lineId,
+    required this.proArName,
+    required this.proEnName,
   });
 
   Map<String, dynamic> toJson(String invoiceNo, String saleDate) {
@@ -116,6 +120,7 @@ class InvoiceDtl {
 
 class InvoicePayment {
   final int payType;
+
   final double payment;
   final int warehouse;
 
@@ -123,6 +128,7 @@ class InvoicePayment {
     required this.payType,
     required this.payment,
     required this.warehouse,
+
   });
 
   Map<String, dynamic> toJson(String invoiceNo, String creditExpireDate) {
