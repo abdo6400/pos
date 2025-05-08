@@ -14,6 +14,7 @@ import '../database/cache/secure_cache_helper.dart';
 import '../database/local/local_consumer.dart';
 import '../database/local/sqlflite_consumer.dart';
 import '../database/network/netwok_info.dart';
+import '../observers/bloc_observer.dart';
 import '../services/Imin_printer_service.dart';
 import '../services/bluethooth_printer_service.dart';
 import '../services/network_printer_service.dart';
@@ -56,6 +57,7 @@ class GlobalLocator {
           ? HydratedStorage.webStorageDirectory
           : await getTemporaryDirectory(),
     );
+    Bloc.observer = MyBlocObserver();
     // Extarnal
     locator.registerLazySingleton(() => Dio());
     locator.registerLazySingleton(() => PrinterManager.instance);
