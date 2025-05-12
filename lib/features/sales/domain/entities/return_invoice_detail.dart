@@ -83,6 +83,8 @@ abstract class ReturnInvoiceHdr extends Equatable {
   final String guid;
   final String qrcode;
   final int companyId;
+  final int payType;
+  final String stationId;
 
   ReturnInvoiceHdr({
     required this.returnId,
@@ -102,6 +104,8 @@ abstract class ReturnInvoiceHdr extends Equatable {
     required this.guid,
     required this.qrcode,
     required this.companyId,
+    required this.payType,
+    required this.stationId,
   });
 
   @override
@@ -123,5 +127,6 @@ abstract class ReturnInvoiceHdr extends Equatable {
         guid,
         qrcode,
         companyId,
+        payType,
       ];
 }

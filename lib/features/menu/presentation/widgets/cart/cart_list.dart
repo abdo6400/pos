@@ -25,6 +25,10 @@ class CartList extends StatelessWidget {
   const CartList({super.key});
   void _flavorsQuestionsDialog(BuildContext context, CartItem cartItem,
       {List<Offer> offers = const []}) {
+    final MultiSelectController<Flavor> _flavorsController =
+        MultiSelectController();
+    final MultiSelectController<dynamic> _questionController =
+        MultiSelectController();
     final TextEditingController _quantityController =
         TextEditingController(text: cartItem.quantity.toString());
     final TextEditingController _noteController =
@@ -37,6 +41,16 @@ class CartList extends StatelessWidget {
           List<Flavor> flavors = [];
           List<Product> questions = [];
           List<Offer> productOffers = [];
+          try {
+            flavors = _flavorsController.getSelectedItems();
+          } catch (e) {
+            debugPrint(e.toString());
+          }
+          try {
+            questions = _questionController.getSelectedItems().cast<Product>();
+          } catch (e) {
+            debugPrint(e.toString());
+          }
           try {
             productOffers = [
               ...offers
@@ -62,9 +76,15 @@ class CartList extends StatelessWidget {
         },
         child: MultiBlocProvider(
             providers: [
+              BlocProvider.value(value: context.read<FlavorBloc>()),
+              BlocProvider.value(value: context.read<QuestionBloc>()),
               BlocProvider.value(value: context.read<ProductBloc>()),
             ],
             child: CustomDialog(
+              selectedFlavors: cartItem.flavors,
+              selectedQuestions: cartItem.questions,
+              flavorsController: _flavorsController,
+              questionController: _questionController,
               product: cartItem.product,
               quantityController: _quantityController,
               noteController: _noteController,

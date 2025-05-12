@@ -73,10 +73,35 @@ class PaymentRepositoryImpl extends PaymentRepository {
   }
 
   @override
-  Future<Either<Failure, List<Invoice>>> getPendingInvoices() async {
+  Future<Either<Failure, bool>> uploadPendingInvoices(
+      int branchId, int userNo) async {
     try {
       final response = await _paymentLocalDataSource.getPendingInvoices();
-      return Right(response);
+      final saleDate =
+          (await getSaleDate(branchId)).fold((l) => null, (r) => r);
+      final cash = (await getCash(userNo)).fold((l) => null, (r) => r);
+      final invoiceId =
+          (await getLastInvoiceId(branchId)).fold((l) => null, (r) => r);
+      final saleDateTime =
+          "${saleDate?.lineDate.year}-${saleDate?.lineDate.month}-${saleDate?.lineDate.day}";
+      final double invoiceNo =
+          double.tryParse(invoiceId?.invoiceNo ?? "0") ?? 0;
+      double increamenter = 0;
+      List<Invoice> invoices = response.map((e) {
+        final newInvoiceNo = (invoiceNo) + increamenter;
+        increamenter = increamenter + 1;
+        return e.copyWith(
+            invoiceNo: (newInvoiceNo).toString(),
+            invoiceCashNo: cash?.cashNo,
+            salesDate: saleDateTime);
+      }).toList();
+      if (invoices.isEmpty) {
+        return Right(false);
+      }
+      for (var element in invoices) {
+        await pay(element.toJson());
+      }
+      return Right(true);
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }

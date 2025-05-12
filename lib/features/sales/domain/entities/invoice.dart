@@ -12,6 +12,7 @@ abstract class Invoice extends Equatable {
   final double invoiceServiceTotal;
   final double invoiceTaxTotal;
   final double invoiceGrandTotal;
+  final String stationId;
 
   Invoice({
     required this.invoiceNo,
@@ -25,6 +26,7 @@ abstract class Invoice extends Equatable {
     required this.invoiceServiceTotal,
     required this.invoiceTaxTotal,
     required this.invoiceGrandTotal,
+    required this.stationId,
   });
 
   @override
@@ -40,5 +42,6 @@ abstract class Invoice extends Equatable {
         invoiceServiceTotal,
         invoiceTaxTotal,
         invoiceGrandTotal,
+        stationId,
       ];
 }

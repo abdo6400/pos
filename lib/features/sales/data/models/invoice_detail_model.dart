@@ -27,6 +27,7 @@ class InvoicesModel extends Invoices {
       required super.invoiceServiceTotal,
       required super.invoiceTaxTotal,
       required super.invoiceGrandTotal,
+      required super.isPrinted,
       required super.customer,
       required super.realTime,
       required super.tableNo,
@@ -40,7 +41,7 @@ class InvoicesModel extends Invoices {
       required super.encryptionSeal,
       required super.guid,
       required super.qrcode,
-  });
+      required super.stationId});
 
   factory InvoicesModel.fromJson(Map<String, dynamic> json) => InvoicesModel(
         invoiceNo: json[ApiKeys.invoiceNo]?.toDouble(),
@@ -50,6 +51,7 @@ class InvoicesModel extends Invoices {
         invoiceServiceTotal: json[ApiKeys.invoiceServiceTotal],
         invoiceTaxTotal: json[ApiKeys.invoiceTaxTotal],
         invoiceGrandTotal: json[ApiKeys.invoiceGrandTotal],
+        isPrinted: json[ApiKeys.isPrinted],
         customer: json[ApiKeys.customer],
         realTime: DateTime.parse(json[ApiKeys.realTime]),
         tableNo: json[ApiKeys.tableNo],
@@ -63,6 +65,7 @@ class InvoicesModel extends Invoices {
         encryptionSeal: json[ApiKeys.encryptionSeal],
         guid: json[ApiKeys.guid],
         qrcode: json[ApiKeys.qrcode],
+        stationId: json[ApiKeys.stationId],
       );
 }
 
@@ -71,7 +74,6 @@ class InvoiceDtlModel extends InvoiceDtl {
       {required super.invoiceNo,
       required super.item,
       required super.qty,
-        required super.unitId,
       required super.price,
       required super.subtotal,
       required super.discountV,
@@ -84,18 +86,13 @@ class InvoiceDtlModel extends InvoiceDtl {
       required super.warehouse,
       required super.salesDate,
       required super.offerNo,
-      required super.lineId,
-        required super.arName,
-        required super.enName,
-
-      });
+      required super.lineId});
 
   factory InvoiceDtlModel.fromJson(Map<String, dynamic> json) =>
       InvoiceDtlModel(
         invoiceNo: json[ApiKeys.invoiceNo]?.toDouble(),
         item: json[ApiKeys.item],
         qty: json[ApiKeys.qty],
-        unitId: json[ApiKeys.unitId],
         price: json[ApiKeys.price]?.toDouble(),
         subtotal: json[ApiKeys.subtotal]?.toDouble(),
         discountV: json[ApiKeys.discountV],
@@ -109,9 +106,6 @@ class InvoiceDtlModel extends InvoiceDtl {
         salesDate: DateTime.parse(json[ApiKeys.salesDate]),
         offerNo: json[ApiKeys.offerNo],
         lineId: json[ApiKeys.lineID],
-          arName:json[ApiKeys.arName],
-        enName:json[ApiKeys.enName],
-
       );
 }
 
@@ -121,10 +115,7 @@ class InvoicePaymentModel extends InvoicePayment {
       required super.payType,
       required super.payment,
       required super.creditExpireDate,
-      required super.warehouse,
-      required super.arName,
-        required super.enName,
-      });
+      required super.warehouse});
 
   factory InvoicePaymentModel.fromJson(Map<String, dynamic> json) =>
       InvoicePaymentModel(
@@ -133,7 +124,5 @@ class InvoicePaymentModel extends InvoicePayment {
         payment: json[ApiKeys.payment],
         creditExpireDate: DateTime.parse(json[ApiKeys.creditExpireDate]),
         warehouse: json[ApiKeys.warehouse],
-        arName:json[ApiKeys.arName],
-        enName:json[ApiKeys.enName],
       );
 }

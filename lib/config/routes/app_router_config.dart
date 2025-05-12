@@ -24,6 +24,7 @@ import '../../features/menu/presentation/bloc/product/product_bloc.dart';
 import '../../features/menu/presentation/bloc/question/question_bloc.dart';
 import '../../features/payment/presentation/bloc/pay/pay_bloc.dart';
 import '../../features/payment/presentation/bloc/payment_types/payment_types_bloc.dart';
+import '../../features/payment/presentation/bloc/pending_invoices/pending_invoices_bloc.dart';
 import '../../features/payment/presentation/screens/payment_screen.dart';
 import '../../features/sales/domain/entities/invoice.dart';
 import '../../features/sales/domain/entities/return_invoice.dart';
@@ -96,6 +97,10 @@ class AppRouterConfig {
             child: MultiBlocProvider(providers: [
               BlocProvider(
                 create: (context) => ScreenCubit(),
+              ),
+              BlocProvider(
+                create: (context) => locator<PendingInvoicesBloc>()
+                  ..add(PendingInvoicesEventUploaded()),
               ),
               BlocProvider(
                 create: (context) =>

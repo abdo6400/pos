@@ -357,7 +357,7 @@ class NumericKeypadInput extends StatelessWidget {
       }
 
       // Set the active field's value to the remaining amount
-      newValue = remainingAmount.toStringAsFixed(3);
+      newValue = remainingAmount.toStringAsFixed(2);
     } else if (value == 'C') {
       // Handle clear (delete all text)
       newValue = '';
@@ -383,7 +383,7 @@ class NumericKeypadInput extends StatelessWidget {
       final newAmount = double.tryParse(newValue) ?? 0;
       if (newAmount > grandTotal) {
         // Show an error or limit the value to the grandTotal
-        newValue = grandTotal.toStringAsFixed(3);
+        newValue = grandTotal.toStringAsFixed(2);
       }
     }
 
@@ -406,7 +406,7 @@ class NumericKeypadInput extends StatelessWidget {
       final returned = totalPayments - grandTotal;
       context
           .read<ReturnedAmountCubit>()
-          .setReturnedAmount(double.parse(returned.toStringAsFixed(3)));
+          .setReturnedAmount(double.parse(returned.toStringAsFixed(2)));
     } else {
       context.read<ReturnedAmountCubit>().setReturnedAmount(0.0);
     }

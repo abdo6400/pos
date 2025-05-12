@@ -49,6 +49,11 @@ abstract class Invoice extends Equatable {
     required this.invoicePayment,
   });
 
+  Invoice copyWith(
+      {String? invoiceNo, double? invoiceCashNo, String? salesDate});
+
+  Map<String, dynamic> toJson();
+
   @override
   List<Object?> get props => [
         invoiceNo,
@@ -91,6 +96,12 @@ abstract class InvoicePayment extends Equatable {
     required this.warehouse,
   });
 
+  InvoicePayment copyWith({
+    String? invoiceId,
+  });
+
+  Map<String, dynamic> toJson();
+
   @override
   List<Object?> get props =>
       [invoiceId, payType, payment, creditExpireDate, warehouse];
@@ -132,6 +143,13 @@ abstract class InvoiceDetail extends Equatable {
     required this.offerNo,
     required this.lineId,
   });
+
+  InvoiceDetail copyWith({
+    String? invoiceNo,
+    String? salesDate,
+  });
+
+  Map<String, dynamic> toJson();
 
   @override
   List<Object?> get props => [

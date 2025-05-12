@@ -55,11 +55,7 @@ class TablesKeys {
   static const String discount = "Discount";
   static const String isActive = "IsActive";
   static const String discountP = "DiscountP";
-  static const String unitID = "UnitID";
-  static const String factor = "Factor";
-  static const String hotGroup = "HotGroup";
-  static const String isService = "IsService";
-
+  static const String unitId = "UnitID";
   static const String addAsNote = "addAsNote";
   static const String isMaximumQty = "IsMaximumQty";
   static const String question1Qty = "Question1Qty";
@@ -137,6 +133,7 @@ class TablesKeys {
   static const String warehouseDetails = "Warehouse";
   static const String salesDateDetails = "SalesDate";
   static const String lineId = "LineId";
+  static const String unitID = "UnitID";
 
   // Column names for invoicesPaymentsTable
   static const String payType = "payType";

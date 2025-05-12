@@ -51,7 +51,7 @@ class ProductsList extends StatelessWidget {
                                   offers.any((y) => y.productId == x.proId))
                               .toList()
                       : [];
-                  products = products.where((x) => !x.hotGroup).toList();
+                  products = products.where((x) => !x.rawMaterial).toList();
                   if (state is ProductSuccess && products.isEmpty) {
                     return EmptyMessage(
                       message: StringEnums.no_products_found.name.tr(),

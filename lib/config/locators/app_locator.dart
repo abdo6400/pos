@@ -43,8 +43,10 @@ import '../../features/payment/data/repositories/payment_repository_impl.dart';
 import '../../features/payment/domain/repositories/payment_repository.dart';
 import '../../features/payment/domain/usecases/get_payment_types_usecase.dart';
 import '../../features/payment/domain/usecases/pay_usecase.dart';
+import '../../features/payment/domain/usecases/upload_pending_invoices_usecase.dart';
 import '../../features/payment/presentation/bloc/pay/pay_bloc.dart';
 import '../../features/payment/presentation/bloc/payment_types/payment_types_bloc.dart';
+import '../../features/payment/presentation/bloc/pending_invoices/pending_invoices_bloc.dart';
 import '../../features/sales/data/repositories/sales_repository_impl.dart';
 import '../../features/sales/domain/usecases/get_returned_invoice_detail_usecase.dart';
 import '../../features/sales/domain/usecases/get_returned_invoices_usecase.dart';
@@ -119,7 +121,8 @@ class AppLocator {
 
     //settings
     locator.registerFactory<SettingsBloc>(() => SettingsBloc(locator()));
-    locator.registerFactory<EndDayBloc>(() => EndDayBloc(locator(),locator(),locator()));
+    locator.registerFactory<EndDayBloc>(
+        () => EndDayBloc(locator(), locator(), locator()));
     locator
         .registerFactory<OpenedPointsBloc>(() => OpenedPointsBloc(locator()));
 
@@ -130,7 +133,7 @@ class AppLocator {
     locator.registerFactory<OpenPointBloc>(() => OpenPointBloc(locator()));
     locator.registerLazySingleton<GetOpenedPointsUsecase>(
         () => GetOpenedPointsUsecase(locator()));
-        locator.registerLazySingleton<GetSummaryByLineIdUsecase>(
+    locator.registerLazySingleton<GetSummaryByLineIdUsecase>(
         () => GetSummaryByLineIdUsecase(locator()));
     locator.registerLazySingleton<GetZReportUsecase>(
         () => GetZReportUsecase(locator()));
@@ -151,11 +154,15 @@ class AppLocator {
 
     //payment
     locator.registerFactory<PayBloc>(() => PayBloc(locator()));
+    locator.registerFactory<PendingInvoicesBloc>(
+        () => PendingInvoicesBloc(locator()));
     locator
         .registerFactory<PaymentTypesBloc>(() => PaymentTypesBloc(locator()));
     locator.registerLazySingleton<PayUsecase>(() => PayUsecase(locator()));
     locator.registerLazySingleton<GetPaymentTypesUsecase>(
         () => GetPaymentTypesUsecase(locator()));
+    locator.registerLazySingleton<UploadPendingInvoicesUsecase>(
+        () => UploadPendingInvoicesUsecase(locator()));
     locator.registerLazySingleton<PaymentRepository>(() =>
         PaymentRepositoryImpl(
             paymentRemoteDataSource: locator(),

@@ -62,7 +62,6 @@ class InvoiceParams {
 class InvoiceDtl {
   final String item;
   final int qty;
-  final int unitId;
   final double price;
   final double subtotal;
   final double discountV;
@@ -81,7 +80,6 @@ class InvoiceDtl {
   InvoiceDtl({
     required this.item,
     required this.qty,
-    required this.unitId,
     required this.price,
     required this.subtotal,
     required this.discountV,
@@ -102,7 +100,6 @@ class InvoiceDtl {
     return {
       ApiKeys.invoiceNo: invoiceNo,
       ApiKeys.item: item,
-      ApiKeys.unitId:unitId,
       ApiKeys.qty: qty,
       ApiKeys.price: price,
       ApiKeys.subtotal: subtotal,
@@ -151,6 +148,7 @@ class Invoices {
   final double invoiceServiceTotal;
   final double invoiceTaxTotal;
   final double invoiceGrandTotal;
+  final bool isPrinted;
   final int customer;
   final DateTime realTime;
   final int tableNo;
@@ -160,6 +158,7 @@ class Invoices {
   final int warehouse;
   final int deliveryCompany;
   final String qrcode;
+  final String stationId;
 
   Invoices({
     required this.invoiceSubTotal,
@@ -167,6 +166,7 @@ class Invoices {
     required this.invoiceServiceTotal,
     required this.invoiceTaxTotal,
     required this.invoiceGrandTotal,
+    required this.isPrinted,
     required this.customer,
     required this.realTime,
     required this.tableNo,
@@ -176,6 +176,7 @@ class Invoices {
     required this.warehouse,
     required this.deliveryCompany,
     required this.qrcode,
+    required this.stationId,
   });
 
   Map<String, dynamic> toJson(
@@ -188,6 +189,7 @@ class Invoices {
       ApiKeys.invoiceServiceTotal: invoiceServiceTotal,
       ApiKeys.invoiceTaxTotal: invoiceTaxTotal,
       ApiKeys.invoiceGrandTotal: invoiceGrandTotal,
+      ApiKeys.isPrinted: jsonEncode(isPrinted),
       ApiKeys.customer: customer,
       ApiKeys.realTime: realTime.toIso8601String(),
       ApiKeys.tableNo: tableNo,
@@ -199,6 +201,7 @@ class Invoices {
       ApiKeys.salesDate: saleDate,
       ApiKeys.deliveryCompany: deliveryCompany,
       ApiKeys.qrcode: qrcode,
+      ApiKeys.stationId: stationId,
     };
   }
 }

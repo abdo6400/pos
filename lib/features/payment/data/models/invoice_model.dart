@@ -63,6 +63,68 @@ class InvoiceModel extends Invoice {
           [],
     );
   }
+
+  @override
+  Invoice copyWith(
+      {String? invoiceNo, double? invoiceCashNo, String? salesDate}) {
+    return InvoiceModel(
+      invoiceNo: invoiceNo ?? this.invoiceNo,
+      invoiceCashNo: invoiceCashNo ?? this.invoiceCashNo,
+      invoiceSubTotal: invoiceSubTotal,
+      invoiceDiscountTotal: invoiceDiscountTotal,
+      invoiceServiceTotal: invoiceServiceTotal,
+      invoiceTaxTotal: invoiceTaxTotal,
+      invoiceGrandTotal: invoiceGrandTotal,
+      isPrinted: isPrinted,
+      customer: customer,
+      realTime: realTime,
+      tableNo: tableNo,
+      empTaker: empTaker,
+      takerName: takerName,
+      queue: queue,
+      cashPayment: cashPayment,
+      warehouse: warehouse,
+      salesDate: salesDate ?? this.salesDate,
+      deliveryCompany: deliveryCompany,
+      qrcode: qrcode,
+      stationId: stationId,
+      invoiceDtl: invoiceDtl
+          .map((e) => e.copyWith(
+              invoiceNo: invoiceNo ?? this.invoiceNo,
+              salesDate: salesDate ?? this.salesDate))
+          .toList(),
+      invoicePayment: invoicePayment
+          .map((e) => e.copyWith(invoiceId: invoiceNo ?? this.invoiceNo))
+          .toList(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      TablesKeys.invoiceNo: invoiceNo,
+      TablesKeys.invoiceCashNo: invoiceCashNo,
+      TablesKeys.invoiceSubTotal: invoiceSubTotal,
+      TablesKeys.invoiceDiscountTotal: invoiceDiscountTotal,
+      TablesKeys.invoiceServiceTotal: invoiceServiceTotal,
+      TablesKeys.invoiceTaxTotal: invoiceTaxTotal,
+      TablesKeys.invoiceGrandTotal: invoiceGrandTotal,
+      TablesKeys.isPrinted: isPrinted,
+      TablesKeys.customer: customer,
+      TablesKeys.realTime: realTime,
+      TablesKeys.tableNo: tableNo,
+      TablesKeys.empTaker: empTaker,
+      TablesKeys.takerName: takerName,
+      TablesKeys.queue: queue,
+      TablesKeys.cashPayment: cashPayment,
+      TablesKeys.warehouse: warehouse,
+      TablesKeys.salesDate: salesDate,
+      TablesKeys.deliveryCompany: deliveryCompany,
+      TablesKeys.qrcode: qrcode,
+      TablesKeys.stationId: stationId,
+      TablesKeys.invoiceDtl: invoiceDtl.map((e) => e.toJson()).toList(),
+      TablesKeys.invoicePayment: invoicePayment.map((e) => e.toJson()).toList(),
+    };
+  }
 }
 
 class InvoiceDetailModel extends InvoiceDetail {
@@ -106,6 +168,49 @@ class InvoiceDetailModel extends InvoiceDetail {
       lineId: json[TablesKeys.lineId] ?? 0,
     );
   }
+
+  @override
+  InvoiceDetail copyWith({String? invoiceNo, String? salesDate}) {
+    return InvoiceDetailModel(
+      invoiceNo: invoiceNo ?? this.invoiceNo,
+      item: this.item,
+      qty: this.qty,
+      price: this.price,
+      subtotal: this.subtotal,
+      discountV: this.discountV,
+      discountP: this.discountP,
+      taxP: this.taxP,
+      taxV: this.taxV,
+      grandTotal: this.grandTotal,
+      taker: this.taker,
+      flavors: this.flavors,
+      warehouse: this.warehouse,
+      salesDate: salesDate ?? this.salesDate,
+      offerNo: this.offerNo,
+      lineId: this.lineId,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      TablesKeys.invoiceNo: invoiceNo,
+      TablesKeys.item: item,
+      TablesKeys.qty: qty,
+      TablesKeys.price: price,
+      TablesKeys.subtotal: subtotal,
+      TablesKeys.discountV: discountV,
+      TablesKeys.discountP: discountP,
+      TablesKeys.taxP: taxP,
+      TablesKeys.taxV: taxV,
+      TablesKeys.grandTotal: grandTotal,
+      TablesKeys.taker: taker,
+      TablesKeys.flavors: flavors,
+      TablesKeys.warehouse: warehouse,
+      TablesKeys.salesDate: salesDate,
+      TablesKeys.offerNo: offerNo,  
+      TablesKeys.lineId: lineId,  
+    };
+  }
 }
 
 class InvoicePaymentModel extends InvoicePayment {
@@ -126,5 +231,26 @@ class InvoicePaymentModel extends InvoicePayment {
           "${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}",
       warehouse: json[TablesKeys.warehouse] ?? 0,
     );
+  }
+
+  @override
+  InvoicePayment copyWith({String? invoiceId}) {
+    return InvoicePaymentModel(
+      invoiceId: invoiceId ?? this.invoiceId,
+      payType: payType,
+      payment: payment,
+      creditExpireDate: creditExpireDate,
+      warehouse: warehouse,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      TablesKeys.invoiceId: invoiceId,
+      TablesKeys.payType: payType,
+      TablesKeys.payment: payment,
+      TablesKeys.creditExpireDate: creditExpireDate,
+      TablesKeys.warehouse: warehouse,
+    };
   }
 }

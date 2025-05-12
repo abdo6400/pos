@@ -427,7 +427,7 @@ class InvoiceDetailsScreen extends StatelessWidget {
                                       color: Colors.red, size: 16),
                                 ),
                               Expanded(
-                                child: Text(item.arName,
+                                child: Text(item.item,
                                     style: TextStyle(
                                         fontSize: context.AppResponsiveValue(14,
                                             mobile: 12,
@@ -496,7 +496,7 @@ class InvoiceDetailsScreen extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(payment.arName.toString(),
+                      Text(payment.payType.toString(),
                           style: TextStyle(
                               fontSize: context.AppResponsiveValue(14,
                                   mobile: 12, tablet: 16, desktop: 16))),
@@ -607,7 +607,7 @@ class InvoiceDetailsScreen extends StatelessWidget {
                                             children: [
                                               Expanded(
                                                 child: Text(
-                                                  item.arName,
+                                                  item.item,
                                                   style: const TextStyle(
                                                       fontWeight:
                                                           FontWeight.w500),
@@ -666,7 +666,7 @@ class InvoiceDetailsScreen extends StatelessWidget {
                                             vertical: 4),
                                         child: ListTile(
                                           title: Text(
-                                            item.arName
+                                            item.item,
                                           ),
                                           subtitle: Text(
                                             '${StringEnums.quentity.name.tr()}: ${item.qty} - ${StringEnums.price.name.tr()}: ${item.price.toStringAsFixed(2)}',
@@ -723,7 +723,7 @@ class InvoiceDetailsScreen extends StatelessWidget {
                                                 color: Colors.red, size: 20),
                                             title: Text(
                                               state.originallyReturned[index]
-                                                  .arName,
+                                                  .item,
                                               style: const TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             ),

@@ -84,7 +84,7 @@ class CartState extends Equatable {
             invoiceGrandTotal:
                 double.parse(total.grandTotal.toStringAsFixed(5)),
             warehouse: branchId,
-
+            isPrinted: isPrinted,
             realTime: DateTime.now(),
             deliveryCompany: deliveryCategory,
             invoiceServiceTotal: 0,
@@ -100,7 +100,7 @@ class CartState extends Equatable {
                     amount: total.grandTotal.toStringAsFixed(remind),
                     trn: trn)
                 : "",
-          ),
+            stationId: ""),
         invoicePayment: payments.entries.map((entry) {
           final int payType = entry.key;
           final double amount = entry.value;
@@ -121,7 +121,6 @@ class CartState extends Equatable {
           return InvoiceDtl(
               item: cartItem.product.proId,
               qty: cartItem.quantity,
-              unitId: cartItem.product.unitId,
               proArName: cartItem.product.proArName,
               proEnName: cartItem.product.proEnName,
               price: cartItem.getPrice(
