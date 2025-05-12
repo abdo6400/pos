@@ -98,11 +98,7 @@ class AppRouterConfig {
               BlocProvider(
                 create: (context) => ScreenCubit(),
               ),
-              BlocProvider(
-                lazy: false,
-                create: (context) => locator<PendingInvoicesBloc>()
-                  ..add(PendingInvoicesEventUploaded()),
-              ),
+
               BlocProvider(
                 create: (context) =>
                     locator<CategoryBloc>()..add(GetCategoriesEvent()),

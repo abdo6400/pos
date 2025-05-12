@@ -6,11 +6,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'config/routes/app_router_config.dart';
 import 'config/themes/app_theme.dart';
+import 'core/bloc/cubit/internet_cubit.dart';
 import 'core/bloc/cubit/printing_cubit.dart';
 import 'core/bloc/cubit/settings_cubit.dart';
 import 'core/bloc/cubit/user_cubit.dart';
 import 'core/utils/constants.dart';
 import 'core/utils/assets.dart';
+import 'features/payment/presentation/bloc/pending_invoices/pending_invoices_bloc.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -27,6 +29,12 @@ class App extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => SettingsCubit(),
+          ),
+          BlocProvider(
+            create: (context) => InternetCubit(),
+          ),
+          BlocProvider(
+            create: (context) => locator<PendingInvoicesBloc>(),
           ),
         ],
         child: EasyLocalization(

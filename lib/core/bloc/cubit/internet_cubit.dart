@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/foundation.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import '../../utils/enums/internet_status_enums.dart';
 
-class InternetCubit extends Cubit<InternetStatus> {
-  final Connectivity connectivity;
+class InternetCubit extends HydratedCubit<InternetStatus> {
+  final Connectivity connectivity = Connectivity();
   late StreamSubscription connectivityStreamSubscription;
   Timer? _timer;
 
-  InternetCubit({required this.connectivity}) : super(InternetStatus.unknown) {
+  InternetCubit() : super(InternetStatus.unknown) {
     _init();
   }
 
@@ -67,5 +67,15 @@ class InternetCubit extends Cubit<InternetStatus> {
     connectivityStreamSubscription.cancel();
     _timer?.cancel();
     return super.close();
+  }
+  
+  @override
+  InternetStatus? fromJson(Map<String, dynamic> json) {
+    return InternetStatus.values[json['status'] as int];
+  }
+  
+  @override
+  Map<String, dynamic>? toJson(InternetStatus state) {
+    return {'status': state.index};
   }
 }
