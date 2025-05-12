@@ -47,25 +47,14 @@ class Tables {
     ${TablesKeys.icon} TEXT,
     ${TablesKeys.backColor} TEXT, 
     ${TablesKeys.foreColor} TEXT,   
-    ${TablesKeys.tag} TEXT, 
-    ${TablesKeys.printer} TEXT, 
-    ${TablesKeys.printer2} TEXT,
-    ${TablesKeys.question1} TEXT,         
-    ${TablesKeys.question2} TEXT,         
-    ${TablesKeys.question3} TEXT,         
-    ${TablesKeys.question4} TEXT,         
-    ${TablesKeys.question5} TEXT,         
+    ${TablesKeys.tag} TEXT,         
     ${TablesKeys.standardItem} TEXT,  
-    ${TablesKeys.isActive} TEXT,  
-    ${TablesKeys.rawMaterial} TEXT,     
-    ${TablesKeys.compositeMaterial} TEXT,
-    ${TablesKeys.compo} TEXT,
-    ${TablesKeys.isMaximumQty} TEXT,
-    ${TablesKeys.question1Qty} INTEGER,
-    ${TablesKeys.question2Qty} INTEGER,
-    ${TablesKeys.question3Qty} INTEGER,
-    ${TablesKeys.question4Qty} INTEGER,
-    ${TablesKeys.question5Qty} INTEGER     
+    ${TablesKeys.father} INTEGER,
+    ${TablesKeys.unitID} INTEGER,
+    ${TablesKeys.factor} REAL,
+    ${TablesKeys.isActive} INTEGER,
+    ${TablesKeys.hotGroup} INTEGER,
+    ${TablesKeys.isService} INTEGER    
   )
 ''';
 
@@ -217,7 +206,6 @@ class Tables {
       ${TablesKeys.invoiceServiceTotal} REAL  NOT NULL,
       ${TablesKeys.invoiceTaxTotal} REAL  NOT NULL,
       ${TablesKeys.invoiceGrandTotal} REAL  NOT NULL,
-      ${TablesKeys.isPrinted} TEXT NOT NULL,
       ${TablesKeys.customer} INTEGER NOT NULL,
       ${TablesKeys.realTime} TEXT NOT NULL,
       ${TablesKeys.tableNo} INTEGER NOT NULL,
@@ -229,7 +217,7 @@ class Tables {
       ${TablesKeys.salesDate} TEXT NOT NULL,
       ${TablesKeys.deliveryCompany} INTEGER NOT NULL,
       ${TablesKeys.qrcode} TEXT NOT NULL,
-      ${TablesKeys.stationId} TEXT NOT NULL
+   
     )
   ''';
 
@@ -238,6 +226,7 @@ class Tables {
       ${TablesKeys.invoiceNo} TEXT NOT NULL,
       ${TablesKeys.item} INTEGER NOT NULL,
       ${TablesKeys.qty} INTEGER NOT NULL,
+      ${TablesKeys.unitID} INTEGER NOT NULL,
       ${TablesKeys.price} REAL  NOT NULL,
       ${TablesKeys.subtotal} REAL  NOT NULL,
       ${TablesKeys.discountV} REAL  NOT NULL,

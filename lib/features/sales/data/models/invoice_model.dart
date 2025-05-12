@@ -14,7 +14,8 @@ class InvoiceModel extends Invoice {
       required super.invoiceServiceTotal,
       required super.invoiceTaxTotal,
       required super.invoiceGrandTotal,
-      required super.stationId});
+
+      });
 
   factory InvoiceModel.fromJson(Map<String, dynamic> json) => InvoiceModel(
         invoiceNo: json[ApiKeys.invoiceNo]?.toDouble(),
@@ -28,6 +29,5 @@ class InvoiceModel extends Invoice {
         invoiceServiceTotal: json[ApiKeys.invoiceServiceTotal]?.toDouble(),
         invoiceTaxTotal: json[ApiKeys.invoiceTaxTotal]?.toDouble(),
         invoiceGrandTotal: json[ApiKeys.invoiceGrandTotal]?.toDouble(),
-        stationId: json[ApiKeys.stationId],
       );
 }

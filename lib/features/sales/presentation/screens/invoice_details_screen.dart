@@ -33,6 +33,7 @@ class InvoiceDetailsScreen extends StatelessWidget {
         (data[StringEnums.returnedItems.name]) as ReturnInvoice?;
     final bool isPrint = data[StringEnums.isPrint.name] as bool;
     final settings = data[StringEnums.settings.name] as Settings;
+    final fun = data[StringEnums.sales_summary.name];
     return BlocConsumer<ReturnInvoiceBloc, ReturnInvoiceState>(
       listener: (context, state) {
         if (state is ReturnInvoiceLoading) {
@@ -42,7 +43,9 @@ class InvoiceDetailsScreen extends StatelessWidget {
               StateEnum.success, StringEnums.returnedItems.name.tr());
           Navigator.pop(context);
           context.read<PrintingCubit>().handlePrint(settings, context,
-              widget: ReturnInvoiceCard(returnInvoice: state.returnedInvoice));
+              widget: ReturnInvoiceCard(returnInvoice: state.returnedInvoice),onPrint:(){
+                fun();
+              });
         } else if (state is ReturnInvoiceError) {
           context.handleState(StateEnum.error, state.message);
         }
@@ -140,79 +143,83 @@ class InvoiceDetailsScreen extends StatelessWidget {
                     );
                   } else if (state is InvoiceDetailSuccess) {
                     return isPrint
-                        ? Screenshot(
-                            controller: screenshotController,
-                            child: InvoiceCard(
-                              isReprint: true,
-                              exChangeAmount: 0,
-                              cashierName:
+                        ? Center(
+                          child: Screenshot(
+                              controller: screenshotController,
+                              child: SingleChildScrollView(
+                                child: InvoiceCard(
+                                  isReprint: true,
+                                  exChangeAmount: 0,
+                                  cashierName:
                                   state.invoiceDetail.invoices.takerName,
-                              cashChange:
+                                  cashChange:
                                   state.invoiceDetail.invoices.cashPayment,
-                              invoiceNumber: state
-                                  .invoiceDetail.invoices.invoiceNo
-                                  .toString(),
-                              items: state.invoiceDetail.invoiceDtl.map((e) {
-                                // Check if this item has been returned
-                                final bool isReturned = state
+                                  invoiceNumber: state
+                                      .invoiceDetail.invoices.invoiceNo
+                                      .toString(),
+                                  items: state.invoiceDetail.invoiceDtl.map((e) {
+                                    // Check if this item has been returned
+                                    final bool isReturned = state
                                         .returnedInvoiceDetail?.dtl
                                         .any((returnItem) =>
-                                            returnItem.itemId == e.item) ??
-                                    false;
-
-                                // If returned, find the returned item to get its quantity
-                                final returnedItem = isReturned
-                                    ? state.returnedInvoiceDetail!.dtl
+                                    returnItem.itemId == e.item) ??
+                                        false;
+                          
+                                    // If returned, find the returned item to get its quantity
+                                    final returnedItem = isReturned
+                                        ? state.returnedInvoiceDetail!.dtl
                                         .firstWhere((returnItem) =>
-                                            returnItem.itemId == e.item)
-                                    : null;
-
-                                // Calculate the actual quantity after returns
-                                final actualQty = isReturned
-                                    ? e.qty - returnedItem!.qty
-                                    : e.qty;
-
-                                // Calculate the actual total after returns
-                                final actualTotal = isReturned
-                                    ? e.grandTotal - returnedItem!.grandTotal
-                                    : e.grandTotal;
-
-                                return {
-                                  "name": isReturned
-                                      ? "${e.item} (Partial Return)"
-                                      : e.item,
-                                  "qty": actualQty,
-                                  "price": e.price,
-                                  "total": actualTotal,
-                                  "isReturned": isReturned
-                                };
-                              }).toList(),
-                              subtotal:
+                                    returnItem.itemId == e.item)
+                                        : null;
+                          
+                                    // Calculate the actual quantity after returns
+                                    final actualQty = isReturned
+                                        ? e.qty - returnedItem!.qty
+                                        : e.qty;
+                          
+                                    // Calculate the actual total after returns
+                                    final actualTotal = isReturned
+                                        ? e.grandTotal - returnedItem!.grandTotal
+                                        : e.grandTotal;
+                          
+                                    return {
+                                      "name": isReturned
+                                          ? "${e.item} (Partial Return)"
+                                          : e.item,
+                                      "qty": actualQty,
+                                      "price": e.price,
+                                      "total": actualTotal,
+                                      "isReturned": isReturned
+                                    };
+                                  }).toList(),
+                                  subtotal:
                                   state.invoiceDetail.invoices.invoiceSubTotal -
                                       (state.returnedInvoiceDetail != null
                                           ? state.returnedInvoiceDetail!.hdr
-                                              .returnsSubTotal
+                                          .returnsSubTotal
                                           : 0.0),
-                              tax:
+                                  tax:
                                   state.invoiceDetail.invoices.invoiceTaxTotal -
                                       (state.returnedInvoiceDetail != null
                                           ? state.returnedInvoiceDetail!.hdr
-                                              .returnsTaxTotal
+                                          .returnsTaxTotal
                                           : 0.0),
-                              discount: state.invoiceDetail.invoices
+                                  discount: state.invoiceDetail.invoices
                                       .invoiceDiscountTotal -
-                                  (state.returnedInvoiceDetail != null
-                                      ? state.returnedInvoiceDetail!.hdr
+                                      (state.returnedInvoiceDetail != null
+                                          ? state.returnedInvoiceDetail!.hdr
                                           .returnsDiscountTotal
-                                      : 0.0),
-                              total: state.invoiceDetail.invoices
+                                          : 0.0),
+                                  total: state.invoiceDetail.invoices
                                       .invoiceGrandTotal -
-                                  (state.returnedInvoiceDetail != null
-                                      ? state.returnedInvoiceDetail!.hdr
+                                      (state.returnedInvoiceDetail != null
+                                          ? state.returnedInvoiceDetail!.hdr
                                           .returnsGrandTotal
-                                      : 0.0),
+                                          : 0.0),
+                                ),
+                              ),
                             ),
-                          )
+                        )
                         : Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: SingleChildScrollView(
@@ -420,7 +427,7 @@ class InvoiceDetailsScreen extends StatelessWidget {
                                       color: Colors.red, size: 16),
                                 ),
                               Expanded(
-                                child: Text(item.item,
+                                child: Text(item.arName,
                                     style: TextStyle(
                                         fontSize: context.AppResponsiveValue(14,
                                             mobile: 12,
@@ -489,7 +496,7 @@ class InvoiceDetailsScreen extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(payment.payType.toString(),
+                      Text(payment.arName.toString(),
                           style: TextStyle(
                               fontSize: context.AppResponsiveValue(14,
                                   mobile: 12, tablet: 16, desktop: 16))),
@@ -600,7 +607,7 @@ class InvoiceDetailsScreen extends StatelessWidget {
                                             children: [
                                               Expanded(
                                                 child: Text(
-                                                  item.item,
+                                                  item.arName,
                                                   style: const TextStyle(
                                                       fontWeight:
                                                           FontWeight.w500),
@@ -659,7 +666,7 @@ class InvoiceDetailsScreen extends StatelessWidget {
                                             vertical: 4),
                                         child: ListTile(
                                           title: Text(
-                                            item.item,
+                                            item.arName
                                           ),
                                           subtitle: Text(
                                             '${StringEnums.quentity.name.tr()}: ${item.qty} - ${StringEnums.price.name.tr()}: ${item.price.toStringAsFixed(2)}',
@@ -716,7 +723,7 @@ class InvoiceDetailsScreen extends StatelessWidget {
                                                 color: Colors.red, size: 20),
                                             title: Text(
                                               state.originallyReturned[index]
-                                                  .item,
+                                                  .arName,
                                               style: const TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             ),
@@ -791,7 +798,8 @@ class InvoiceDetailsScreen extends StatelessWidget {
                                         companyId: invoice
                                             .deliveryCompany, // Default company ID
                                         payType: 0, // Default payment type
-                                        stationId: invoice.stationId ?? "",
+                                          stationId:''
+
                                       );
 
                                       // Create detail items for return

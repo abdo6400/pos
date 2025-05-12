@@ -9,21 +9,14 @@ import '../../domain/entities/product.dart';
 import 'questions_list.dart';
 
 class CustomDialog extends StatelessWidget {
-  final MultiSelectController<Flavor> flavorsController;
-  final MultiSelectController<dynamic> questionController;
+
   final TextEditingController noteController;
   final TextEditingController quantityController;
   final Product? product;
-  final List<Flavor> selectedFlavors;
-  final List<Product> selectedQuestions;
 
   const CustomDialog(
       {super.key,
-      required this.flavorsController,
-      required this.questionController,
       required this.product,
-      this.selectedFlavors = const [],
-      this.selectedQuestions = const [],
       required this.noteController,
       required this.quantityController});
 
@@ -31,28 +24,14 @@ class CustomDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: context.AppResponsiveValue(400,
-          mobile: 300, tablet: 500, desktop: 800),
+          mobile: 300, tablet: 350, desktop: 800),
       child: Row(
         children: [
-          Flexible(
-              child: FlavorsList(
-            catId: product!.catId,
-            controller: flavorsController,
-            selectedFlavors: selectedFlavors,
-          )),
-          const VerticalDivider(),
-          Flexible(
-              child: QuestionsList(
-            productId: product!.proId,
-            controller: questionController,
-            selectedQuestions: selectedQuestions,
-          )),
-          const VerticalDivider(),
           Flexible(
               child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,16 +42,16 @@ class CustomDialog extends StatelessWidget {
                                 mobile: 12, tablet: 24, desktop: 30))),
                     TextFormField(
                         controller: noteController,
-                        maxLines: 10,
+                        maxLines: 3,
                         style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             fontSize: context.AppResponsiveValue(16,
-                                mobile: 12, tablet: 20, desktop: 30)),
+                                mobile: 12, tablet: 15, desktop: 30)),
                         decoration: InputDecoration(
                           hintText: StringEnums.add_note.name.tr(),
                           hintStyle:
                               Theme.of(context).textTheme.bodyMedium!.copyWith(
                                     fontSize: context.AppResponsiveValue(16,
-                                        mobile: 12, tablet: 24, desktop: 30),
+                                        mobile: 12, tablet: 20, desktop: 30),
                                   ),
                           border: const OutlineInputBorder(),
                           focusedBorder: const OutlineInputBorder(),
@@ -80,6 +59,7 @@ class CustomDialog extends StatelessWidget {
                         )),
                   ],
                 ),
+                SizedBox(height: 20,),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -91,7 +71,7 @@ class CustomDialog extends StatelessWidget {
                               .bodyLarge!
                               .copyWith(
                                   fontSize: context.AppResponsiveValue(16,
-                                      mobile: 12, tablet: 24, desktop: 30))),
+                                      mobile: 12, tablet: 12, desktop: 30))),
                     ),
                     Flexible(
                       flex: context.AppResponsiveValue(2,
@@ -137,7 +117,7 @@ class CustomDialog extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 10),
+                //SizedBox(height: 10),
               ],
             ),
           )),

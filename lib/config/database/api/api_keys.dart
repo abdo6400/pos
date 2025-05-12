@@ -65,6 +65,11 @@ class ApiKeys {
   static const String saleable = "Saleable";
   static const String standardItem = "StandardItem";
   static const String discountable = "Discountable";
+  static const String unitId = "UnitID";
+  static const String factor = "Factor";
+  static const String isSmall = "IsSmall";
+  static const String hotGroup = "HotGroup";
+  static const String isService = "IsService";
 
   // Keys for ProductModel
   static const String proId = "ProID";
@@ -178,6 +183,8 @@ class ApiKeys {
   static const String salesDate = "SalesDate";
   static const String offerNo = "OfferNo";
   static const String lineID = "LineID";
+  static const String arName="ArName";
+  static const String enName="EnName";
 
   // InvoicePayment keys
   static const String invoiceId = "InvoiceId";

@@ -66,13 +66,9 @@ class ProductCard extends StatelessWidget {
         },
         child: MultiBlocProvider(
             providers: [
-              BlocProvider.value(value: context.read<FlavorBloc>()),
-              BlocProvider.value(value: context.read<QuestionBloc>()),
               BlocProvider.value(value: context.read<ProductBloc>()),
             ],
             child: CustomDialog(
-              flavorsController: _flavorsController,
-              questionController: _questionController,
               product: product,
               quantityController: _quantityController,
               noteController: _noteController,

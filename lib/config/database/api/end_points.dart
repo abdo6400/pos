@@ -1,6 +1,6 @@
 class EndPoints {
   // Base URL
-  static const String baseUrl = 'https://api.futec-soft.com/';
+  static const String baseUrl = 'https://retailapi.futec-soft.com/';
   static const String prefixToken = 'Bearer ';
   static const String refresh = '';
   static const String response = "Response";

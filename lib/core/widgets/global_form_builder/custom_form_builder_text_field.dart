@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import '../../entities/field.dart';
-
+class AlwaysDisabledFocusNode extends FocusNode {
+  @override
+  bool get hasFocus => false;
+}
 class CustomFormBuilderTextField extends StatelessWidget {
   final FieldParams fieldModel;
   final Function(String)? onFocus;
@@ -30,6 +33,8 @@ class CustomFormBuilderTextField extends StatelessWidget {
         builder: (BuildContext context, setState) {
           return FormBuilderTextField(
             onTap: onFocus != null ? () => onFocus!(fieldModel.label) : null,
+            readOnly: fieldModel.readOnly,
+            //focusNode: FocusNode(skipTraversal: true, canRequestFocus: false),
             name: fieldModel.label,
             obscureText: fieldModel.isPassword ? obscureText : false,
             maxLines: fieldModel.isPassword ? 1 : fieldModel.maxLines,

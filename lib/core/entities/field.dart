@@ -14,6 +14,7 @@ class FieldParams {
   List<String>? options; // For fields like dropdown, checkboxGroup, etc.
   double? min; // For slider and rangeSlider
   double? max; // For slider and rangeSlider
+  bool readOnly;
 
   FieldParams({
     required this.label,
@@ -27,5 +28,6 @@ class FieldParams {
     this.options,
     this.min,
     this.max,
+    this.readOnly=false
   });
 }

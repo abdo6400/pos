@@ -19,6 +19,7 @@ abstract class InvoiceDtl extends Equatable {
   final double invoiceNo;
   final String item;
   final double qty;
+  final int unitId;
   final double price;
   final double subtotal;
   final double discountV;
@@ -32,11 +33,14 @@ abstract class InvoiceDtl extends Equatable {
   final DateTime salesDate;
   final int offerNo;
   final int lineId;
+  final String arName;
+  final String enName;
 
   InvoiceDtl({
     required this.invoiceNo,
     required this.item,
     required this.qty,
+    required this.unitId,
     required this.price,
     required this.subtotal,
     required this.discountV,
@@ -50,6 +54,8 @@ abstract class InvoiceDtl extends Equatable {
     required this.salesDate,
     required this.offerNo,
     required this.lineId,
+    required this.arName,
+    required this.enName
   });
 
   @override
@@ -57,6 +63,7 @@ abstract class InvoiceDtl extends Equatable {
         invoiceNo,
         item,
         qty,
+    unitId,
         price,
         subtotal,
         discountV,
@@ -70,6 +77,7 @@ abstract class InvoiceDtl extends Equatable {
         salesDate,
         offerNo,
         lineId,
+    arName,enName
       ];
 }
 
@@ -79,13 +87,16 @@ abstract class InvoicePayment extends Equatable {
   final double payment;
   final DateTime creditExpireDate;
   final String warehouse;
-
+  final String arName;
+  final String enName;
   InvoicePayment({
     required this.invoiceId,
     required this.payType,
     required this.payment,
     required this.creditExpireDate,
     required this.warehouse,
+    required this.arName,
+    required this.enName
   });
 
   @override
@@ -95,6 +106,7 @@ abstract class InvoicePayment extends Equatable {
         payment,
         creditExpireDate,
         warehouse,
+    arName,enName
       ];
 }
 
@@ -106,7 +118,6 @@ abstract class Invoices extends Equatable {
   final double invoiceServiceTotal;
   final double invoiceTaxTotal;
   final double invoiceGrandTotal;
-  final bool isPrinted;
   final int customer;
   final DateTime realTime;
   final int tableNo;
@@ -120,7 +131,6 @@ abstract class Invoices extends Equatable {
   final dynamic encryptionSeal;
   final String guid;
   final String qrcode;
-  final dynamic stationId;
 
   Invoices({
     required this.invoiceNo,
@@ -130,7 +140,6 @@ abstract class Invoices extends Equatable {
     required this.invoiceServiceTotal,
     required this.invoiceTaxTotal,
     required this.invoiceGrandTotal,
-    required this.isPrinted,
     required this.customer,
     required this.realTime,
     required this.tableNo,
@@ -144,7 +153,6 @@ abstract class Invoices extends Equatable {
     required this.encryptionSeal,
     required this.guid,
     required this.qrcode,
-    required this.stationId,
   });
 
   @override
@@ -156,7 +164,6 @@ abstract class Invoices extends Equatable {
         invoiceServiceTotal,
         invoiceTaxTotal,
         invoiceGrandTotal,
-        isPrinted,
         customer,
         realTime,
         tableNo,
@@ -170,6 +177,5 @@ abstract class Invoices extends Equatable {
         encryptionSeal,
         guid,
         qrcode,
-        stationId,
       ];
 }

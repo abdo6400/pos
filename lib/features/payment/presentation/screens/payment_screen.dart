@@ -1,12 +1,16 @@
+import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:retail/core/entities/auth_tokens.dart';
 import 'package:retail/core/utils/extensions/extensions.dart';
 import 'package:retail/core/widgets/custom_button.dart';
+import '../../../../core/bloc/cubit/user_cubit.dart';
 import '../../../../core/entities/field.dart';
 import '../../../../core/entities/form.dart';
+import '../../../../core/entities/settings.dart';
 import '../../../../core/utils/enums/field_type_enums.dart';
 import '../../../../core/utils/enums/string_enums.dart';
 import '../../../../core/widgets/global_form_builder/custom_form_builder.dart';
@@ -45,7 +49,8 @@ class PaymentScreen extends StatelessWidget {
       });
       double totalPaymentsBefore =
           payments.values.fold(0, (sum, amount) => sum + amount);
-      if (payments.isEmpty || totalPaymentsBefore != grandTotal) {
+
+      if (payments.isEmpty || totalPaymentsBefore < grandTotal) {
         context.showMessageToast(
           msg: StringEnums.please_enter_amount.name.tr(),
         );
@@ -75,6 +80,7 @@ class PaymentScreen extends StatelessWidget {
       // Calculate the total payments
       double totalPayments =
           payments.values.fold(0, (sum, amount) => sum + amount);
+
       if (totalPayments >= grandTotal) {
         Navigator.pop(context);
         pay(payments, isPrint, exChangeAmount); // Send the payments
@@ -93,7 +99,6 @@ class PaymentScreen extends StatelessWidget {
         (param[0] as List<PaymentType>).takeWhile((e) => e.isActive).toList();
     final pay = param[1] as Function(Map<int, double>, bool, double);
     final grandTotal = param[2] as double;
-
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -110,156 +115,164 @@ class PaymentScreen extends StatelessWidget {
         ),
         child: BlocBuilder<PaymentTypeSelectionCubit, String?>(
           builder: (context, state) {
-            return Scaffold(
-              appBar: context.isMobile
-                  ? null
-                  : AppBar(
-                      leading: Icon(
-                        Icons.payment_outlined,
-                        size: context.AppResponsiveValue(25,
-                            mobile: 25, tablet: 35, desktop: 40),
-                      ),
-                      actions: [
-                        SizedBox(width: 25),
-                        Text(
-                          "  ${DateTime.now().minute} :${DateTime.now().hour}  - ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}",
-                          style:
-                              Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                    fontSize: context.AppResponsiveValue(16,
-                                        mobile: 12, tablet: 24, desktop: 30),
-                                  ),
-                        ),
-                        SizedBox(width: 25),
-                      ],
-                      title: Text(
-                        StringEnums.pay_by.name.tr(),
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                              fontSize: context.AppResponsiveValue(16,
-                                  mobile: 12, tablet: 24, desktop: 30),
+            return  BlocBuilder<UserCubit,AuthTokens?>(
+                builder: (context,state) {
+                  final int numbersOfDigits = state?.numbersOfDigits??3;
+                  return Scaffold(
+                  appBar: context.isMobile
+                      ? null
+                      : AppBar(
+                          leading: Icon(
+                            Icons.payment_outlined,
+                            size: context.AppResponsiveValue(25,
+                                mobile: 25, tablet: 35, desktop: 40),
+                          ),
+                          actions: [
+                            SizedBox(width: 25),
+                            Text(
+                              "  ${DateTime.now().minute} :${DateTime.now().hour}  - ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}",
+                              style:
+                                  Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                        fontSize: context.AppResponsiveValue(16,
+                                            mobile: 12, tablet: 24, desktop: 30),
+                                      ),
                             ),
-                      ),
+                            SizedBox(width: 25),
+                          ],
+                          title: Text(
+                            StringEnums.pay_by.name.tr(),
+                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                  fontSize: context.AppResponsiveValue(16,
+                                      mobile: 12, tablet: 24, desktop: 30),
+                                ),
+                          ),
+                        ),
+                  bottomNavigationBar: Padding(
+                    padding: EdgeInsets.all(
+                      context.AppResponsiveValue(5,
+                          mobile: 1, tablet: 30, desktop: 40),
                     ),
-              bottomNavigationBar: Padding(
-                padding: EdgeInsets.all(
-                  context.AppResponsiveValue(5,
-                      mobile: 1, tablet: 30, desktop: 40),
-                ),
-                child: BlocBuilder<ReturnedAmountCubit, double>(
-                  builder: (context, exChangeAmount) {
-                    return Row(
-                      children: [
-                        Expanded(
-                          child: CustomButton(
-                            backgroundColor: Colors.red,
-                            buttonLabel: StringEnums.close.name,
-                            onSubmit: () => Navigator.pop(context),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: CustomButton(
-                            backgroundColor: Colors.green,
-                            buttonLabel: StringEnums.save.name,
-                            onSubmit: () => payInvoice(paymentTypes, false,
-                                grandTotal, exChangeAmount, pay, context),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: CustomButton(
-                            backgroundColor: Colors.blue,
-                            buttonLabel: StringEnums.print.name,
-                            onSubmit: () => payInvoice(paymentTypes, true,
-                                grandTotal, exChangeAmount, pay, context),
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              ),
-              body: Center(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Card(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 10),
-                            child: Column(
-                              spacing: 5,
+                    child:  BlocBuilder<ReturnedAmountCubit, double>(
+                          builder: (context, exChangeAmount) {
+                            return Row(
                               children: [
-                                _buildAmountRow(
-                                    context,
-                                    StringEnums.totalAmount.name.tr(),
-                                    grandTotal.toStringAsFixed(2)),
-                                BlocBuilder<ReturnedAmountCubit, double>(
-                                  builder: (context, state) {
-                                    return _buildAmountRow(
+                                Expanded(
+                                  child: CustomButton(
+                                    backgroundColor: Colors.red,
+                                    buttonLabel: StringEnums.close.name,
+                                    onSubmit: () => Navigator.pop(context),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: CustomButton(
+                                    backgroundColor: Colors.green,
+                                    buttonLabel: StringEnums.save.name,
+                                    onSubmit: () => payInvoice(paymentTypes, false,
+                                        grandTotal, exChangeAmount, pay, context),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: CustomButton(
+                                    backgroundColor: Colors.blue,
+                                    buttonLabel: StringEnums.print.name,
+                                    onSubmit: () => payInvoice(paymentTypes, true,
+                                        grandTotal, exChangeAmount, pay, context),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        )
+
+                  ),
+                  body: Center(
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Card(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 10),
+                                child: Column(
+                                  spacing: 5,
+                                  children: [
+                                    _buildAmountRow(
                                         context,
-                                        StringEnums.returned_amount.name.tr(),
-                                        state.toStringAsFixed(2));
-                                  },
+                                        StringEnums.totalAmount.name.tr(),
+                                        grandTotal.toStringAsFixed(numbersOfDigits)),
+                                    BlocBuilder<ReturnedAmountCubit, double>(
+                                      builder: (context, state) {
+                                        return _buildAmountRow(
+                                            context,
+                                            StringEnums.returned_amount.name.tr(),
+                                            state.toStringAsFixed(numbersOfDigits));
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Row(
+                              spacing: 10,
+                              children: [
+                                Flexible(
+                                  flex: 3,
+                                  child: CustomFormBuilder(
+                                    FormParams(
+                                      formKey: _formKey,
+                                      onFocus: (paymentType) {
+
+                                        context
+                                            .read<PaymentTypeSelectionCubit>()
+                                            .selectPaymentType(paymentType);
+                                      },
+                                      fields: paymentTypes
+                                          .map((e) => FieldParams(
+                                                type: FieldTypeEnums.text,
+                                                readOnly: true,
+                                                label: context.trValue(
+                                                    e.paymentArDesc,
+                                                    e.paymentEnDesc),
+                                                validators: [
+                                                  FormBuilderValidators.numeric(
+                                                      checkNullOrEmpty: false),
+                                                  FormBuilderValidators
+                                                      .positiveNumber(
+                                                          checkNullOrEmpty: false),
+                                                ],
+                                                icon: Icons.payment_outlined,
+                                              ))
+                                          .toList(),
+                                    ),
+                                  ),
+                                ),
+                                VerticalDivider(),
+                                Flexible(
+                                  flex: 2,
+                                  child: BlocBuilder<ReturnedAmountCubit, double>(
+                                    builder: (context, state) {
+                                      return NumericKeypadInput(
+                                        formKey: _formKey,
+                                        grandTotal: grandTotal,
+                                        paymentTypes: paymentTypes,
+                                      );
+                                    },
+                                  ),
                                 ),
                               ],
                             ),
-                          ),
-                        ),
-                        Row(
-                          spacing: 10,
-                          children: [
-                            Flexible(
-                              flex: 3,
-                              child: CustomFormBuilder(
-                                FormParams(
-                                  formKey: _formKey,
-                                  onFocus: (paymentType) {
-                                    context
-                                        .read<PaymentTypeSelectionCubit>()
-                                        .selectPaymentType(paymentType);
-                                  },
-                                  fields: paymentTypes
-                                      .map((e) => FieldParams(
-                                            type: FieldTypeEnums.text,
-                                            label: context.trValue(
-                                                e.paymentArDesc,
-                                                e.paymentEnDesc),
-                                            validators: [
-                                              FormBuilderValidators.numeric(
-                                                  checkNullOrEmpty: false),
-                                              FormBuilderValidators
-                                                  .positiveNumber(
-                                                      checkNullOrEmpty: false),
-                                            ],
-                                            icon: Icons.payment_outlined,
-                                          ))
-                                      .toList(),
-                                ),
-                              ),
-                            ),
-                            VerticalDivider(),
-                            Flexible(
-                              flex: 2,
-                              child: BlocBuilder<ReturnedAmountCubit, double>(
-                                builder: (context, state) {
-                                  return NumericKeypadInput(
-                                    formKey: _formKey,
-                                    grandTotal: grandTotal,
-                                    paymentTypes: paymentTypes,
-                                  );
-                                },
-                              ),
-                            ),
                           ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              ),
+                );
+              }
             );
           },
         ),
@@ -308,11 +321,15 @@ class NumericKeypadInput extends StatelessWidget {
     String newValue = currentValue;
 
     // Get the active payment type
-    final activePaymentType = paymentTypes.firstWhere(
+    final activePaymentType = paymentTypes.firstWhereOrNull(
       (element) =>
           element.paymentEnDesc == activeField ||
           element.paymentArDesc == activeField,
     );
+
+    if(activePaymentType==null)
+      return;
+
 
     if (value == 'X') {
       // Handle backspace (remove last character)
@@ -340,7 +357,7 @@ class NumericKeypadInput extends StatelessWidget {
       }
 
       // Set the active field's value to the remaining amount
-      newValue = remainingAmount.toStringAsFixed(2);
+      newValue = remainingAmount.toStringAsFixed(3);
     } else if (value == 'C') {
       // Handle clear (delete all text)
       newValue = '';
@@ -366,7 +383,7 @@ class NumericKeypadInput extends StatelessWidget {
       final newAmount = double.tryParse(newValue) ?? 0;
       if (newAmount > grandTotal) {
         // Show an error or limit the value to the grandTotal
-        newValue = grandTotal.toStringAsFixed(2);
+        newValue = grandTotal.toStringAsFixed(3);
       }
     }
 
@@ -389,7 +406,7 @@ class NumericKeypadInput extends StatelessWidget {
       final returned = totalPayments - grandTotal;
       context
           .read<ReturnedAmountCubit>()
-          .setReturnedAmount(double.parse(returned.toStringAsFixed(2)));
+          .setReturnedAmount(double.parse(returned.toStringAsFixed(3)));
     } else {
       context.read<ReturnedAmountCubit>().setReturnedAmount(0.0);
     }

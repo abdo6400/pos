@@ -37,6 +37,15 @@ class InvoicesTableState extends State<InvoicesTable> {
     int _rowsPerPage =
         context.AppResponsiveValue(5, mobile: 5, tablet: 10, desktop: 10)
             .toInt();
+    final fun = () {
+      final fromDate = _formKey.currentState!
+          .value[StringEnums.from_date.name] as DateTime;
+      final toDate = _formKey.currentState!
+          .value[StringEnums.to_date.name] as DateTime;
+      context.read<InvoiceBloc>().add(GetInvoicesEvent(
+          '${fromDate.year}-${fromDate.month}-${fromDate.day}',
+          '${toDate.year}-${toDate.month}-${toDate.day}'));
+    };
     return Card(
       margin: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
       shape: RoundedRectangleBorder(
@@ -54,15 +63,7 @@ class InvoicesTableState extends State<InvoicesTable> {
                   if (state is InvoicesError) {
                     return ErrorCard(
                       message: state.message,
-                      onRetry: () {
-                        final fromDate = _formKey.currentState!
-                            .value[StringEnums.from_date.name] as DateTime;
-                        final toDate = _formKey.currentState!
-                            .value[StringEnums.to_date.name] as DateTime;
-                        context.read<InvoiceBloc>().add(GetInvoicesEvent(
-                            '${fromDate.year}-${fromDate.month}-${fromDate.day}',
-                            '${toDate.year}-${toDate.month}-${toDate.day}'));
-                      },
+                      onRetry: fun,
                     );
                   }
                   if (state is InvoicesSuccess && state.invoices.isEmpty) {
@@ -80,7 +81,7 @@ class InvoicesTableState extends State<InvoicesTable> {
                       children: [
                         Expanded(
                             child: _buildDataGrid(invoices, returnInvoices,
-                                _rowsPerPage, context, widget.settings)),
+                                _rowsPerPage, context, widget.settings,fun)),
                         // if (state is InvoicesSuccess)
                         //   _buildPaginationControls(invoices.length,
                         //       _rowsPerPage, _InvoiceDataSource(invoices)),
@@ -145,9 +146,9 @@ class InvoicesTableState extends State<InvoicesTable> {
       List<ReturnInvoice> returnInvoices,
       int rowsPerPage,
       BuildContext context,
-      Settings settings) {
+      Settings settings,void Function()? fun) {
     final _invoiceDataSource = _InvoiceDataSource(invoices, returnInvoices,
-        context: context, settings: settings);
+        context: context, settings: settings,fun);
     return SfDataGrid(
       columnWidthMode: ColumnWidthMode.fill,
       showCheckboxColumn: false,
@@ -209,8 +210,9 @@ class _InvoiceDataSource extends DataGridSource {
   final List<ReturnInvoice> _returnInvoices;
   final BuildContext context;
   final Settings settings;
+  final void Function()? _fun;
 
-  _InvoiceDataSource(this._invoices, this._returnInvoices,
+  _InvoiceDataSource(this._invoices, this._returnInvoices,this._fun,
       {required this.context, required this.settings}) {
     _buildDataGridRows();
   }
@@ -244,7 +246,8 @@ class _InvoiceDataSource extends DataGridSource {
               StringEnums.invoices.name: invoice,
               StringEnums.returnedItems.name: _returnInvoices.firstWhereOrNull(
                   (element) => element.invoiceNo == invoice.invoiceNo),
-              StringEnums.settings.name: settings
+              StringEnums.settings.name: settings,
+              StringEnums.sales_summary.name: _fun
             }),
       ]);
     }).toList();

@@ -54,6 +54,7 @@ class MainScreen extends StatelessWidget {
                   } else if (state is CheckerPointError) {
                     context.go(AppRoutes.openPoint);
                   } else if (state is CheckerPointReady) {
+
                     if (!state.hasPoint && (!state.mustCloseDay)) {
                       context.go(AppRoutes.openPoint);
                     }
@@ -66,6 +67,9 @@ class MainScreen extends StatelessWidget {
                       });
                     }   else {
                       context.hideOverlayLoader();
+                      if(state.onSuccess!=null){
+                        state.onSuccess!();
+                      }
                     }
                   }
                 },

@@ -30,8 +30,7 @@ class HdrModel extends ReturnInvoiceHdr {
       required super.guid,
       required super.qrcode,
       required super.companyId,
-      required super.payType,
-      required super.stationId});
+      });
 
   factory HdrModel.fromJson(Map<String, dynamic> json) => HdrModel(
         returnId: json[ApiKeys.returnId],
@@ -51,8 +50,7 @@ class HdrModel extends ReturnInvoiceHdr {
         guid: json[ApiKeys.guid],
         qrcode: json[ApiKeys.qrcode]??"",
         companyId: json[ApiKeys.companyID],
-        payType: json[ApiKeys.payType],
-        stationId: json[ApiKeys.stationID]??"",
+
       );
 }
 

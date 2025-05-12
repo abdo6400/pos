@@ -8,6 +8,7 @@ sealed class CheckerPointState extends Equatable {
   final bool hasPoint;
   final String startDate;
   final String closeTime;
+  final VoidCallback? onSuccess;
 
   const CheckerPointState({
     this.warehouseSales,
@@ -17,6 +18,7 @@ sealed class CheckerPointState extends Equatable {
     this.hasPoint = false,
     this.startDate = '',
     this.closeTime = '',
+    this.onSuccess
   });
 
   CheckerPointState copyWith({
@@ -27,6 +29,7 @@ sealed class CheckerPointState extends Equatable {
     bool? hasPoint,
     String? startDate,
     String? closeTime,
+    VoidCallback? onSuccess
   });
 
   @override
@@ -38,6 +41,7 @@ sealed class CheckerPointState extends Equatable {
         hasPoint,
         startDate,
         closeTime,
+    onSuccess
       ];
 }
 
@@ -53,6 +57,7 @@ final class CheckerPointInitial extends CheckerPointState {
     bool? hasPoint,
     String? startDate,
     String? closeTime,
+VoidCallback? onSuccess
   }) {
     return const CheckerPointInitial();
   }
@@ -70,12 +75,14 @@ final class CheckerPointLoading extends CheckerPointState {
     bool? hasPoint,
     String? startDate,
     String? closeTime,
+VoidCallback? onSuccess
   }) {
     return const CheckerPointLoading();
   }
 }
 
 final class CheckerPointReady extends CheckerPointState {
+
   const CheckerPointReady({
     required SaleDate warehouseSales,
     required List<Setting> settings,
@@ -84,6 +91,7 @@ final class CheckerPointReady extends CheckerPointState {
     required bool hasPoint,
     required String startDate,
     required String closeTime,
+VoidCallback? onSuccess
   }) : super(
           warehouseSales: warehouseSales,
           settings: settings,
@@ -92,6 +100,7 @@ final class CheckerPointReady extends CheckerPointState {
           hasPoint: hasPoint,
           startDate: startDate,
           closeTime: closeTime,
+onSuccess: onSuccess
         );
 
   @override
@@ -103,6 +112,7 @@ final class CheckerPointReady extends CheckerPointState {
     bool? hasPoint,
     String? startDate,
     String? closeTime,
+VoidCallback? onSuccess
   }) {
     return CheckerPointReady(
       warehouseSales: warehouseSales ?? this.warehouseSales!,
@@ -112,6 +122,7 @@ final class CheckerPointReady extends CheckerPointState {
       hasPoint: hasPoint ?? this.hasPoint,
       startDate: startDate ?? this.startDate,
       closeTime: closeTime ?? this.closeTime,
+onSuccess: onSuccess?? this.onSuccess
     );
   }
 }
@@ -136,6 +147,7 @@ final class CheckerPointError extends CheckerPointState {
     String? startDate,
     String? closeTime,
     String? errorMessage,
+VoidCallback? onSuccess
   }) {
     return CheckerPointError(
       errorMessage: errorMessage ?? this.errorMessage,

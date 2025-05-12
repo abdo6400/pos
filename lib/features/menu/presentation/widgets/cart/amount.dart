@@ -10,6 +10,7 @@ import '../../../../../core/utils/constants.dart';
 import '../../../../../core/utils/enums/string_enums.dart';
 import '../../../../../core/widgets/custom_button.dart';
 import '../../../../payment/presentation/bloc/payment_types/payment_types_bloc.dart';
+import '../../../../settings/presentation/bloc/checker_point/checker_point_bloc.dart';
 import '../../../../settings/presentation/bloc/settings_bloc.dart';
 import '../../../domain/entities/discount.dart';
 import '../../bloc/cart/cart_bloc.dart';
@@ -51,6 +52,7 @@ class Amount extends StatelessWidget {
       bool addQrCode = false}) async {
     final user = await storage.getUser();
     if (user != null && cart.cart.isNotEmpty) {
+
       context.read<PayBloc>().add(Pay(
           isPrint: isPrint,
           exchangeAmount: exChangeAmount,
@@ -106,6 +108,7 @@ class Amount extends StatelessWidget {
                     deliveryCategory: delivery?.deliveryPriceCategory ?? 0,
                     deliveryDiscount: delivery?.deliveryPriceDiscount ?? 0.0,
                   );
+
                   return Padding(
                     padding: const EdgeInsets.all(5),
                     child: Column(
@@ -147,21 +150,27 @@ class Amount extends StatelessWidget {
                                 backgroundColor: Colors.green,
                                 onSubmit: () async {
                                   if (paymentTypes is PaymentTypesSuccess) {
-                                    payReceipt(context,
-                                        cart: cart,
-                                        exChangeAmount: 0,
-                                        addQrCode: addQrCode,
-                                        isPrint: true,
-                                        payments: {
-                                          paymentTypes.paymentTypes.first.ptype:
-                                              receipt.grandTotal
-                                        },
-                                        taxPercentage: taxPercentage,
-                                        priceIncludesTax: priceIncludesTax,
-                                        taxIncludesDiscount:
-                                            taxIncludesDiscount,
-                                        discount: discount,
-                                        delivery: delivery);
+
+                                    context.read<CheckerPointBloc>().add(
+                                        CheckPointStatus(
+                                            OnSuccess:() =>  payReceipt(context,
+                                                cart: cart,
+                                                exChangeAmount: 0,
+                                                addQrCode: addQrCode,
+                                                isPrint: true,
+                                                payments: {
+                                                  paymentTypes.paymentTypes.first.ptype:
+                                                  receipt.grandTotal
+                                                },
+                                                taxPercentage: taxPercentage,
+                                                priceIncludesTax: priceIncludesTax,
+                                                taxIncludesDiscount:
+                                                taxIncludesDiscount,
+                                                discount: discount,
+                                                delivery: delivery)
+                                        )
+                                    );
+
                                   } else {
                                     context.showMessageToast(
                                         msg: StringEnums.empty_cart.name.tr());
@@ -174,26 +183,31 @@ class Amount extends StatelessWidget {
                                 onSubmit: paymentTypes is PaymentTypesSuccess &&
                                         cart.cart.isNotEmpty
                                     ? () {
-                                        context.push(AppRoutes.payment, extra: [
-                                          paymentTypes.paymentTypes,
-                                          (payments, bool isPrint,
-                                              double exChangeAmount) {
-                                            payReceipt(context,
-                                                cart: cart,
-                                                isPrint: isPrint,
-                                                exChangeAmount: exChangeAmount,
-                                                addQrCode: addQrCode,
-                                                payments: payments,
-                                                taxPercentage: taxPercentage,
-                                                priceIncludesTax:
-                                                    priceIncludesTax,
-                                                taxIncludesDiscount:
-                                                    taxIncludesDiscount,
-                                                discount: discount,
-                                                delivery: delivery);
-                                          },
-                                          receipt.grandTotal,
-                                        ]);
+                                  context.read<CheckerPointBloc>().add(
+                                      CheckPointStatus(
+                                          OnSuccess:() =>  context.push(AppRoutes.payment, extra: [
+                                            paymentTypes.paymentTypes,
+                                                (payments, bool isPrint,
+                                                double exChangeAmount) {
+                                              payReceipt(context,
+                                                  cart: cart,
+                                                  isPrint: isPrint,
+                                                  exChangeAmount: exChangeAmount,
+                                                  addQrCode: addQrCode,
+                                                  payments: payments,
+                                                  taxPercentage: taxPercentage,
+                                                  priceIncludesTax:
+                                                  priceIncludesTax,
+                                                  taxIncludesDiscount:
+                                                  taxIncludesDiscount,
+                                                  discount: discount,
+                                                  delivery: delivery);
+                                            },
+                                            receipt.grandTotal,
+                                          ])
+                                      )
+                                  );
+
                                       }
                                     : () {
                                         context.showMessageToast(

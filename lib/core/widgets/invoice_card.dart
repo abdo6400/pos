@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class InvoiceCard extends StatelessWidget {
   final String invoiceNumber;
-  final double exChangeAmount;
+  final double exChangeAmount;//this change
   final String cashierName;
   final List<Map<String, dynamic>> items;
   final double subtotal;

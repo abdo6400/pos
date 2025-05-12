@@ -61,6 +61,7 @@ class CustomFormBuilderField extends StatelessWidget {
           return FormBuilderTextField(
             onTap: onFocus != null ? () => onFocus!(fieldModel.label) : null,
             name: fieldModel.label,
+            readOnly: fieldModel.readOnly,
             initialValue: fieldModel.initialValue,
             obscureText: fieldModel.isPassword ? obscureText : false,
             maxLines: fieldModel.isPassword ? 1 : fieldModel.maxLines,

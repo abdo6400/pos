@@ -8,7 +8,8 @@ sealed class CheckerPointEvent extends Equatable {
 }
 
 final class CheckPointStatus extends CheckerPointEvent {
-  const CheckPointStatus();
+ final VoidCallback? OnSuccess;
+  const CheckPointStatus({this.OnSuccess});
 
   @override
   List<Object> get props => [];
