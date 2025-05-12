@@ -13,7 +13,6 @@ class PendingInvoicesBloc
   PendingInvoicesBloc(this._uploadPendingInvoicesUsecase)
       : super(PendingInvoicesInitial()) {
     on<PendingInvoicesEventUploaded>((event, emit) async {
-      print("uploading pending invoices");
       final user = (await storage.getUser())!;
       await _uploadPendingInvoicesUsecase.call(UploadPendingInvoicesParams(
           branchId: int.parse(user.defaultBranch), userNo: user.userNo));
